@@ -1,0 +1,30 @@
+configuration {
+    width: 50;
+    lines: 12;
+    columns: 2;
+    font: "Roboto 11";
+    bw: 0;
+    padding: 10;
+    yoffset: 0;
+    xoffset: 0;
+    fixed-num-lines: true;
+    terminal: "termite -e";
+    case-sensitive: false;
+    matching: "normal";
+    m: "-4";
+    line-margin: 0;
+    line-padding: 0;
+    separator-style: "none";
+    hide-scrollbar: true;
+    dpi: 0;
+    threads: 0;
+    scroll-method: 1;
+    click-to-exit: true;
+    show-match: true;
+    theme: "~/.config/rofi/theme.rasi";
+    kb-secondary-paste: "Control+v";
+    kb-accept-entry: "Return";
+    kb-accept-custom: "Control+Return";
+	kb-row-tab: "Tab";
+	kb-cancel: "Escape,Control+g,Control+q,Control+c";
+}
