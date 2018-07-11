@@ -1,0 +1,1 @@
+/home/jonas/.zsh_plugins.txt
