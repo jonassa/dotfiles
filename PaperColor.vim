@@ -1,0 +1,1 @@
+/home/jonas/.config/nvim/colors/PaperColor.vim
