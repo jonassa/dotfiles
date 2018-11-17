@@ -1,0 +1,2 @@
+#!/bin/bash
+randomorg -f an -l 12 -q|tail -1|xclip -selection c

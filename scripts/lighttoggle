@@ -1,0 +1,11 @@
+#!/usr/bin/zsh
+#zsh nødvendig av en eller annen grunn...
+
+brightness=$(light)
+
+if [[ $brightness -lt 50.0 ]]; then
+    light -S 100
+else
+    light -S 0.33
+fi
+

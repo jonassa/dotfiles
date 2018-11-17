@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo systemctl stop nginx.service;
+sudo systemctl stop mysqld.service;
+sudo systemctl stop php-fpm.service;

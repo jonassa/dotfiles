@@ -1,0 +1,10 @@
+#!/bin/bash
+file=$(fd -H -t f -c never . ~ | \
+    grep -v '~$' | \
+    rofi -dmenu -i -p "Edit:")
+
+
+if [[ -n $file ]]
+then
+    xfce4-terminal --geometry=106x200 -e "nvim $file"
+fi

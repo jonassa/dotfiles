@@ -1,0 +1,2 @@
+#!/bin/bash
+nmcli device connect wlp2s0

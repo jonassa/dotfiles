@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+terminalrc="/home/jonas/.config/xfce4/terminal/terminalrc"
+colorschemes="/home/jonas/.local/share/xfce4/terminal/colorschemes"
+
+selection=$(
+for f in $colorschemes/*; do
+    echo $f
+done | fzf)
+
+
+
+if [[ -n $selection ]]; then
+    sed -i '/Color/d' $terminalrc
+    sed -n '/Color/p' $selection >> $terminalrc
+fi
+

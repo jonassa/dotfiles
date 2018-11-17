@@ -1,0 +1,2 @@
+#!/bin/bash
+nm-connection-editor -e `nmcli -t connection show --active | cut -d: -f2`                                                                    

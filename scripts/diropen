@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dir=$(fd -t d . /home/jonas | rofi -dmenu -i -p "Browse:")
+if [[ -n $dir ]]
+then
+    thunar "${dir}"
+fi
+

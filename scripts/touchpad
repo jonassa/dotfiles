@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+n=$(xinput|grep -i touchpad|awk '{print $6}'|cut -c 4-5)
+
+disabled=$(xinput --list-props $n | awk '/Device Enabled/{print !$NF}')
+
+if [ $disabled -eq 1 ]; then
+    xinput enable $n
+else
+    xinput disable $n
+fi
+

@@ -1,0 +1,23 @@
+# Monokai collection darkened
+foreground      = #f1ebeb
+foreground_bold = #f1ebeb
+cursor          = #f1ebeb
+background      = rgba(2b, 2b, 2b, 0.5)
+highlight       = #3b758c
+
+color0  = #2b2b2b
+color8  = #76715e
+color1  = #dc2566
+color9  = #fa2772
+color2  = #8fc029
+color10 = #a7e22e
+color3  = #d4c96e
+color11 = #e7db75
+color4  = #55bcce
+color12 = #66d9ee
+color5  = #9358fe
+color13 = #ae82ff
+color6  = #56b7a5
+color14 = #66efd5
+color7  = #acada1
+color15 = #cfd0c2

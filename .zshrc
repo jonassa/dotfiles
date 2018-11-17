@@ -878,3 +878,5 @@ bindkey '^I' $fzf_default_completion
 #autonamedirs
 setopt autonamedirs
 dotfiles="/home/jonas/Dropbox/Backup/dotfiles"
+minimax="/home/jonas/Dropbox/Fag/Kunstig intelligens/Assignment 4"
+sudoku="/home/jonas/Dropbox/Fag/Kunstig intelligens/Assignment 5"

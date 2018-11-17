@@ -1,0 +1,8 @@
+#!/bin/bash
+share=$(echo "samba.samfundet.no/fk
+samba.samfundet.no/fk-web
+samba.samfundet.no/jonassa
+samba.samfundet.no/sceneteknisk
+samba.samfundet.no/lydarkivet" |
+    fzf)
+thunar smb://$share

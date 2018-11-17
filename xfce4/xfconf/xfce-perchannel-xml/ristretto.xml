@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="ristretto" version="1.0">
+  <property name="window" type="empty">
+    <property name="navigationbar" type="empty">
+      <property name="position" type="string" value="left"/>
+      <property name="sort-type" type="uint" value="2"/>
+    </property>
+    <property name="height" type="uint" value="1019"/>
+    <property name="width" type="uint" value="956"/>
+    <property name="maximize-on-startup" type="bool" value="false"/>
+  </property>
+  <property name="file" type="empty">
+    <property name="current-uri" type="string" value="file:///usr/share/icons/Papirus/22x22/apps"/>
+  </property>
+  <property name="slideshow" type="empty">
+    <property name="timeout" type="uint" value="3"/>
+  </property>
+</channel>

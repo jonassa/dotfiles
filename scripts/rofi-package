@@ -1,0 +1,11 @@
+#!/bin/bash
+
+filename="/tmp/pkginfo"
+package=$(pacman -Qq|rofi -i -dmenu -p "Package:")
+if [[ -n $package ]]
+then
+    result=$(pacaur -Qi $package) &&
+    echo "$result" > $filename 
+    xfce4-terminal -e 'less /tmp/pkginfo'
+fi
+

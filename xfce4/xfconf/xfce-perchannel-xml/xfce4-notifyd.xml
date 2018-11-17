@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-notifyd" version="1.0">
+  <property name="primary-monitor" type="uint" value="0"/>
+  <property name="notify-location" type="uint" value="2"/>
+  <property name="log-level" type="uint" value="1"/>
+  <property name="log-level-apps" type="uint" value="0"/>
+  <property name="applications" type="empty">
+    <property name="known_applications" type="array">
+      <value type="string" value="calibre"/>
+      <value type="string" value="chromium"/>
+      <value type="string" value="Dropbox"/>
+      <value type="string" value="Electron"/>
+      <value type="string" value="gPodder"/>
+      <value type="string" value="kalu"/>
+      <value type="string" value="nm-applet"/>
+      <value type="string" value="notify-send"/>
+      <value type="string" value="org.gnome.FeedReader"/>
+      <value type="string" value="Package Manager"/>
+      <value type="string" value="pactray"/>
+      <value type="string" value="Persepolis Download Manager"/>
+      <value type="string" value="Radio Tray"/>
+      <value type="string" value="Spotify"/>
+      <value type="string" value="Thunar"/>
+      <value type="string" value="thunar-volman"/>
+      <value type="string" value="Transmission"/>
+      <value type="string" value="Xfce volume control"/>
+      <value type="string" value="Xfce4-notifyd settings"/>
+      <value type="string" value="xfce4-power-manager"/>
+      <value type="string" value="xfce4-settings-helper"/>
+    </property>
+    <property name="muted_applications" type="array">
+    </property>
+  </property>
+  <property name="expire-timeout" type="int" value="5"/>
+  <property name="notification-log" type="bool" value="true"/>
+  <property name="theme" type="string" value="Adapta"/>
+  <property name="do-fadeout" type="bool" value="true"/>
+  <property name="do-slideout" type="bool" value="true"/>
+  <property name="plugin" type="empty">
+    <property name="log-only-today" type="bool" value="true"/>
+  </property>
+  <property name="do-not-disturb" type="bool" value="false"/>
+</channel>

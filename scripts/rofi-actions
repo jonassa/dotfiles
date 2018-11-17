@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+OPTIONS="Reboot\nPower off\nSuspend\nHibernate\nLog out\nLock screen"
+
+LAUNCHER="rofi -width 30 -dmenu -i -p Actions"
+USE_LOCKER="false"
+LOCKER="i3lock"
+
+# Show exit wm option if exit command is provided as an argument
+if [ ${#1} -gt 0 ]; then
+  OPTIONS="Exit window manager\n$OPTIONS"
+fi
+
+option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
+if [ ${#option} -gt 0 ]
+then
+    case $option in
+      Exit)
+        eval $1
+        ;;
+      Reboot)
+        sudo systemctl reboot
+        ;;
+      "Power off")
+        sudo systemctl poweroff
+        ;;
+      Suspend)
+        $($USE_LOCKER) && "$LOCKER"; sudo systemctl suspend
+        ;;
+      "Log out")
+        $($USE_LOCKER) && "$LOCKER"; sudo xfce4-session-logout --logout
+        ;;
+      Lock)
+        $($USE_LOCKER) && "$LOCKER"; sudo light-locker-command -l
+        ;;
+      Hibernate)
+        $($USE_LOCKER) && "$LOCKER"; sudo systemctl hibernate
+        ;;
+      *)
+        ;;
+    esac
+fi

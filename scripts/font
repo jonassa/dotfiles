@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+terminalrc="/home/jonas/.config/xfce4/terminal/terminalrc"
+
+fontlist=(
+    'Fira Mono 11'
+    'Liberation Mono 11'
+    'Roboto Mono 11'
+    'DejaVu Sans Mono 11'
+    'Iosevka Regular 13'
+    'SF Mono 11'
+)
+
+selection=$(
+for f in "${fontlist[@]}"; do
+    echo $f
+done | fzf)
+
+if [[ -n $selection ]]; then
+    sed -i "s/FontName=.*/FontName=$selection/" $terminalrc
+fi
+

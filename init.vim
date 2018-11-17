@@ -36,6 +36,7 @@ Plug 'https://github.com/sts10/vim-pink-moon'
 Plug 'https://github.com/andreypopp/vim-colors-plain'
 Plug 'https://github.com/yuttie/inkstained-vim'
 Plug 'https://github.com/logico-dev/typewriter'
+Plug 'https://github.com/NLKNguyen/papercolor-theme'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -48,6 +49,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 " Todo: Completion sources
+" Denne var bare buggy
+" Plug 'https://github.com/ncm2/ncm2-jedi'
+Plug 'https://github.com/Shougo/neco-vim'
 
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -118,10 +122,11 @@ Plug 'https://github.com/kana/vim-submode'
 let g:submode_timeout = 0
 let g:submode_keep_leaving_key = 1
 
-" Completion
-Plug 'https://github.com/Shougo/neco-vim'
-
+"UNIX helpers
 Plug 'https://github.com/tpope/vim-eunuch'
+
+Plug 'https://github.com/AndrewRadev/splitjoin.vim'
+"Bruk gJ og gS
 
 call plug#end()
 
@@ -221,8 +226,6 @@ set gdefault
 
 set inccommand=split
 
-set foldmethod=indent
-set nofoldenable
 
 set scrolloff=3
 set sidescrolloff=3
@@ -236,7 +239,10 @@ set formatoptions+=n
 " Nei den fucker opp noe annet jesus
 "set completeopt="menu,menuone,noinsert,noselect,preview"
 " Den over gjÃ¸r ingenting med NCM, men den under skal i teorien gjÃ¸re det
-let g:cm_completeopt="menu,menuone,noinsert,noselect,preview"
+
+" Denne funket med ncm2, men preview var flickery og irriterende
+" let g:cm_completeopt="menu,menuone,noinsert,noselect,preview"
+let g:cm_completeopt="menu,menuone,noinsert,noselect"
 
 
 set switchbuf=usetab
@@ -290,6 +296,7 @@ nmap <silent> <leader>q :q!<CR>
 nmap <silent> <leader>Q :q!<CR>
 map q<space> :q!<CR>
 nmap <silent> <leader>w :wq<CR>
+inoremap <M-s> <Esc>:update<CR>
 nmap <silent> <leader>s :w<CR>
 nmap <silent> <leader>e :e!<CR>
 nmap <silent> <leader>d :bd!<CR>
@@ -339,8 +346,8 @@ imap <M-n> <Esc>n
 imap <M-N> <Esc>N
 imap <M-ø> <Esc>:
 imap <M-:> <Esc>:
-imap <M-s> <Esc>s
-imap <M-S> <Esc>S
+" imap <M-s> <Esc>s
+" imap <M-S> <Esc>S
 imap <M-r> <C-O>r
 imap <M-R> <C-O>R
 imap <M-i> <Esc>I
@@ -374,6 +381,7 @@ nmap <M-f> <C-Right>
 nmap <M-b> <C-Left>
 "/EMACS
 nnoremap <M-i> S
+vnoremap <M-i> c
 
 vmap <M-h> <Esc>h
 vmap <M-j> <Esc>j
@@ -498,6 +506,11 @@ onoremap J }
 onoremap K {
 nnoremap <M-j> 4gj4<C-e>
 nnoremap <M-k> 4gk4<C-y>
+nnoremap <C-F> <C-F>zz
+nnoremap <C-B> <C-B>zz
+nnoremap gg ggzz
+nnoremap G Gzz
+
 
 " søk
 nmap s /
@@ -540,7 +553,7 @@ let g:sneak#use_ic_scs = 1
 hi Sneak ctermfg=6 ctermbg=8
 
 " go to tag
-" map t <C-]>
+nnoremap <M-t> <C-]>zz
 
 " redo
 nnoremap U <C-R>
@@ -555,7 +568,9 @@ nnoremap Q @q
 nnoremap gQ <Nop>
 
 " join line
-nnoremap <M-J> gJ
+" gJ preserver whitespace, men var ikke bra oppførsel når du preserver
+" indentering
+nnoremap <M-J> J 
 " split line
 " nnoremap <M-K> a<CR><Esc><BS>
 function! BreakHere()
@@ -638,7 +653,16 @@ nmap <silent> <M-3> :NERDTreeToggle<CR>
 nmap <silent> <M-4> :TagbarToggle<CR>
 
 " toggle fold
-"nnoremap <space> za
+set foldmethod=indent
+set nofoldenable "folding ikke på default når du åpner en fil
+set foldlevel=2
+set foldnestmax=2 " 1 = klassenivå, 2 = funksjoner
+set foldopen+=jump
+nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
+nnoremap go za
+nnoremap gO zA
+nnoremap <M-m> zr
+nnoremap <M-M> zm
 
 " WORD OBJECTS
 " targets.vim
@@ -802,7 +826,8 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " nvim completion manager
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 "inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-D>"
 
 " ncm2
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -835,3 +860,4 @@ let g:bullets_enabled_file_types = [
     \ 'scratch'
     \]
 
+autocmd VimEnter * ALEDisable
