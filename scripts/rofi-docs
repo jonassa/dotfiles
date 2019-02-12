@@ -1,6 +1,6 @@
 #!/usr/bin/zsh
  
-doc=$(fd -e pdf -e djvu . /home/jonas/ |rofi -dmenu -i -p "Document:")
+doc=$(fd -e pdf -e djvu . /home/jonas/ |rofi -dmenu -i -p "Document")
 if [[ -n $doc ]]
 then
     zathura "$doc"

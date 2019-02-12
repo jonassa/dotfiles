@@ -1,3 +1,5 @@
+bindkey -e
+
 # Farger for man
 man() {
     env LESS_TERMCAP_mb=$'\E[1;31m' \
@@ -16,18 +18,22 @@ autoload -U colors && colors
 # Sett LS_COLORS
 eval $(dircolors)
 # eval $(dircolors /home/jonas/.nord_dircolors)
+export EXA_COLORS="di=1;34:ln=1;36:uu=0:gu=0:ur=0:uw=0:ux=0:ue=0:gr=0:gw=0:gx=0:tr=0:tw=0:tx=0:su=0:sf=0:xa=0:da=0:sn=0:sb=0"
 
-export EDITOR=nvim
-export VISUAL=nvim
 
+# Burde ikke være i zshrc, men i profile
+# export EDITOR=nvim
+# export VISUAL=nvim
+
+# Burde ikke være her, men i profile
 # Inkluder global-dir for npm pakker i path
-NPM_PACKAGES="${HOME}/.npm-global"
-PATH="$NPM_PACKAGES/bin:$PATH"
-# Ruby gems i path
-PATH="/home/jonas/.gem/ruby/2.5.0/bin:$PATH"
-# Rust i path
-PATH="/home/jonas/.cargo/bin:$PATH"
-export PATH
+# NPM_PACKAGES="${HOME}/.npm-global"
+# PATH="$NPM_PACKAGES/bin:$PATH"
+# # Ruby gems i path
+# PATH="/home/jonas/.gem/ruby/2.5.0/bin:$PATH"
+# # Rust i path
+# PATH="/home/jonas/.cargo/bin:$PATH"
+# export PATH
 
 
 # For at termite skal kunne vite hvilken mappe du er i og starte en ny terminal derfra
@@ -160,7 +166,6 @@ setopt PUSHD_TO_HOME        # Push to home directory when no argument is given.
 setopt CDABLE_VARS          # Change directory to a path stored in a variable.
 setopt MULTIOS              # Write to multiple descriptors.
 
-alias d='dirs -v'
 #for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
 switch-to-dir () {
@@ -175,23 +180,23 @@ switch-to-dir () {
 	done
 }
 
-insert-cycledleft () {
+cycledleft () {
 	emulate -L zsh
 	setopt nopushdminus
 
 	switch-to-dir +1
 	zle reset-prompt
 }
-zle -N insert-cycledleft
+zle -N cycledleft
 
-insert-cycledright () {
+cycledright () {
 	emulate -L zsh
 	setopt nopushdminus
 
 	switch-to-dir -0
 	zle reset-prompt
 }
-zle -N insert-cycledright
+zle -N cycledright
 
 # Command-not-found
 source /usr/share/doc/pkgfile/command-not-found.zsh
@@ -222,16 +227,22 @@ add-zsh-hook chpwd chpwd_recent_dirs
 
 ## Aliaser
 
+# alias ls='ls -h --color=auto --group-directories-first'
+# alias l='ls -l'
+# alias ll='ls -la'
+
 alias ls='ls -h --color=auto --group-directories-first'
-# alias ls='/opt/coreutils/bin/ls -h --color=auto --group-directories-first'
-alias l='ls -l'
-alias ll='ls -la'
+alias exa='exa --group-directories-first'
+alias l='exa -l'
+alias ll='exa -la'
+alias lll='exa -lauUhmiHS --git'
+alias lt='exa -laT'
 
 function e() {
     if [[ -n $@ ]]; then
         echo $@
     else
-        local var=$(set | cut -d= -f1 | fzf)
+        local var=$(env | cut -d= -f1 | fzf)
         echo ${(P)var}
     fi
 }
@@ -240,9 +251,11 @@ compdef _vars e
 alias p='print -l'
 alias o='xdg-open'
 alias h='history'
+alias d='dirs -v'
 alias lo='locate'
 alias u='cd ..'
 alias ax='chmod a+x'
+alias cat='bat'
 function vsh(){
     if [[ -n $1 ]]; then
         if [[ -w $(dirname $1) ]]; then
@@ -262,27 +275,23 @@ export LESS='-iRk /home/jonas/.less'
 alias tree='tree -Chal --dirsfirst'
 function trl() {tree $@ | less}
 alias diff='colordiff'
-# alias pass='dump.py|awk "{print $2,$4}"|rg https://|sed "s,https://,,"|fzf|cut -d" " -f2|tr -d "\n"|xsel -ib'
 function pass() {
     dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
 }
-function conf() {(fd -H "${@}" /etc; fd -H "${@}" ~/.config)}
-
 alias grep='grep -i --color=auto'
-alias fd='fd -I' # ignored
-alias fh='fd -H' # hidden and ignored
-alias ag='ag -t --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31' # ignored
-alias ah='ag --hidden' # hidden and ignored
+alias fd='fd -H'
+alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31' # ignored
 function agl() {ag $@ --pager less 2> /dev/null}
-alias rg='rg -uS' # ignored, smartcase
-alias rh='rg -uu' # hidden and ignored
-function rgl() {rg -p $@ 2> /dev/null | less}
+function gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
+alias rg='rg -uuS' # hidden, ignored, smartcase
+function rgl() {rg $@ 2> /dev/null | less}
 
 alias v='nvim'
 alias vim='nvim'
 alias sv='sudo nvim'
 alias svim='sudo nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
+alias z='nvim ~/.zshrc'
 alias em='emacsclient -c -a=""'
 
 alias ta='tmux attach'
@@ -296,13 +305,13 @@ alias pm='sudo pacman'
 alias pa='pacaur'
 alias pu='sudo pacman -Syu --noconfirm'
 alias puu='pacaur -Syu --noconfirm'
+function pd() {sudo pacman -Rns $(pacman -Qqdt)}
 alias pls='pacaur -Ql'
 alias pf='pacaur -Fs'
 alias po='pacaur -Qo'
-alias pt='pactree -cs'
+alias pt='pactree -c'
 alias deps='pactree -cd1'
 alias sdeps='pactree -scd1'
-alias plog='paclog'
 alias pl='paclog'
 alias pla='paclog --color --action all'
 alias plc='paclog --color --commandline|rg -v -e "pacman -D" -e "-Ud"'
@@ -311,32 +320,35 @@ alias plg='paclog --grep'
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
-alias dmesg='dmesg -HP --color=always' # funker med grepping og less, men kan være andre ting som ikke funker
+alias dmesg='dmesg -HP --color=always' # human, no-pager, farger kan være problem men funker med grep og less
+alias jc='journalctl'
+alias pstree='pstree -hT' # highlight current process, hide threads
 
 alias ip='ip -color'
 alias ipp='ip -br addr && ip -br link'
-# alias ip='ip -color -br'
-alias dfc='dfc -wT'
+alias df='df -hT' # human, show filesystem type; -a for all
+alias dfc='dfc -T' # show type
 alias cdu='cdu -idh'
-alias ht='htop'
 alias htop='sudo htop'
 # function smem() {
 #     (sudo smem -pt $@ | tail -n 1;
 #     smem -kt $@) | command less
 #     }
-alias smem='sudo smem -kt'
-alias pgrep='sudo pgrep -li'
-
+alias smem='sudo smem -kt' # -k abbreviate, -t show totals
+alias pgrep='sudo pgrep -li' # show name, case insensitive
 
 alias tldr='tldr -t ocean'
 
 alias aria='aria2c'
 alias sub='subliminal download -l en'
+alias py='python'
 
 alias fkprint='lp -d fkprint -h printhost.samfundet.no'
 
 alias li='light -S'
-alias cl='xsel -ib'
+alias cl='xsel -b' # uten o eller i, kan fungere som input eller output
+alias sel='fzf | xsel -ib'
+
 
 alias clone='git clone'
 alias ga='git add'
@@ -384,31 +396,23 @@ paclist() {
 }
 
 vg() {
-    if [[ -z $@ ]]
-    then
+    if [[ -z $@ ]]; then
         return
     fi
-    local file=$(rg -uul $@ | fzf --preview="rg --color=always -C3 \"${@}\" {}");
-    if [[ -n $file ]]
-    then
-        local line=$(rg -n $@ "${file}" | head -n1 | cut -d: -f1)
+    local file=$(command rg -l -uu "$@" | fzf --preview="rg --color=always -C3 \"${@}\" {}");
+    if [[ -n $file ]]; then
+        local line=$(rg -n "$@" "${file}" | head -n1 | cut -d: -f1)
         vim +$line "${file}"
 
     fi
 }
 
 vf() {
-    local file=$(fd -tf -H "$@" | fzf --preview "echo {} | rg --color=always \"$@\"" --preview-window up:1);
-    if [[ -n $file ]]
-    then
+    local file=$(fd -tf "$@" | fzf --preview "echo {} | rg --color=always \"$@\"" --preview-window up:1);
+    if [[ -n $file ]]; then
         vim "${file}"
     fi
 }
-
-fag() {
-  local line=$(ag -nocolor "$@" | fzf) \
-    && vim $(cut -d':' -f1 <<< "$line") +$(cut -d':' -f2 <<< "$line")
-}    
 
 mykeys() {
     (
@@ -431,8 +435,7 @@ mykeys() {
 # }
 
 pi() {
-    if [[ -n $@ ]]
-    then
+    if [[ -n $@ ]]; then
         result=$(comm -23 <(pacaur -Ssq $@|sort) <(pacman -Qq|sort) | fzf --preview 'pacaur -Si {}')
     else
         result=$(comm -23 \
@@ -448,8 +451,7 @@ pi() {
 }
 
 pg() {
-    if [[ -n $@ ]]
-    then
+    if [[ -n $@ ]]; then
         result=$(pacaur -Ssq $@ | fzf --preview 'pacaur -Si {}')
     else
         result=$( \
@@ -463,8 +465,7 @@ pg() {
 }
 
 pq() {
-    if [[ -n $@ ]]
-    then
+    if [[ -n $@ ]]; then
         result=$(pacman -Qqs $@ | fzf --preview 'pacman -Qi {}')
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
@@ -486,25 +487,9 @@ pr() {
     [[ -n $result ]] && sudo pacman -Rns $result
 }
 
-pr() {
-    if [[ -n $@ ]]
-    then
-        result=$(pacman -Qqs $@ | fzf --preview 'pacman -Qi {}')
-    else
-        result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
-    fi
-
-    [[ -n $result ]] && sudo pacman -Rns $result
-}
-
-pd() {
-    sudo pacman -Rns $(pacman -Qqdt)
-}
-
 ali() {
     local cmd=$(alias|fzf|cut -d\' -f2)
-    if [[ -n $cmd ]]
-    then
+    if [[ -n $cmd ]]; then
         echo $cmd
         eval $cmd
     fi
@@ -513,8 +498,7 @@ ali() {
 
 psq() {
     local pid=$(ps -e hc -o pid,user,args|fzf|awk '{print $1}')
-    if [[ -n $pid ]]
-    then
+    if [[ -n $pid ]]; then
         ps -o f,s,user,pid,ppid,pgid,lwp,nlwp,sid,tty,cmd,comm -p $pid | column -t
         echo
         ps -o pri,ni,start_time,etime,time,rss,vsz,pmem,pcpu,uunit -p $pid | column -t
@@ -538,12 +522,10 @@ ap() {
         (highlight -O ansi -l {} ||
         cat {}) 2> /dev/null | head -500'
     )
-    if [[ -n $file ]]
-    then
+    if [[ -n $file ]]; then
         file=$(realpath $file)
-        if [[ $(file --mime $file) != *"binary"* ]]
-        then
-            echo $@ >> $file
+        if [[ $(file --mime $file) != *"binary"* ]]; then
+            echo "$@" >> $file
         else
             echo "Binary file, nothing appended"
             return 1
@@ -571,8 +553,6 @@ antibody bundle < ~/.zplugins.txt
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets line)
 ZSH_HIGHLIGHT_STYLES[path]=none
 
-# Tror denne må være før mye
-bindkey -e
 
 ## WIDGETS
 
@@ -613,14 +593,12 @@ zle -N parent-directory-widget
 sc-widget() {
     zle kill-buffer
     local service=$(systemctl list-unit-files --no-pager| cut -d' ' -f1| tail -n +2 | head -n -2| sed '/^-/d' | rg -v @ | fzf --preview="systemctl status -n0 {}");
-    if [[ -n $service ]]
-    then
+    if [[ -n $service ]]; then
         zle redisplay
         systemctl status --no-pager $service
         zle accept-line
-        local action=$(echo "show\nenable\ndisable\nstart\nstop\nrestart\nreload"|fzf)
-        if [[ -n $action ]]
-        then
+        local action=$(echo "cat\nshow\nenable\ndisable\nstart\nstop\nrestart\nreload"|fzf)
+        if [[ -n $action ]]; then
             zle redisplay
             BUFFER="sudo systemctl $action $service"
             zle accept-line
@@ -636,26 +614,20 @@ zle -N sc-widget
 global-cd-widget() {
     zle kill-buffer
     local file="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
-    if [[ -n $file ]]
-    then
-        if [[ -d $file ]]
-        then
+    if [[ -n $file ]]; then
+        if [[ -d $file ]]; then
             cd -- "$file"
-            zle reset-prompt
         else
             cd -- "${file:h}"
-            zle reset-prompt
         fi
-    else
-        zle reset-prompt
     fi
+    zle reset-prompt
 }
 zle -N global-cd-widget
 
 insert-widget() {
     local target="$(locate -Ai -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
-    if [[ -n $target ]]
-    then
+    if [[ -n $target ]]; then
         LBUFFER+="$target "
         zle redisplay
     else
@@ -668,18 +640,16 @@ zle -N insert-widget
 edit-local-widget() {
     zle kill-buffer
     # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
-    local file=$(rg --files -uu | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='~/' \
+    local file=$(rg --files -uu | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='./' \
         --preview='[[ $(file -b --mime {}) =~ binary ]] &&
         file -b {} ||
         (highlight -O ansi -l {} ||
         cat {}) 2> /dev/null | head -500'
-    )
-    if [[ -n $file ]]
-    then
+        )
+    if [[ -n $file ]]; then
         file=$(realpath $file)
         zle redisplay
-        if [[ ! $(file --mime $file) =~ 'binary' ]]
-        then
+        if [[ ! $(file --mime $file) =~ 'binary' ]]; then
             BUFFER="vim \"${file}\""
             zle accept-line
         fi
@@ -706,11 +676,9 @@ edit-global-widget() {
         (highlight -O ansi -l {} ||
         cat {}) 2> /dev/null | head -500';)
 
-    if [[ -n $file && (! $(file --mime $file) =~ 'binary') ]]
-    then
+    if [[ -n $file && (! $(file --mime $file) =~ 'binary') ]]; then
         zle redisplay
-        if [[ -w $file ]]
-        then
+        if [[ -w $file ]]; then
             BUFFER="nvim '${file}'"
             zle accept-line
         else 
@@ -726,8 +694,7 @@ zle -N edit-global-widget
 kill-processes-widget() {
     zle kill-buffer
     local process=$(ps hc --ppid 2 -p 2 --deselect -o pid,user,args|fzf|awk '{print $1}')
-    if [[ -n $process ]]
-    then
+    if [[ -n $process ]]; then
         echo $process
     	zle redisplay
         BUFFER="sudo kill $process"
@@ -750,8 +717,7 @@ zle -N sudo-widget
 man-widget() {
     zle kill-buffer
     local manpage=$(fd -tf -e gz . /usr/share/man/ | sed 's/.*\///' | sed 's/\..*//' | sort -u |fzf --preview="whatis {}" --preview-window up:1)
-    if [[ -n $manpage ]]
-    then
+    if [[ -n $manpage ]]; then
         zle redisplay
         BUFFER="man $manpage"
         zle accept-line
@@ -764,8 +730,7 @@ zle -N man-widget
 ssh-widget() {
     zle kill-buffer
     local login=$(cat ~/.ssh/logins | fzf)
-    if [[ -n $login ]]
-    then
+    if [[ -n $login ]]; then
         zle redisplay
         BUFFER="ssh $login"
         zle accept-line
@@ -784,8 +749,7 @@ where-widget() {
     print -l ${(ok)functions};
     print -l ${(ok)aliases}
     ) | fzf --preview="whatis {} 2> /dev/null && echo; where {} 2> /dev/null")
-    if [[ -n $name ]]
-    then
+    if [[ -n $name ]]; then
         zle redisplay
         where $name && whatis $name 2> /dev/null && pacman -Qo $(whereis -b $name|cut -d' ' -f2)
         zle accept-line
@@ -795,6 +759,18 @@ where-widget() {
 }
 zle -N where-widget
 
+bookmarks-widget() {
+    zle kill-buffer
+    local dir=$(hash -d | grep -v -E "OLDPWD|PWD" | fzf --preview 'tree -C $(echo {} | cut -d= -f2)')
+    if [[ -n $dir ]]; then
+        dir=$(echo $dir | cut -d= -f2)
+        cd $dir
+        zle redisplay
+    else
+        zle reset-prompt
+    fi
+}
+zle -N bookmarks-widget
 
 ## Keybindings
 
@@ -824,14 +800,16 @@ bindkey '^[i' insert-widget
 bindkey '^[R' sudo-widget
 bindkey '^[H' man-widget
 bindkey '^U' parent-directory-widget
+bindkey '^[[1;3A' parent-directory-widget
 bindkey '^[W' where-widget
+bindkey '^[|' bookmarks-widget
 
 # fzf-widgets
 bindkey '^[r' fzf-change-recent-directory
 
 # Cycle dirstack, må være etter plugins
-bindkey '^[P' insert-cycledleft
-bindkey '^[N' insert-cycledright
+bindkey '^[P' cycledleft
+bindkey '^[N' cycledright
 
 # Alt-left, alt-right
 bindkey ';3C' forward-word
@@ -841,8 +819,8 @@ bindkey ';3D' backward-word
 bindkey ';5C' forward-word
 bindkey ';5D' backward-word
 
+# escape codes er riktige, men undefined-key gjør ikke det du vil
 # Ctrl-up,down, Alt-up,down
-# Ser ikke ut til å fungere
 bindkey ';3A' undefined-key
 bindkey ';3B' undefined-key
 bindkey ';5A' undefined-key
@@ -854,7 +832,8 @@ bindkey '^S' undefined-key
 bindkey '^[L' undefined-key
 # bindkey '^[l' undefined-key
 bindkey '^[l' clear-screen
-bindkey '^Q' kill-buffer
+# Push hele bufferen til stack og hent den igjen etter du har gjort noe annet
+bindkey '^Q' push-line-or-edit
 bindkey '^[q' kill-buffer
 
 
@@ -863,7 +842,8 @@ bindkey '^[q' kill-buffer
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='rg --files -uu'
-export FZF_ALT_C_OPTS="--prompt='~/' --preview 'tree -C {} | head -200'"
+export FZF_ALT_C_COMMAND="fd -td -tl"
+export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_OPTS='
 --height=50% --reverse
 --bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
@@ -874,9 +854,6 @@ bindkey '^T' fzf-completion
 bindkey '^[t' fzf-completion
 bindkey '^I' $fzf_default_completion
 
-
-#autonamedirs
+# autonamedirs
 setopt autonamedirs
-dotfiles="/home/jonas/Dropbox/Backup/dotfiles"
-minimax="/home/jonas/Dropbox/Fag/Kunstig intelligens/Assignment 4"
-sudoku="/home/jonas/Dropbox/Fag/Kunstig intelligens/Assignment 5"
+source ~/.zshdirs

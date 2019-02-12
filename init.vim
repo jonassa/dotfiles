@@ -32,6 +32,7 @@ let g:vrunchbang_dark_LineNr = 'off'
 Plug 'https://github.com/nightsense/snow'
 Plug 'https://github.com/nightsense/seabird'
 Plug 'https://github.com/nightsense/stellarized'
+Plug 'https://github.com/nightsense/rusticated'
 Plug 'https://github.com/sts10/vim-pink-moon'
 Plug 'https://github.com/andreypopp/vim-colors-plain'
 Plug 'https://github.com/yuttie/inkstained-vim'
@@ -433,13 +434,14 @@ cnoremap <M-n> <C-n>
 cnoremap <M-p> <C-p>
 
 " Small keys
-noremap + .
+" noremap + .
+" noremap . <Nop>
+noremap + <Nop>
+noremap - <Nop>
 noremap \ @:
-noremap . <Nop>
 nnoremap <CR> <Nop>
 noremap <BS> <Nop>
 noremap <M-BS> <Nop>
-noremap - <Nop>
 " toggle case
 noremap ¤ ~
 
@@ -596,6 +598,8 @@ map Y y$
 map <leader>y "+y
 " paste from clipboard
 map <leader>p <esc>"+p
+map cp <esc>"+p
+map cp <esc>"+P
 " paste from yank register
 " nnoremap <M-p> "0p
 " nnoremap <M-P> "0P
@@ -605,6 +609,8 @@ nnoremap <M-d> yyp
 nnoremap <M-D> yyP
 " duplicate selected lines
 vnoremap P <esc>y'<g'>p
+"delete to start of line
+nnoremap dh d^
 
 " insert blank lines
 function! s:blankup(count) abort
@@ -747,6 +753,9 @@ function! JustOneSpace()
 endfunction
 command! JustOneSpace call JustOneSpace()
 nnoremap <silent> <M-Space> :JustOneSpace<CR>
+
+command! -nargs=? Filter let @a='' | execute 'g/<args>/y A' | enew | setlocal bt=nofile | put! a
+
 
 "-----------------
 " PLUGINS

@@ -42,7 +42,7 @@ MiscShowRelaunchDialog=TRUE
 DropdownPosition=56
 BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 
-ColorForeground=#abb2bf
-ColorBackground=#282c34
-ColorCursor=x
-ColorPalette=#282c34;#e06c75;#98c379;#e5c07b;#61afef;#c678dd;#56b6c2;#abb2bf;#545862;#e06c75;#98c379;#e5c07b;#61afef;#c678dd;#56b6c2;#c8ccd4
+ColorCursor=#dcdcdfdfe4e4
+ColorForeground=#dcdcdfdfe4e4
+ColorBackground=#1e1e21212727
+ColorPalette=#28282c2c3434;#e0e06c6c7575;#9898c3c37979;#e5e5c0c07b7b;#6161afafefef;#c6c67878dddd;#5656b6b6c2c2;#dcdcdfdfe4e4;#28282c2c3434;#e0e06c6c7575;#9898c3c37979;#e5e5c0c07b7b;#6161afafefef;#c6c67878dddd;#5656b6b6c2c2;#dcdcdfdfe4e4

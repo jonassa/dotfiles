@@ -8,5 +8,6 @@ zsh-users/zsh-autosuggestions
 sindresorhus/pure
 
 zsh-users/zsh-syntax-highlighting
+
 # Denne må være etter syntax-hl
 zsh-users/zsh-history-substring-search

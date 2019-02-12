@@ -9,6 +9,12 @@
     <property name="height" type="uint" value="1019"/>
     <property name="width" type="uint" value="956"/>
     <property name="maximize-on-startup" type="bool" value="false"/>
+    <property name="thumbnails" type="empty">
+      <property name="show" type="bool" value="true"/>
+    </property>
+    <property name="toolbar" type="empty">
+      <property name="show" type="bool" value="true"/>
+    </property>
   </property>
   <property name="file" type="empty">
     <property name="current-uri" type="string" value="file:///usr/share/icons/Papirus/22x22/apps"/>

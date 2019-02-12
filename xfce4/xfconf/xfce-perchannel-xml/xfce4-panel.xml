@@ -28,7 +28,7 @@
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
       <property name="nrows" type="uint" value="1"/>
-      <property name="background-style" type="uint" value="0"/>
+      <property name="background-style" type="uint" value="1"/>
       <property name="background-color" type="array">
         <value type="uint" value="8738"/>
         <value type="uint" value="11565"/>
@@ -71,6 +71,7 @@
         <value type="string" value="task manager"/>
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="electron"/>
+        <value type="string" value="steam"/>
         <value type="string" value="synapse"/>
         <value type="string" value="baka-mplayer"/>
         <value type="string" value="zeal"/>
@@ -86,6 +87,7 @@
         <value type="string" value="slack"/>
         <value type="string" value="franz"/>
         <value type="string" value="cerebro"/>
+        <value type="string" value="udiskie"/>
         <value type="string" value="cadence"/>
       </property>
     </property>

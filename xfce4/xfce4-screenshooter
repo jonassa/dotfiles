@@ -1,8 +1,8 @@
 delay=1
 region=3
-action=4
+action=1
 show_mouse=1
-screenshot_dir=file:///home/jonas
+screenshot_dir=file:/home/jonas/Dropbox/Fag/Kompilatorteknikk/ex1
 app=pinta
 last_user=
 

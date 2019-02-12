@@ -1,5 +1,5 @@
 favorites=
-recent=visual-studio-code.desktop,pidgin.desktop,cockos-reaper-new.desktop,catfish.desktop,baka-mplayer.desktop,avahi-discover.desktop,xfce-backdrop-settings.desktop,ffadomixer.desktop,ranger.desktop,mpv.desktop
+recent=designer-qt4.desktop,ipython.desktop,llpp.desktop,org.pwmt.zathura.desktop,org.gnome.Evince.desktop,baka-mplayer.desktop,highlight.desktop,slack.desktop,hardinfo.desktop,cockos-reaper-whatsnew.desktop
 button-title=Applications
 button-icon=search
 button-single-row=false

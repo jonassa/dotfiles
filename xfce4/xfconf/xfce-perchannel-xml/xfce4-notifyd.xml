@@ -20,6 +20,7 @@
       <value type="string" value="pactray"/>
       <value type="string" value="Persepolis Download Manager"/>
       <value type="string" value="Radio Tray"/>
+      <value type="string" value="Slack"/>
       <value type="string" value="Spotify"/>
       <value type="string" value="Thunar"/>
       <value type="string" value="thunar-volman"/>
@@ -30,6 +31,7 @@
       <value type="string" value="xfce4-settings-helper"/>
     </property>
     <property name="muted_applications" type="array">
+      <value type="string" value="Dropbox"/>
     </property>
   </property>
   <property name="expire-timeout" type="int" value="5"/>

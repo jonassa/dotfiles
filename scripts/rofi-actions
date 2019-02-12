@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-OPTIONS="Reboot\nPower off\nSuspend\nHibernate\nLog out\nLock screen"
+OPTIONS="Reboot\nPower off\nSuspend\nHibernate\nLog out\nLock"
 
 LAUNCHER="rofi -width 30 -dmenu -i -p Actions"
 USE_LOCKER="false"

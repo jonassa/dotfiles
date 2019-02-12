@@ -39,7 +39,7 @@
 
 (global-hl-line-mode)
 (global-linum-mode)
-(global-highlight-parentheses-mode)
+(global-highlight-parentheses-mode) ;; ikke en default mode/pakke
 (show-paren-mode)
 
 (electric-pair-mode t)
