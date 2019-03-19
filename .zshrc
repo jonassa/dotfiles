@@ -25,16 +25,6 @@ export EXA_COLORS="di=1;34:ln=1;36:uu=0:gu=0:ur=0:uw=0:ux=0:ue=0:gr=0:gw=0:gx=0:
 # export EDITOR=nvim
 # export VISUAL=nvim
 
-# Burde ikke være her, men i profile
-# Inkluder global-dir for npm pakker i path
-# NPM_PACKAGES="${HOME}/.npm-global"
-# PATH="$NPM_PACKAGES/bin:$PATH"
-# # Ruby gems i path
-# PATH="/home/jonas/.gem/ruby/2.5.0/bin:$PATH"
-# # Rust i path
-# PATH="/home/jonas/.cargo/bin:$PATH"
-# export PATH
-
 
 # For at termite skal kunne vite hvilken mappe du er i og starte en ny terminal derfra
 if [[ $TERM == xterm-termite ]]; then
@@ -236,7 +226,10 @@ alias exa='exa --group-directories-first'
 alias l='exa -l'
 alias ll='exa -la'
 alias lll='exa -lauUhmiHS --git'
-alias lt='exa -laT'
+alias lt='exa -lT'
+alias ltt='exa -laT'
+function t() { exa -T --color always $@ | less }
+function tt() { exa -aT --color always $@ | less }
 
 function e() {
     if [[ -n $@ ]]; then
@@ -280,22 +273,34 @@ function pass() {
 }
 alias grep='grep -i --color=auto'
 alias fd='fd -H'
-alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31' # ignored
+# alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
+alias ag='ag --hidden --ignore .git'
 function agl() {ag $@ --pager less 2> /dev/null}
 function gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 function rgl() {rg $@ 2> /dev/null | less}
 
-alias v='nvim'
 alias vim='nvim'
-alias sv='sudo nvim'
 alias svim='sudo nvim'
+alias em='emacsclient -c -a=""'
+alias v='nvim ~/Dropbox/notes.txt'
+function vimgrep() { vim -c "silent grep $@" }
 alias vrc='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
-alias em='emacsclient -c -a=""'
-
-alias ta='tmux attach'
-alias tma='tmux attach -t $(tmux list-sessions|fzf|cut -f1 -d:)'
+alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
+alias cmd='nvim Dropbox/0Data/cmd/*'
+function ta() {
+    if [[ -z $@ ]]; then
+        local sessions=$(tmux list-sessions)
+        if [[ "$(echo \"$sessions\"|wc -l)" == "1" ]]; then
+            tmux attach
+        else
+            tmux attach -t $(echo $sessions|fzf|cut -f1 -d:)
+        fi
+    else
+        tmux attach -t $@
+    fi
+}
 alias tn='tmux new -s'
 alias tm='tmux'
 alias tl='tmux ls'
@@ -312,11 +317,13 @@ alias po='pacaur -Qo'
 alias pt='pactree -c'
 alias deps='pactree -cd1'
 alias sdeps='pactree -scd1'
-alias pl='paclog'
-alias pla='paclog --color --action all'
-alias plc='paclog --color --commandline|rg -v -e "pacman -D" -e "-Ud"'
-alias plw='paclog --warnings'
-alias plg='paclog --grep'
+# alias pl='paclog'
+# alias pla='paclog --color --action all'
+# alias plc='paclog --color --commandline|rg -v -e "pacman -D" -e "-Ud"'
+# alias plw='paclog --warnings'
+# alias plg='paclog --grep'
+alias plog='paclog'
+function pl() { test -n $@ && paclog --grep $@ || paclog --color --action all}
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
@@ -342,11 +349,18 @@ alias tldr='tldr -t ocean'
 alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
+alias py2='python2'
 
 alias fkprint='lp -d fkprint -h printhost.samfundet.no'
 
 alias li='light -S'
-alias cl='xsel -b' # uten o eller i, kan fungere som input eller output
+cl() {
+    if [[ -n $@ ]]; then
+        echo -n "$@" | xsel -b 
+    else
+        while read line; do echo "$line"; done | xsel -b
+    fi
+}
 alias sel='fzf | xsel -ib'
 
 
@@ -536,6 +550,11 @@ ap() {
 
 }
 
+# bookmark() {
+#     entry="\"$(basename $PWD)=$PWD\""
+#     if [[ -f "$HOME/.zshdirs" ]]; then
+# }
+
 
 
 
@@ -628,7 +647,7 @@ zle -N global-cd-widget
 insert-widget() {
     local target="$(locate -Ai -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
     if [[ -n $target ]]; then
-        LBUFFER+="$target "
+        LBUFFER+="\"$target\" "
         zle redisplay
     else
         zle redisplay

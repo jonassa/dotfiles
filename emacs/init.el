@@ -1,9 +1,7 @@
 (server-start)
 
 (require 'package)
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -406,19 +404,19 @@
   "gj" 'move-line-down
   "gk" 'move-line-up
   "M-n" 'evil-paste-pop-next
+  "C-n" 'next-buffer
   "M-p" 'evil-paste-pop
   "," 'goto-last-change
   ";" 'goto-last-change-reverse
   "<backspace>" (kbd "``")
-  "C-n" 'next-buffer
-  "C-p" 'previous-buffer
   "C-S-C" 'clipboard-kill-ring-save
-  "C-S-V" 'clipboard-yank
-  "go" 'insert-line-below
+  "C-p" 'previous-buffer
   "gO" 'insert-line-above
+  "go" 'insert-line-below
+  "C-S-V" 'clipboard-yank
+  
   "C-s" 'helm-swoop
 )
-
 (general-def 'visual
     "<" 'evil-shift-left-visual
     ">" 'evil-shift-right-visual
@@ -481,7 +479,7 @@
 
 (setq doom-themes-enable-bold t
       doom-themes-enable-italic t)
-(load-theme 'doom-spacegrey t)
+(load-theme 'doom-one t)
 (doom-themes-neotree-config)
 (doom-themes-org-config)
 
@@ -517,3 +515,13 @@
 ;;   :config (minions-mode 1))
 
 (add-to-list 'evil-emacs-state-modes 'inferior-python-mode)
+
+
+(use-package tex-mode
+  :ensure auctex)
+
+;; (use-package yasnippet
+;;   :ensure t)
+
+;; (use-package company-auctex
+;;   :ensure t)

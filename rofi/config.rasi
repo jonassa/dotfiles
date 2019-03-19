@@ -25,11 +25,11 @@ configuration {
     kb-secondary-paste: "Control+v";
     kb-accept-entry: "Return";
     kb-accept-custom: "Control+Return";
-	kb-row-tab: "Tab";
 	kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q";
 	kb-remove-to-eol: "";
-	kb-row-up: "Control+k,Control+p";
-	kb-row-down: "Control+j,Control+n";
+	kb-row-tab: "Tab";
+	kb-row-up: "Shift+Tab,Control+k,Control+p,Alt+k,Alt+p";
+	kb-row-down: "Control+j,Control+n,Alt+j,Alt+n";
 	kb-mode-next: "Super+r,Super+g";
 }
 /* Fjern denne for custom theme lagret i theme.rasi, og uncomment linja theme: over */

@@ -80,6 +80,7 @@
         <value type="string" value="pactray"/>
         <value type="string" value="radiotray"/>
         <value type="string" value="chromium"/>
+        <value type="string" value="dropbox"/>
         <value type="string" value="pidgin"/>
         <value type="string" value="gpick"/>
         <value type="string" value="xfce4-power-manager"/>
@@ -97,7 +98,7 @@
     </property>
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value=";mps-youtube.instance14446;mps-youtube.instance17992;mps-youtube.instance30678;mps-youtube.instance3932;mps-youtube.instance4311;mps-youtube.instance5823;mps-youtube.instance5923;spotify;vlc;vlc.instance20815;vlc.instance24332;vlc.instance24834;vlc.instance25012;vlc.instance27089;vlc.instance29750;vlc.instance32593;vlc.instance382"/>
+      <property name="mpris-players" type="string" value=";mps-youtube.instance14446;mps-youtube.instance17992;mps-youtube.instance30678;mps-youtube.instance3932;mps-youtube.instance4311;mps-youtube.instance5823;mps-youtube.instance5923;spotify;vlc;vlc.instance11969;vlc.instance20815;vlc.instance24332;vlc.instance24834;vlc.instance25012;vlc.instance27089;vlc.instance29750;vlc.instance32593;vlc.instance382"/>
     </property>
     <property name="plugin-17" type="string" value="systemload"/>
     <property name="plugin-13" type="string" value="netload"/>

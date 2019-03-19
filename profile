@@ -19,8 +19,7 @@ appendpath '/usr/local/bin/scripts'
 appendpath '/usr/bin'
 # Jonas
 appendpath "${HOME}/.local/bin"
-NPM_PACKAGES="${HOME}/.npm-global"
-appendpath "$NPM_PACKAGES/bin"
+appendpath "${HOME}/.npm-global/bin"
 appendpath "/home/jonas/.gem/ruby/2.5.0/bin"
 appendpath "/home/jonas/.cargo/bin"
 

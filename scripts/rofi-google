@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+query=$(rofi -dmenu -width 50 -lines 0 -location 2 -p "Search")
+
+if [[ -n $query ]]; then
+    xdg-open "https://www.google.no/search?q=$query"
+fi
+

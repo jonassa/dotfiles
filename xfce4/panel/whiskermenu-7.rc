@@ -1,5 +1,5 @@
 favorites=
-recent=designer-qt4.desktop,ipython.desktop,llpp.desktop,org.pwmt.zathura.desktop,org.gnome.Evince.desktop,baka-mplayer.desktop,highlight.desktop,slack.desktop,hardinfo.desktop,cockos-reaper-whatsnew.desktop
+recent=uxterm.desktop,baka-mplayer.desktop,highlight.desktop,xterm.desktop,exo-preferred-applications.desktop,designer-qt4.desktop,ipython.desktop,llpp.desktop,org.pwmt.zathura.desktop,org.gnome.Evince.desktop
 button-title=Applications
 button-icon=search
 button-single-row=false
