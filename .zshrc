@@ -228,8 +228,8 @@ alias ll='exa -la'
 alias lll='exa -lauUhmiHS --git'
 alias lt='exa -lT'
 alias ltt='exa -laT'
-function t() { exa -T --color always $@ | less }
-function tt() { exa -aT --color always $@ | less }
+function t() { exa -T --color always $@ | less --quit-if-one-screen }
+function tt() { exa -aT --color always $@ | less --quit-if-one-screen }
 
 function e() {
     if [[ -n $@ ]]; then
@@ -250,7 +250,7 @@ alias u='cd ..'
 alias ax='chmod a+x'
 alias cat='bat'
 function vsh(){
-    if [[ -n $1 ]]; then
+    if [[ -n $1 ]] && [[ ! -f $1 ]]; then
         if [[ -w $(dirname $1) ]]; then
             echo '#!/usr/bin/bash\n\n' > $1; chmod a+x $1; $EDITOR $1 +3
         else
@@ -266,7 +266,7 @@ function vsh(){
 alias path='echo $PATH | tr ":" "\n"'
 export LESS='-iRk /home/jonas/.less'
 alias tree='tree -Chal --dirsfirst'
-function trl() {tree $@ | less}
+function trl() {tree $@ | less --quit-if-one-screen}
 alias diff='colordiff'
 function pass() {
     dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
@@ -285,7 +285,7 @@ alias svim='sudo nvim'
 alias em='emacsclient -c -a=""'
 alias v='nvim ~/Dropbox/notes.txt'
 function vimgrep() { vim -c "silent grep $@" }
-alias vrc='nvim ~/.config/nvim/init.vim'
+alias vrc='nvim ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
 alias z='nvim ~/.zshrc'
 alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
 alias cmd='nvim Dropbox/0Data/cmd/*'

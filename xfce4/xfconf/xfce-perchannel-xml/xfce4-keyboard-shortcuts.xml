@@ -69,6 +69,7 @@
       <property name="&lt;Super&gt;g" type="string" value="rofi-browse"/>
       <property name="&lt;Super&gt;r" type="string" value="rofi -show run -display-run &quot;Run&quot;"/>
       <property name="&lt;Super&gt;space" type="string" value="rofi-google"/>
+      <property name="&lt;Super&gt;u" type="string" value="rofi-unicode"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+unipicker --command "rofi -dmenu -p 'Unicode'" --copy

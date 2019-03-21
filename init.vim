@@ -141,6 +141,9 @@ Plug 'https://github.com/tpope/vim-eunuch'
 " Plug 'https://github.com/SirVer/ultisnips'
 " Plug 'https://github.com/honza/vim-snippets'
 
+Plug 'https://github.com/metakirby5/codi.vim'
+nnoremap <leader>oc :Codi!!<CR>
+
 call plug#end()
 
 " Statusline
@@ -165,48 +168,34 @@ set statusline+=\ %*
 syntax enable
 set background=dark
 
-" let g:theme='onedark'
-let g:theme='onedark'
+" let g:theme='onehalfdark'
+colorscheme onehalfdark
 
-if exists('$TMUX')
-    set notermguicolors
-    " colorscheme disco
-    " let g:airline_theme='quantum'
-    colorscheme nord
-    " let g:airline_theme='nord'
-
-else
+if exists('+termguicolors')
     set termguicolors
-    " colorscheme two-firewatch
-    " let g:airline_theme='base16'
-    execute "colorscheme " . g:theme
-    " let g:airline_theme=g:theme
+    if exists('$TMUX')
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
 endif
 
-augroup TextFile
-    autocmd!
-    autocmd filetype text let b:textfile = 1
-augroup END
+" augroup TextFile
+"     autocmd!
+"     autocmd filetype text let b:textfile = 1
+" augroup END
 
-augroup SetFiletypeColors
-    autocmd!
-    autocmd BufEnter * call SetColors()
-augroup END
+" augroup SetFiletypeColors
+"     autocmd!
+"     autocmd BufEnter * call SetColors()
+" augroup END
 
-function! SetColors()
-    if exists('b:textfile')
-        colorscheme PaperColor
-        " AirlineTheme papercolor
-    else
-        if exists('$TMUX')
-            colorscheme nord
-            " AirlineTheme nord
-        else
-            execute "colorscheme " . g:theme
-            " execute "AirlineTheme " . g:theme
-        endif
-    endif
-endfun
+" function! SetColors()
+"     if exists('b:textfile')
+"         colorscheme PaperColor
+"     else
+"         execute "colorscheme " . g:theme
+"     endif
+" endfun
 
 "-----------------
 "" Options
@@ -266,7 +255,12 @@ set scrolloff=3
 set sidescrolloff=3
 
 set nojoinspaces
-set formatoptions+=n
+" set formatoptions+=n
+" set formatoptions-=o
+" Kan være dette ikke er beste autocommand event å bruke, men funker.
+" Formatoptions er ellers ikke persistent
+autocmd! BufEnter * set formatoptions=jncrql
+
 " Tror jeg liker select, altså ikke noselect
 " Nei tydeligvis ikke, den gjorde det verre...
 " Jo den gjør det bedre? Altså du slipper å trykke en ekstra gang bare for å
@@ -303,7 +297,7 @@ autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 
 " Automatisk normalisering av splits
 autocmd VimResized * wincmd =
 
-" Forhindre netrw i ÃÂ¥ ikke lukkes
+" Forhindre netrw i å ikke lukkes
 autocmd FileType netrw setl bufhidden=delete
 
 " Lukk preview window automatisk
@@ -355,6 +349,7 @@ nmap <silent> <leader>n :enew<CR>
 nmap <silent> <leader>t :Tags<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <silent> <leader>r :History<CR>
+nmap <silent> <C-R> :History:<CR>
 nmap <silent> <leader>: :Commands<CR>
 nmap <silent> <leader>h :Helptags<CR>
 nmap <silent> <leader>f :Files<CR>
@@ -435,8 +430,8 @@ nnoremap ? K
 nnoremap q <Nop>
 
 " Navigate changelist
-noremap , g;
-noremap ; g,
+noremap , g;zz
+noremap ; g,zz
 
 " Alternating
 nnoremap <silent> <C-S> <C-W>p
@@ -444,7 +439,7 @@ noremap <C-A> <C-^>
 nnoremap <M-Bar> `.
 noremap <Bar> ``
 nnoremap <BS> `.
-nnoremap gb `.
+" nnoremap gb `.
 
 
 
@@ -599,6 +594,7 @@ nmap <M-n> <Plug>yankstack_substitute_newer_paste
 map Y y$
 " yank to clipboard
 map <leader>y "+y
+vnoremap <C-C> "+y
 " paste from clipboard
 map <leader>p <esc>"+p
 nnoremap cp <esc>"+p
@@ -731,6 +727,8 @@ nnoremap Q %
 " xnoremap gb %
 " onoremap gb %
 nnoremap gB :ls!<CR>:b<Space>
+nnoremap gb :Buffers<CR>
+nnoremap <leader><Tab> :Buffers<CR>
 
 nnoremap vm :Maps!<CR>
 " nnoremap mk :mksession!<Space>
@@ -757,7 +755,7 @@ exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
 nnoremap <C-S> :Lines<CR>
 cnoremap <C-S> <C-C>:Lines<CR>
 nnoremap <C-Space> <C-W>p
-nnoremap <leader><Tab> <C-W>p
+" nnoremap <leader><Tab> <C-W>p
 
 nnoremap <M-x> :Commands<CR>
 
@@ -770,17 +768,27 @@ nnoremap <leader>2 :2tabnext<CR>
 " map ] i[
 " map ) i(
 "
+
+
+" Shortcuts som egentlig ikke sparer deg for så mye, men som kan være nice,
+" med mindre du finner noe bedre å bruke dem til
 nmap cv civ
+" nmap dv div gir mening i tillegg, men vil kanskje ha noe annet her?
 " clone paragraph: yapP
 " change paragraph: cip
 " delete paragraph: dap
 nnoremap dp dap
+
+nnoremap vv viw
+nnoremap vV viW
+nnoremap vp vip
 
 
 " Zappend
 nnoremap zd "Zdd
 nnoremap zp "zp:let @z=''<CR>
 
+" yank paste
 nnoremap yp "0p
 nnoremap yP "0P
 
@@ -790,6 +798,7 @@ nnoremap - :<C-u>-m.<left><left>
 
 " nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<cr>:execute 'lcd '.@a<cr>A
 
+nnoremap <M-a> mz=ap`z
 
 "____________TEST
 
@@ -917,7 +926,7 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 let g:fzf_colors =
-            \ { 'fg':      ['fg', 'Normal'],
+          \ { 'fg':      ['fg', 'Normal'],
             \ 'bg':      ['bg', 'Normal'],
             \ 'hl':      ['fg', 'Statement'],
             \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
