@@ -9,6 +9,7 @@ fontlist=(
     'DejaVu Sans Mono 11'
     'Iosevka Regular 13'
     'SF Mono 11'
+    'SF Mono 11.5'
 )
 
 selection=$(

@@ -33,4 +33,4 @@ configuration {
 	kb-mode-next: "Super+r,Super+g";
 }
 /* Fjern denne for custom theme lagret i theme.rasi, og uncomment linja theme: over */
-@import "/usr/share/rofi/themes/Arc-Dark.rasi"
+@import "/usr/share/rofi/themes/android_notification.rasi"

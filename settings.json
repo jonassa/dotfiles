@@ -1,0 +1,70 @@
+{
+    "window.zoomLevel": 0,
+    "editor.fontFamily": "SF Mono",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 20,
+    "vim.timeout": 0,
+    "vim.leader": "<Space>",
+    "vim.substituteGlobalFlag": true,
+    "vim.handleKeys": {
+    },
+    "vim.visualstar": true,
+    // "vim.enableNeovim": true,
+    // "vim.neovimPath": "/usr/bin/nvim",
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<C-q>"],
+            "after": ["<esc>"]
+            // "commands": ["extension.vim_escape"]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["U"],
+            "after": [],
+            "commands": ["extension.vim_ctrl+r"]
+        },
+        {
+            "before": ["J"],
+            "after": ["}"]
+        },
+        {
+            "before": ["K"],
+            "after": ["{"]
+        },
+        {
+            "before": ["H"],
+            "after": ["^"]
+        },
+        {
+            "before": ["L"],
+            "after": ["$"]
+        }
+        // {
+        //     "before": ["<leader>", "w"],
+        //     "after": [],
+        //     "commands": [
+        //         {
+        //             "command": "workbench.action.files.save",
+        //             "args": []
+        //         },
+        //         {
+        //             "command": "workbench.action.closeActiveEditor",
+        //             "args": []
+        //         }
+        //     ]
+        // },
+        //funker ikke...
+        // {
+        //     "before": ["<leader>", "e"],
+        //     "after": [],
+        //     "commands": ["workbench.action.files.revert"]
+        // }
+    ],
+
+    "workbench.iconTheme": "simple-icons",
+    "workbench.colorTheme": "Plastic",
+    "workbench.activityBar.visible": false,
+    "window.enableMenuBarMnemonics": false,
+    "window.titleBarStyle": "custom",
+}

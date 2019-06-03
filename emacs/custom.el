@@ -16,7 +16,7 @@
 	("#B9F" "#B8D" "#B7B" "#B69" "#B57" "#B45" "#B33" "#B11")))
  '(package-selected-packages
    (quote
-	(yasnippet 0blayout company-auctex auctex minions spaceline solaire-mode base16-theme doom-themes zerodark-theme which-key use-package telephone-line sr-speedbar rainbow-delimiters paper-theme neotree mwim imenu-list highlight-sexp highlight-parentheses helpful helm-swoop general flx flatland-theme evil-visualstar evil-collection evil-anzu drag-stuff dired-hacks-utils delight counsel company-quickhelp async-await arjen-grey-theme all-the-icons-dired)))
+	(org-bullets yasnippet 0blayout company-auctex auctex minions spaceline solaire-mode base16-theme doom-themes zerodark-theme which-key use-package telephone-line sr-speedbar rainbow-delimiters paper-theme neotree mwim imenu-list highlight-sexp highlight-parentheses helpful helm-swoop general flx flatland-theme evil-visualstar evil-collection evil-anzu drag-stuff dired-hacks-utils delight counsel company-quickhelp async-await arjen-grey-theme all-the-icons-dired)))
  '(show-paren-mode t)
  '(vc-annotate-background "#1f2124")
  '(vc-annotate-color-map

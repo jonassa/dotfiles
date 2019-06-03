@@ -1,4 +1,6 @@
-(server-start)
+(require 'server)
+(or (server-running-p)
+	(server-start))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages"))
@@ -76,6 +78,10 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; t: edit actual file, som gir git access til dotfiles mappen
+;; nil: behandle filen som om den ligger der symlinken er
+(setq vc-follow-symlinks nil)
+
 
 
 (use-package evil
@@ -100,17 +106,18 @@
 				 company
 				 (package-menu package)
 				 (buff-menu "buff-menu")
+				 ibuffer
 				 neotree
 				 ))
 	(add-to-list 'evil-collection-mode-list mode))
-  ;; (add-to-list 'evil-collection-mode-list 'help)
-  ;; (add-to-list 'evil-collection-mode-list 'dired)
-  ;; (add-to-list 'evil-collection-mode-list 'company)
-  ;; (add-to-list 'evil-collection-mode-list '(package-menu package))
-  ;; (add-to-list 'evil-collection-mode-list '(buff-menu "buff-menu"))
-  ;; (add-to-list 'evil-collection-mode-list 'neotree)
   :config
   (evil-collection-init))
+
+;; denne listen er lang per default, og magit er inkludert, men du kan legge til ting her
+;; (dolist (mode '(magit-mode))
+;;   (add-to-list 'evil-emacs-state-modes mode))
+;; (add-to-list 'evil-emacs-state-modes 'inferior-python-mode) ;; virker ikke?
+(evil-set-initial-state 'inferior-python-mode 'emacs) ;; denne funker, hmmm
 
 (use-package evil-visualstar
   :ensure t
@@ -197,8 +204,15 @@
    "M-j" 'ivy-next-line
    "M-k" 'ivy-previous-line 
    "C-q" 'ivy-kill-line
-   )
-  )
+   [escape] 'minibuffer-keyboard-quit) ;;bør probably settes mer generelt
+  (setq ivy-re-builders-alist
+  		'((swiper . ivy--regex-plus)
+  		  (t      . ivy--regex-fuzzy)))
+  (setq ivy-initial-inputs-alist nil)
+)
+
+(use-package flx
+  :ensure t)
 
 (use-package counsel
   :ensure t
@@ -286,74 +300,94 @@
 (use-package general
   :ensure t)
 
-(general-create-definer leader-def
-  :states 'normal
-  :prefix "SPC"
+;; LEADER
+(general-def
+  ;; hverken local eller intercept fungerte bra her
   :keymaps 'override
-  ;; Kan være for invasive, må vurderes
-  ;; Funker dog ikke for info-mode, f.eks, men er ikke farlig så lenge man kan quitte med q
-  ;; Tror grunnen er at info remapper space, og override keymappen fungerer først og fremst
-  ;; for å override evil.
-)
-
-(leader-def
+  :states '(motion visual)
+  :prefix "SPC"
   "f" 'counsel-fzf
   "e" 'revert-buffer-no-confirm
   "s" 'evil-write
   "r" 'eval-buffer
   "p" 'clipboard-yank
-  "b" 'helm-mini
+  ;;"b" 'helm-mini
+  "b" 'counsel-ibuffer
+  "TAB" 'counsel-ibuffer
   "ha" 'helm-apropos
+  "SPC" 'counsel-M-x
   )
 
-;; Override evil
-;; (general-def 'normal 'override
-;;   "<C-tab>" 'evil-window-next
-;;   "<C-S-iso-lefttab>" 'evil-window-prev
-;;   "C-q" 'evil-window-delete
-;;   "C-n" 'next-buffer
-;;   "C-p" 'previous-buffer
-;;   "C-S-n" 'make-frame-command
-;;   "M-1" 'delete-other-windows
-;;   "M-2" 'evil-window-split
-;;   "M-3" 'evil-window-vsplit
+;; (general-def
+;;   :keymaps 'magit-mode-map
+;;   :states 'emacs
+;;   :prefix "SPC"
+;;   "f" 'counsel-fzf
+;;   "e" 'revert-buffer-no-confirm
+;;   "s" 'evil-write
+;;   "r" 'eval-buffer
+;;   "p" 'clipboard-yank
+;;   ;;"b" 'helm-mini
+;;   "b" 'counsel-ibuffer
+;;   "TAB" 'counsel-ibuffer
+;;   "ha" 'helm-apropos
+;;   "SPC" 'counsel-M-x
 ;;   )
 
-;; Override anything
-;; C-Q og ting bundet i insert state av meg har tydeligvis fortsatt høyere prioritet
-;; enn denne, men det er like greit så lenge disse tingene funker for normal state i
-;; alle major modes som info, help, org osv.
-(defvar my-intercept-mode-map (make-sparse-keymap)
-  "Keymap for my-intercept-mode.")
 
-(define-minor-mode my-intercept-mode
-  "Global minor mode with highest precedence keybindings."
-  :lighter " intercept"
-  :init-value t
-  :global t)
-
-(general-def my-intercept-mode-map
+;; INTERCEPT
+;; Det du vil:
+;; Override emacs state/special buffers
+;; Ikke override minibuffer, insert state
+;; Mulig du vil ha override eller intercept her
+(general-def
+  :states '(motion visual emacs)
+  "<C-tab>" 'evil-window-next
+  "<C-S-iso-lefttab>" 'evil-window-prev
   "C-q" 'evil-window-delete
   "C-n" 'next-buffer
   "C-p" 'previous-buffer
-  "<C-tab>" 'evil-window-next 
-  "<C-S-iso-lefttab>" 'evil-window-prev
   "C-S-n" 'make-frame-command
   "M-1" 'delete-other-windows
   "M-2" 'evil-window-split
   "M-3" 'evil-window-vsplit
-  "<C-backspace>" 'switch-to-last-buffer
-  "C-S-q" 'kill-this-buffer
   )
 
-(my-intercept-mode)
-(add-hook 'minibuffer-setup-hook (lambda () (my-intercept-mode -1)))
-(add-hook 'minibuffer-exit-hook (lambda () (my-intercept-mode 1)))
+;; GAMMEL INTERCEPT
+;; Funker i evil normal state og emacs state, men har fortsatt
+;; lavere prioritet enn keys som er bundet i insert state (som er bra, med tanke på c-n c-p osv.)
+;; (defvar my-intercept-mode-map (make-sparse-keymap)
+;;   "Keymap for my-intercept-mode.")
+
+;; (define-minor-mode my-intercept-mode
+;;   "Global minor mode with highest precedence keybindings."
+;;   :lighter " intercept"
+;;   :init-value t
+;;   :global t)
+
+;; (general-def my-intercept-mode-map
+;;   "C-q" 'evil-window-delete
+;;   "C-n" 'next-buffer
+;;   "C-p" 'previous-buffer
+;;   "<C-tab>" 'evil-window-next 
+;;   "<C-S-iso-lefttab>" 'evil-window-prev
+;;   "C-S-n" 'make-frame-command
+;;   "M-1" 'delete-other-windows
+;;   "M-2" 'evil-window-split
+;;   "M-3" 'evil-window-vsplit
+;;   "<C-backspace>" 'switch-to-last-buffer
+;;   "C-S-q" 'kill-this-buffer
+;;   )
+
+;; (my-intercept-mode)
+;; (add-hook 'minibuffer-setup-hook (lambda () (my-intercept-mode -1)))
+;; (add-hook 'minibuffer-exit-hook (lambda () (my-intercept-mode 1)))
+
 
 
 
 (general-def
-  "M-x" 'helm-M-x
+  "M-x" 'counsel-M-x
 )
 
 (general-def 'motion
@@ -466,8 +500,13 @@
   "RET"
 )
 
+;; Info-mode-map er i evil-overriding-maps lista, spesifikt med motion state som argument
+;; Det betyr at det som defineres i Info-mode-map under motion state, vil overskrive det globale evil-motion-state keymapet.
+;; Bindings du ikke putter i motion state (bare Info-mode-map uten state), vil IKKE overskrive evil-motion-state, som Info mode er i default.
+;; På den annen side: hvis du bruker emacs state, fungerer bindings som bare er i Info-mode-map, uten at du spesifiserer emacs state.
 (general-define-key
  :keymaps 'Info-mode-map
+ :states 'motion
  "C-i" 'Info-history-forward
  "<tab>" 'Info-next-reference
  )
@@ -514,8 +553,6 @@
 ;;   :ensure t
 ;;   :config (minions-mode 1))
 
-(add-to-list 'evil-emacs-state-modes 'inferior-python-mode)
-
 
 (use-package tex-mode
   :ensure auctex)
@@ -525,3 +562,10 @@
 
 ;; (use-package company-auctex
 ;;   :ensure t)
+
+;; Erstatt denne med General
+(evil-add-hjkl-bindings magit-mode-map 'emacs
+  (kbd "n") 'evil-search-next)
+
+(add-hook 'with-editor-mode-hook 'evil-insert-state)
+

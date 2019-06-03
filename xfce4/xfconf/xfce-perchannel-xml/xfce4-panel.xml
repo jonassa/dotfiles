@@ -63,33 +63,34 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="names-visible" type="array">
         <value type="string" value="turtl"/>
-        <value type="string" value="vlc"/>
-        <value type="string" value="redshift-gtk"/>
-        <value type="string" value="persepolis"/>
-        <value type="string" value="kalu"/>
-        <value type="string" value="thunar"/>
-        <value type="string" value="task manager"/>
-        <value type="string" value="networkmanager applet"/>
-        <value type="string" value="electron"/>
-        <value type="string" value="steam"/>
-        <value type="string" value="synapse"/>
-        <value type="string" value="baka-mplayer"/>
         <value type="string" value="zeal"/>
+        <value type="string" value="cerebro"/>
         <value type="string" value="xfce terminal"/>
-        <value type="string" value="pamac-tray"/>
-        <value type="string" value="pactray"/>
-        <value type="string" value="radiotray"/>
-        <value type="string" value="chromium"/>
-        <value type="string" value="dropbox"/>
-        <value type="string" value="pidgin"/>
-        <value type="string" value="gpick"/>
-        <value type="string" value="xfce4-power-manager"/>
+        <value type="string" value="persepolis"/>
+        <value type="string" value="udiskie"/>
         <value type="string" value="zazu"/>
         <value type="string" value="slack"/>
+        <value type="string" value="pamac-tray"/>
+        <value type="string" value="pidgin"/>
+        <value type="string" value="networkmanager applet"/>
+        <value type="string" value="vlc"/>
+        <value type="string" value="electron"/>
+        <value type="string" value="task manager"/>
+        <value type="string" value="chromium"/>
+        <value type="string" value="synapse"/>
+        <value type="string" value="baka-mplayer"/>
+        <value type="string" value="redshift-gtk"/>
         <value type="string" value="franz"/>
-        <value type="string" value="cerebro"/>
-        <value type="string" value="udiskie"/>
+        <value type="string" value="kalu"/>
+        <value type="string" value="xfce4-power-manager"/>
+        <value type="string" value="pactray"/>
+        <value type="string" value="radiotray"/>
+        <value type="string" value="gpick"/>
+        <value type="string" value="thunar"/>
+        <value type="string" value="steam"/>
+        <value type="string" value="qtox"/>
         <value type="string" value="cadence"/>
+        <value type="string" value="dropbox"/>
       </property>
     </property>
     <property name="plugin-7" type="string" value="whiskermenu"/>

@@ -16,8 +16,8 @@ man() {
 autoload -U colors && colors
 
 # Sett LS_COLORS
-eval $(dircolors)
-# eval $(dircolors /home/jonas/.nord_dircolors)
+# eval $(dircolors)
+eval $(dircolors /home/jonas/.nord_dircolors)
 export EXA_COLORS="di=1;34:ln=1;36:uu=0:gu=0:ur=0:uw=0:ux=0:ue=0:gr=0:gw=0:gx=0:tr=0:tw=0:tx=0:su=0:sf=0:xa=0:da=0:sn=0:sb=0"
 
 
@@ -217,14 +217,13 @@ add-zsh-hook chpwd chpwd_recent_dirs
 
 ## Aliaser
 
-# alias ls='ls -h --color=auto --group-directories-first'
-# alias l='ls -l'
-# alias ll='ls -la'
-
 alias ls='ls -h --color=auto --group-directories-first'
+alias l='ls -l'
+alias ll='ls -la'
+
 alias exa='exa --group-directories-first'
-alias l='exa -l'
-alias ll='exa -la'
+# alias l='exa -l'
+# alias ll='exa -la'
 alias lll='exa -lauUhmiHS --git'
 alias lt='exa -lT'
 alias ltt='exa -laT'
@@ -265,6 +264,7 @@ function vsh(){
 
 alias path='echo $PATH | tr ":" "\n"'
 export LESS='-iRk /home/jonas/.less'
+export LESSOPEN='| /usr/bin/src-hilite-lesspipe.sh %s'
 alias tree='tree -Chal --dirsfirst'
 function trl() {tree $@ | less --quit-if-one-screen}
 alias diff='colordiff'
@@ -279,13 +279,14 @@ function agl() {ag $@ --pager less 2> /dev/null}
 function gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 function rgl() {rg $@ 2> /dev/null | less}
+alias udb='sudo updatedb'
 
 alias vim='nvim'
 alias svim='sudo nvim'
 alias em='emacsclient -c -a=""'
 alias v='nvim ~/Dropbox/notes.txt'
 function vimgrep() { vim -c "silent grep $@" }
-alias vrc='nvim ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
+alias vrc='nvim -O ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
 alias z='nvim ~/.zshrc'
 alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
 alias cmd='nvim Dropbox/0Data/cmd/*'
@@ -323,7 +324,7 @@ alias sdeps='pactree -scd1'
 # alias plw='paclog --warnings'
 # alias plg='paclog --grep'
 alias plog='paclog'
-function pl() { test -n $@ && paclog --grep $@ || paclog --color --action all}
+function pl() { test -n $@ && paclog --color --action all | ag --nocolor $@ || paclog --color --action all}
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
@@ -350,6 +351,17 @@ alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
+function srv() {
+    local ip="$(ip -br -4 addr show wlp2s0 | awk '{print $3}' | cut -d/ -f1):8000"
+    echo $ip
+    sed 's/\x1b\[[0-9;]*m//g' <<< $ip | xsel -ib 
+    # xdg-open "http://$ip"
+    if [[ -n $@ ]]; then
+        python -m http.server --directory $@
+    else
+        python -m http.server
+    fi
+}
 
 alias fkprint='lp -d fkprint -h printhost.samfundet.no'
 
@@ -364,7 +376,8 @@ cl() {
 alias sel='fzf | xsel -ib'
 
 
-alias clone='git clone'
+# alias clone='git clone'
+function clone() {git clone $1 && cd $(basename $1 .git)}
 alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
@@ -377,7 +390,6 @@ alias gpl='git pull'
 alias gpu='git push'
 alias g='git status'
 alias gs='git status -s'
-alias gss='git status'
 alias gsh='git show'
 alias gl='git log'
 alias gll='git log --pretty=oneline --abbrev-commit' 
@@ -561,7 +573,7 @@ ap() {
 ## PLUGIN LOAD
 # Dynamic
 source <(antibody init)
-antibody bundle < ~/.zplugins.txt
+antibody bundle < ~/.zshplugins
 
 # Static
 # antibody bundle < ~/.zplugins.txt > ~/.zplugins.sh
@@ -659,7 +671,7 @@ zle -N insert-widget
 edit-local-widget() {
     zle kill-buffer
     # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
-    local file=$(rg --files -uu | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='./' \
+    local file=$(rg --files -uu 2> /dev/null | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='./' \
         --preview='[[ $(file -b --mime {}) =~ binary ]] &&
         file -b {} ||
         (highlight -O ansi -l {} ||
@@ -680,7 +692,7 @@ zle -N edit-local-widget
 
 edit-global-widget() {
     zle kill-buffer
-    find_cmd="sudo rg --files -uu"
+    find_cmd="sudo rg --files -uu 2> /dev/null"
     local file=$(
     (eval ${find_cmd} /etc
     eval ${find_cmd} ~/
@@ -793,7 +805,7 @@ zle -N bookmarks-widget
 
 ## Keybindings
 
-# Hist substring search 
+# Hist substring search (pil opp ned)
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 

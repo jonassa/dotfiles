@@ -3,12 +3,12 @@ runtime! archlinux.vim
 filetype plugin indent on
 
 
-" vim-plug
+"=====PLUGINS=====
 call plug#begin('~/.vim/plugged')
 
 
 Plug 'https://github.com/vim-scripts/ScrollColors'
-"" Colors
+"=====COLORSCHEMES=====
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'trevordmiller/nova-vim'
 Plug 'crusoexia/vim-monokai'
@@ -38,8 +38,11 @@ Plug 'https://github.com/yuttie/inkstained-vim'
 Plug 'https://github.com/logico-dev/typewriter'
 Plug 'https://github.com/NLKNguyen/papercolor-theme'
 Plug 'https://github.com/Nequo/vim-allomancer'
-" Funker ikke, men ser bra ut
+Plug 'https://github.com/morhetz/gruvbox'
+" Installert manuelt
 " Plug 'https://github.com/sonph/onehalf'
+Plug 'https://github.com/tomasr/molokai'
+Plug 'https://github.com/kamwitsta/flatwhite-vim'
 
 " Er denne nødvendig når fzf er installert?
 Plug 'junegunn/fzf'
@@ -69,20 +72,6 @@ Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
 
-" Har editet denne i pluginen
-" Plug 'pacha/vem-statusline'
-" let g:vem_statusline_parts = 'mbfienpP'
-" " let g:vem_statusline_mode_separator = '  | '
-" " let g:vem_statusline_right_separator = '|'
-" hi link VemStatusLineMode StatusLine
-" hi link VemStatusLineModeInsert DiffAdd
-" hi link VemStatusLineBranch StatusLine
-" hi link VemStatusLineFileModified Question
-" hi link VemStatusLineFileRO WarningMSG
-" hi link VemStatusLinePosition StatusLine
-" hi link VemStatusLineSeparator StatusLine
-
-
 
 Plug 'https://github.com/scrooloose/nerdtree'
 Plug 'https://github.com/ryanoasis/vim-devicons'
@@ -99,14 +88,16 @@ Plug 'https://github.com/kana/vim-textobj-indent'
 Plug 'https://github.com/kana/vim-textobj-function'
 Plug 'https://github.com/Julian/vim-textobj-variable-segment'
 
-Plug 'https://github.com/jiangmiao/auto-pairs'
-let g:AutoPairsShortcutToggle = ''
-let g:AutoPairsShortcutBackInsert = ''
-let g:AutoPairsMapCh = 0
-let g:AutoPairsMoveCharacter = ''
-let g:AutoPairsShortcutJump = '<M-,>'
-let g:AutoPairsShortcutFastWrap = ''
+" Plug 'https://github.com/jiangmiao/auto-pairs'
+" let g:AutoPairsShortcutToggle = ''
+" let g:AutoPairsShortcutBackInsert = ''
+" let g:AutoPairsMapCh = 0
+" let g:AutoPairsMoveCharacter = ''
+" let g:AutoPairsShortcutJump = '<M-,>'
+" let g:AutoPairsShortcutFastWrap = ''
 
+" Bedre?
+Plug 'https://github.com/Raimondi/delimitMate'
 
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'https://github.com/szw/vim-maximizer'
@@ -131,9 +122,9 @@ Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-Plug 'https://github.com/kana/vim-submode'
-let g:submode_timeout = 0
-let g:submode_keep_leaving_key = 1
+" Plug 'https://github.com/kana/vim-submode'
+" let g:submode_timeout = 0
+" let g:submode_keep_leaving_key = 1
 
 "UNIX helpers
 Plug 'https://github.com/tpope/vim-eunuch'
@@ -144,10 +135,22 @@ Plug 'https://github.com/tpope/vim-eunuch'
 Plug 'https://github.com/metakirby5/codi.vim'
 nnoremap <leader>oc :Codi!!<CR>
 
+
+Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
+let g:filebeagle_suppress_keymaps = 1
+nnoremap - :FileBeagleBufferDir<CR>
+
+Plug 'https://github.com/FooSoft/vim-argwrap'
+nnoremap gw :ArgWrap<CR>
+
+Plug 'https://github.com/romainl/vim-devdocs'
+nnoremap <leader>K :DD<CR>
+
+Plug 'https://github.com/thaerkh/vim-indentguides'
+
 call plug#end()
 
-" Statusline
-
+"=====STATUSLINE=====
 set statusline=
 set statusline+=%#title#\ %f%*
                              " set statusline+=%#function#\ %l
@@ -169,9 +172,12 @@ syntax enable
 set background=dark
 
 " let g:theme='onehalfdark'
-colorscheme onehalfdark
+" colorscheme onehalfdark
+" colorscheme material-theme
+colorscheme deus
 
-if exists('+termguicolors')
+" if exists('+termguicolors')
+if has('termguicolors')
     set termguicolors
     if exists('$TMUX')
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -204,6 +210,7 @@ set number
 set relativenumber
 set title
 set cursorline
+set list listchars=trail:·
 
 " set iskeyword+=\-
 
@@ -245,13 +252,14 @@ set splitbelow
 
 set nohlsearch
 
-" slipper g pÃÂ¥ slutten av ex/subst commands
+" slipper g etter ex/subst commands
 set gdefault
 
 set inccommand=split
 
 
-set scrolloff=3
+" set scrolloff=3
+set scrolloff=5
 set sidescrolloff=3
 
 set nojoinspaces
@@ -313,10 +321,8 @@ augroup END
 " Autoreload vimrc
 augroup vimrc
     autocmd!
-    autocmd BufWritePost $MYVIMRC
-                \ source $MYVIMRC "| AirlineRefresh
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
-
 
 
 "------------
@@ -355,7 +361,7 @@ nmap <silent> <leader>h :Helptags<CR>
 nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>F :Files ~<CR>
 nmap <silent> <leader>l :Lines<CR>
-nmap <silent> <leader>k :Grep "\b<C-R><C-W>\b"<CR>
+nmap <silent> <leader>k :Grep "\b<cword>\b"<CR>
 nmap <leader>a :Ag<Space>
 nmap <leader>o :Locate<Space>
 nmap <silent> <leader>m :Marks<CR>
@@ -385,8 +391,8 @@ imap <M-O> <Esc>O
 imap <M-r> <C-O>r
 imap <M-R> <C-O>R
 imap <M-e> <Esc>A
-imap <M-p> <C-O>p
-imap <M-P> <C-O>P
+" imap <M-p> <C-O>p
+" imap <M-P> <C-O>P
 
 vmap <M-u> <Esc>u
 vmap <M-U> <Esc>U
@@ -400,9 +406,10 @@ inoremap <C-B> <Left>
 inoremap <C-Q> <Esc>S
 inoremap <M-i> <Esc>I
 inoremap <M-d> <C-\><C-O>de
-inoremap <C-H> <C-D>
-inoremap <C-L> <C-T>
+" inoremap <C-H> <C-D>
+" inoremap <C-L> <C-T>
 inoremap <C-C> <Esc>
+inoremap <C-L> <C-X><C-L>
 
 " Command mode editing
 noremap! <M-BS> <C-W>
@@ -460,7 +467,6 @@ nnoremap <silent> <C-J> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-K> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-L> :TmuxNavigateRight<cr>
 "nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
-nnoremap <C-C> zz
 nnoremap <M-g> zz
 noremap <C-E> zt
 noremap <C-Y> zb
@@ -470,7 +476,7 @@ cmap w!! w !sudo tee > /dev/null %
 
 " Quickfix
 set grepprg=ag\ --vimgrep
-command! -nargs=? Grep silent grep! <args>
+command! -nargs=? -complete=file_in_path Grep silent grep! <args>
 nnoremap <silent> <left>  :cpf<cr>zvzz
 nnoremap <silent> <right> :cnf<cr>zvzz
 nnoremap <silent> <up>    :cprev<cr>zvzz
@@ -491,14 +497,17 @@ noremap <silent> k gk
 noremap L $
 noremap ø $
 noremap H ^
+noremap å ^
 nnoremap <silent> J :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 nnoremap <silent> K :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 xnoremap J :<C-u>keepjumps normal! gv}<CR>
 xnoremap K :<C-u>keepjumps normal! gv{<CR>
 onoremap J }
 onoremap K {
-nnoremap <M-j> 4gj4<C-e>
-nnoremap <M-k> 4gk4<C-y>
+" nnoremap <M-j> 4gj4<C-e>
+" nnoremap <M-k> 4gk4<C-y>
+nnoremap <M-j> 4gjzz
+nnoremap <M-k> 4gkzz
 " nnoremap <C-M-J> ][
 " nnoremap <C-M-K> []
 nnoremap <C-F> <C-F>zz
@@ -555,7 +564,7 @@ nnoremap U <C-R>
 " command mode
 " noremap ø :
 
-" macro
+" play macro
 nnoremap Q @q
 
 " no Ex-mode
@@ -578,8 +587,8 @@ xnoremap > >gv
 xnoremap < <gv
 xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv
-vnoremap <M-h> <gv
-vnoremap <M-l> >gv
+xnoremap <M-h> <gv
+xnoremap <M-l> >gv
 
 nnoremap <M-h> <<
 nnoremap <M-l> >>
@@ -595,20 +604,23 @@ map Y y$
 " yank to clipboard
 map <leader>y "+y
 vnoremap <C-C> "+y
+nnoremap <C-C> "+yyzz
 " paste from clipboard
 map <leader>p <esc>"+p
 nnoremap cp <esc>"+p
 nnoremap cP <esc>"+P
 " paste from yank register
-" nnoremap <M-p> "0p
-" nnoremap <M-P> "0P
-" duplicate line below
-nnoremap <M-d> yyp
-" duplicate line above
-nnoremap <M-D> yyP
-" duplicate selected lines
-vnoremap P <esc>y'<g'>p
-vnoremap <M-d> <esc>y'<g'>p
+nnoremap yp "0p
+nnoremap yP "0P
+
+" duplicate lines
+nnoremap <M-d> :t.<CR>
+nnoremap <M-D> :t-1<CR>
+" vnoremap P <esc>y'<g'>p
+" vnoremap <M-d> <esc>y'<g'>p
+vnoremap P :t-1<CR>
+vnoremap <M-d> :t-1<CR>
+
 "d/c/y to start of line
 nnoremap dh d^
 nnoremap ch c^
@@ -631,24 +643,10 @@ nnoremap <silent> <M-O> :<c-u>call <sid>blankup(v:count1)<cr>
 " insert space
 nnoremap g<Space> a<Space><Esc>
 
-" move lines
-call submode#enter_with('move', 'n', 's', 'gj', ':m .+1<CR>==')
-call submode#enter_with('move', 'n', 's', 'gk', ':m .-2<CR>==')
-call submode#map('move', 'n', 's', 'j', ':m .+1<CR>==')
-call submode#map('move', 'n', 's', 'k', ':m .-2<CR>==')
-call submode#leave_with('move', 'n', '', 'g')
-
-call submode#enter_with('move-visual', 'x', 's', 'gj', ":m '>+1<CR>gv=gv")
-call submode#enter_with('move-visual', 'x', 's', 'gk', ":m '<-2<CR>gv=gv")
-call submode#map('move-visual', 'x', 's', 'j', ":m '>+1<CR>gv=gv")
-call submode#map('move-visual', 'x', 's', 'k', ":m '<-2<CR>gv=gv")
-call submode#leave_with('move', 'x', '', 'g')
-
+" " move lines
 nnoremap <C-M-j> mz:m+<CR>`z
 nnoremap <C-M-k> mz:m-2<CR>`z
 " Må modifiseres for å også autoindentere
-" Kan bruke alt, men kan da ikke escape visual fra alt, men er nok ikke så
-" interessant
 vnoremap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
@@ -677,7 +675,7 @@ nnoremap <M-m> zr
 nnoremap <M-M> zm
 
 
-"Test
+"=====Test=====
 map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
 " nnoremap qq :q!<CR>
 " nnoremap qw :wq!<CR>
@@ -696,11 +694,11 @@ augroup END
 
 " nmap gw <M-s>iw
 " nmap gW <M-s>iW
-nmap <M-w> <M-s>iw
-nmap <M-W> <M-s>iW
+nmap <M-w> <M-r>iw
+nmap <M-W> <M-r>iW
 
-" nnoremap <M-w> ciw
-" nnoremap <M-W> ciW
+nnoremap <M-c> ciw
+nnoremap <M-C> ciW
 
 " Insert mode navigation uten å escape, undos lagres per linje
 inoremap <C-J> <Down>
@@ -714,16 +712,31 @@ cnoremap <M-.> <Up>
 cnoremap <M-:> <Down>
 
 nnoremap mv :Rename<Space>
-nnoremap cu :cd %:p:h<CR>\|:pwd<CR>
 nnoremap cd :Directories<CR>
 nnoremap do :Explore<CR>
+" Kan være en nyttig mapping, men den glemmer hvor vim ble startet fra, altså project root
+" :set autochdir!
+" nnoremap cu :cd %:p:h<CR>\|:pwd<CR>
+
+nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
+
+
+
 
 "cd to home?
 nnoremap g/ :g//<CR>
 nnoremap g= =ap
+nnoremap <M-a> mz=ap`z
 " nnoremap g= gg=G``
 " nnoremap gb %
-nnoremap Q %
+" nnoremap Q %
+"holy shit lol ,hmmm funker ikke helt
+" nnoremap qq qq:unmap qq<CR>:nnoremap q q<CR>
+" nnoremap Q @q
+" nnoremap Q q
+nnoremap q ``
+nnoremap Q `.
+
 " xnoremap gb %
 " onoremap gb %
 nnoremap gB :ls!<CR>:b<Space>
@@ -763,6 +776,9 @@ nnoremap <M-x> :Commands<CR>
 " nnoremap <leader>2 <C-W>v
 nnoremap <leader>1 :1tabnext<CR>
 nnoremap <leader>2 :2tabnext<CR>
+nnoremap <leader>3 :3tabnext<CR>
+nnoremap <leader>4 :4tabnext<CR>
+nnoremap <leader>5 :5tabnext<CR>
 
 " map } i{
 " map ] i[
@@ -782,28 +798,55 @@ nnoremap dp dap
 nnoremap vv viw
 nnoremap vV viW
 nnoremap vp vip
+nnoremap vo <C-W>o
+" nnoremap vs <C-W>v
 
 
 " Zappend
 nnoremap zd "Zdd
 nnoremap zp "zp:let @z=''<CR>
 
-" yank paste
-nnoremap yp "0p
-nnoremap yP "0P
-
-nnoremap + :<C-u>+m.<left><left>
-nnoremap - :<C-u>-m.<left><left>
+" nnoremap + :<C-u>+m.<left><left>
+" nnoremap - :<C-u>-m.<left><left>
 
 
 " nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<cr>:execute 'lcd '.@a<cr>A
 
-nnoremap <M-a> mz=ap`z
 
-"____________TEST
+" resize:
+nnoremap <silent> <S-Up> 10<C-w>+
+nnoremap <silent> <S-Down> 10<C-w>-
+nnoremap <silent> <S-Left> 10<C-w><
+nnoremap <silent> <S-Right> 10<C-w>>
+
+inoremap <M-CR> <ESC>:s/\s*$/;<CR>j
+nnoremap <M-CR> <ESC>:s/\s*$/;<CR>j
+
+nnoremap zx :pclose<CR>
 
 
+inoremap <M-n> <C-N>
+inoremap <M-p> <C-P>
 
+nmap gj ][
+nmap gk []
+
+"go to next search match while searching
+cnoremap <M-j> <C-G>
+cnoremap <M-k> <C-T>
+
+xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
+xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
+
+xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
+xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
+
+" highlight last inserted text
+nnoremap gV `[v`]
+
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+
+"=====TEST END=====
 
 
 
@@ -823,18 +866,18 @@ highlight link OperatorSandwichChange IncSearch
 
 " onoremap <SID>line :normal! ^vg_<CR>
 " onoremap <SID>gul g_
-nmap <silent> <M-s> <Plug>(operator-sandwich-add)
+" nmap <silent> <M-s> <Plug>(operator-sandwich-add)
+" nmap <silent> <M-s><M-s> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
+" xmap <M-s> <Plug>(operator-sandwich-add)
 nmap <silent> <M-r> <Plug>(operator-sandwich-add)
-nmap <silent> <M-s><M-s> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
 nmap <silent> <M-r><M-r> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
+xmap <M-r> <Plug>(operator-sandwich-add)
 " nmap <silent> <M-s><M-s><Plug>(operator-sandwich-add)<SID>line
 " nmap <M-S> <M-s><SID>gul
 nmap ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
 nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
 nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-xmap <M-s> <Plug>(operator-sandwich-add)
-xmap <M-r> <Plug>(operator-sandwich-add)
 
 omap ij <Plug>(textobj-sandwich-auto-i)
 xmap ij <Plug>(textobj-sandwich-auto-i)
@@ -898,6 +941,68 @@ nnoremap <silent> <M-Space> :JustOneSpace<CR>
 command! -nargs=? Filter let @x='' | execute 'g/<args>/y X' | enew | setlocal bt=nofile | put! x
 
 command! BufOnly silent! execute "up|%bd|e#|bd#"
+
+function! ToggleWorkingDir()
+    if !exists("g:project_dir")
+        let g:project_dir=getcwd()
+        cd %:p:h
+        pwd
+    else
+        execute "cd " . g:project_dir
+        unlet g:project_dir
+        pwd
+    endif
+endfunction
+
+function! StripTrailingWhitespace()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+function! s:BG()
+    let &background = ( &background == "dark" ? "light" : "dark" )
+    if exists("g:colors_name")
+        exe "colorscheme " . g:colors_name
+    endif
+endfunction
+command! BG call s:BG()
+nnoremap <silent> <F5> :BG<CR>
+
+
+
+let g:colorlist = ["material-theme", "snow", "deus", "onehalfdark"]
+function! CNext()
+    let len_shortlist = len(g:colorlist)
+    let current_scheme_idx = index(g:colorlist, g:colors_name)
+    let next_scheme_idx = (current_scheme_idx + 1) % len_shortlist
+    let next_scheme = g:colorlist[next_scheme_idx]
+    exec 'colorscheme '.next_scheme
+endfunction
+command! CNext call CNext()
+
+function! CPrev()
+    let len_shortlist = len(g:colorlist)
+    let current_scheme_idx = index(g:colorlist, g:colors_name)
+    let next_scheme_idx = (current_scheme_idx - 1)
+    if next_scheme_idx == -1
+        let next_scheme_idx = (len_shortlist - 1)
+    endif
+    let next_scheme = g:colorlist[next_scheme_idx]
+    exec 'colorscheme '.next_scheme
+endfunction
+command! CPrev call CPrev()
+
+nnoremap <silent> <F3> :CPrev<CR>
+nnoremap <silent> <F4> :CNext<CR>
+
+" FUNCTIONS END
+"_____________
+
 
 "-----------------
 " PLUGINS

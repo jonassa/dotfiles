@@ -6,8 +6,8 @@
       <property name="position" type="string" value="left"/>
       <property name="sort-type" type="uint" value="2"/>
     </property>
-    <property name="height" type="uint" value="1019"/>
-    <property name="width" type="uint" value="956"/>
+    <property name="height" type="uint" value="638"/>
+    <property name="width" type="uint" value="614"/>
     <property name="maximize-on-startup" type="bool" value="false"/>
     <property name="thumbnails" type="empty">
       <property name="show" type="bool" value="true"/>
