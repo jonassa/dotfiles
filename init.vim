@@ -607,7 +607,7 @@ map Y y$
 " yank to clipboard
 map <leader>y "+y
 vnoremap <C-C> "+y
-nnoremap <C-C> "+yyzz
+nnoremap <C-C> "+yy
 " paste from clipboard
 map <leader>p <esc>"+p
 nnoremap cp <esc>"+p

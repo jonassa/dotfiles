@@ -16,12 +16,18 @@ appendpath () {
 appendpath '/usr/local/sbin'
 appendpath '/usr/local/bin'
 appendpath '/usr/bin'
+
 # Jonas
 appendpath '/usr/local/bin/scripts'
 appendpath "${HOME}/.local/bin"
 appendpath "${HOME}/.npm-global/bin"
 appendpath "${HOME}/.gem/ruby/2.5.0/bin"
 appendpath "${HOME}/.cargo/bin"
+
+if [[ $UID -ge 1000 && -d $HOME/bin ]]
+then
+    appendpath "${HOME}/bin"
+fi
 
 unset appendpath
 export PATH
