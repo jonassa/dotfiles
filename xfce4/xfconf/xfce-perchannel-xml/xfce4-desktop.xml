@@ -62,7 +62,7 @@
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="3"/>
-          <property name="last-image" type="string" value="/home/jonas/Dropbox/Bilder/Wallpapers/1477553450947.jpg"/>
+          <property name="last-image" type="string" value="/home/jonas/Dropbox/Bilder/Wallpapers/1477404313967.jpg"/>
           <property name="backdrop-cycle-enable" type="bool" value="true"/>
           <property name="backdrop-cycle-random-order" type="bool" value="true"/>
           <property name="backdrop-cycle-period" type="int" value="2"/>
@@ -89,15 +89,15 @@
     <property name="single-workspace-number" type="int" value="0"/>
   </property>
   <property name="desktop-icons" type="empty">
-    <property name="style" type="int" value="0"/>
+    <property name="style" type="int" value="2"/>
     <property name="icon-size" type="uint" value="36"/>
     <property name="use-custom-font-size" type="bool" value="false"/>
     <property name="show-hidden-files" type="bool" value="false"/>
     <property name="show-thumbnails" type="bool" value="true"/>
     <property name="file-icons" type="empty">
-      <property name="show-filesystem" type="bool" value="true"/>
-      <property name="show-home" type="bool" value="true"/>
-      <property name="show-trash" type="bool" value="true"/>
+      <property name="show-filesystem" type="bool" value="false"/>
+      <property name="show-home" type="bool" value="false"/>
+      <property name="show-trash" type="bool" value="false"/>
       <property name="show-removable" type="bool" value="false"/>
     </property>
   </property>

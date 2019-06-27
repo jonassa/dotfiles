@@ -1,19 +1,23 @@
 [xfdesktop-version-4.10.3+-rcfile_format]
 4.10.3+=true
 
-[Filesystem root]
-row=0
-col=0
-
-[boot]
+[/home/jonas/Desktop/notes.txt]
 row=1
 col=0
 
-[/]
+[/home/jonas/Desktop/org.txt]
 row=2
 col=0
 
-[/home/jonas]
+[/home/jonas/Desktop/Learn Emacs Org Mode - Spacemacs Intro Tutorial.mkv]
+row=4
+col=0
+
+[/home/jonas/Desktop/Org-mode, literate programming in Emacs.mkv]
 row=3
+col=0
+
+[/home/jonas/Desktop/steam.desktop]
+row=0
 col=0
 

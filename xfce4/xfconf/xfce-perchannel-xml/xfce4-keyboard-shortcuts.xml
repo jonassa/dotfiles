@@ -12,11 +12,13 @@
       </property>
       <property name="&lt;Primary&gt;&lt;Alt&gt;Delete" type="empty"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;l" type="empty"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="empty"/>
       <property name="XF86Display" type="empty"/>
       <property name="&lt;Super&gt;p" type="empty"/>
       <property name="&lt;Primary&gt;Escape" type="empty"/>
       <property name="XF86WWW" type="empty"/>
       <property name="XF86Mail" type="empty"/>
+      <property name="Print" type="empty"/>
     </property>
     <property name="custom" type="empty">
       <property name="&lt;Alt&gt;F3" type="empty">
@@ -63,13 +65,13 @@
       <property name="&lt;Super&gt;plus" type="string" value="rofi-package"/>
       <property name="&lt;Super&gt;apostrophe" type="string" value="rofi-locate"/>
       <property name="&lt;Super&gt;minus" type="string" value="chromium --app=&apos;https://www.messenger.com/t/&apos;"/>
-      <property name="&lt;Super&gt;w" type="string" value="rofi -show window -display-window &quot;Window&quot; -matching fuzzy"/>
       <property name="&lt;Super&gt;0" type="string" value="rofi-actions"/>
       <property name="&lt;Super&gt;9" type="string" value="light -S 50"/>
       <property name="&lt;Super&gt;g" type="string" value="rofi-browse"/>
       <property name="&lt;Super&gt;r" type="string" value="rofi -show run -display-run &quot;Run&quot;"/>
       <property name="&lt;Super&gt;space" type="string" value="rofi-google"/>
       <property name="&lt;Super&gt;u" type="string" value="rofi-unicode"/>
+      <property name="&lt;Super&gt;w" type="string" value="rofi -show window -display-window &quot;Window&quot;"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

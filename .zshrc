@@ -229,6 +229,7 @@ alias lt='exa -lT'
 alias ltt='exa -laT'
 function t() { exa -T --color always $@ | less --quit-if-one-screen }
 function tt() { exa -aT --color always $@ | less --quit-if-one-screen }
+alias tree='tree -Chal --dirsfirst'
 
 function e() {
     if [[ -n $@ ]]; then
@@ -265,8 +266,6 @@ function vsh(){
 alias path='echo $PATH | tr ":" "\n"'
 export LESS='-iRk /home/jonas/.less'
 export LESSOPEN='| /usr/bin/src-hilite-lesspipe.sh %s'
-alias tree='tree -Chal --dirsfirst'
-function trl() {tree $@ | less --quit-if-one-screen}
 alias diff='colordiff'
 function pass() {
     dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
@@ -289,7 +288,7 @@ function vimgrep() { vim -c "silent grep $@" }
 alias vrc='nvim -O ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
 alias z='nvim ~/.zshrc'
 alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
-alias cmd='nvim Dropbox/0Data/cmd/*'
+alias cmd='nvim ~/Dropbox/0Data/cmd/*'
 function ta() {
     if [[ -z $@ ]]; then
         local sessions=$(tmux list-sessions)
@@ -397,9 +396,30 @@ alias glg='git log --graph --pretty=oneline --abbrev-commit'
 alias gwh='git whatchanged -p --abbrev-commit' 
 alias gsb='git show-branch'
 
+alias origmacs='env HOME=$HOME/emacs/orig emacs'
+alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
+alias winmacs='env HOME=$HOME/emacs/windows emacs'
 
-
-
+# Global aliases
+alias -g G='|grep'
+alias -g L='|less'
+alias -g C='|wc -l'
+alias -g DN='2> /dev/null'
+alias -g F='|field'
+alias -g H='--help'
+function field() {
+    awk "{print \$$1}"
+}
+alias f='field'
+alias f1='field 1'
+alias f2='field 2'
+alias f3='field 3'
+alias f4='field 4'
+alias f5='field 5'
+alias f6='field 6'
+alias f7='field 7'
+alias f8='field 8'
+alias f9='field 9'
 
 
 ## Funksjoner
@@ -425,7 +445,7 @@ vg() {
     if [[ -z $@ ]]; then
         return
     fi
-    local file=$(command rg -l -uu "$@" | fzf --preview="rg --color=always -C3 \"${@}\" {}");
+    local file=$(command rg -l -uu "$@" 2> /dev/null | fzf --preview="rg --color=always -C3 \"${@}\" {}");
     if [[ -n $file ]]; then
         local line=$(rg -n "$@" "${file}" | head -n1 | cut -d: -f1)
         vim +$line "${file}"
@@ -567,6 +587,12 @@ ap() {
 #     if [[ -f "$HOME/.zshdirs" ]]; then
 # }
 
+
+function flag() {
+    for f in "${@:2}"; do
+        eval "$1 --help | grep '^\s*\-$f'"
+    done
+}
 
 
 
@@ -805,9 +831,18 @@ zle -N bookmarks-widget
 
 ## Keybindings
 
-# Hist substring search (pil opp ned)
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+# Hist substring search (pil opp ned) (fjernet denne pluginen
+# (fzf er bedre, innebygd h-s-back holder)
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+# Alt-n/p samme som ctrl-n/p, fjerne for å gå tilbake til substring search
+bindkey '^[p' up-history
+bindkey '^[n' down-history
+
 
 # Undo
 bindkey '^[u' undo
@@ -868,7 +903,6 @@ bindkey '^Q' push-line-or-edit
 bindkey '^[q' kill-buffer
 
 
-
 # FZF
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
@@ -884,6 +918,12 @@ export FZF_COMPLETION_TRIGGER=''
 bindkey '^T' fzf-completion
 bindkey '^[t' fzf-completion
 bindkey '^I' $fzf_default_completion
+
+# fzf-marks
+# mark: save
+# fzm: goto
+export FZF_MARKS_NO_COLORS=1
+# export FZF_MARKS_JUMP='^[|'
 
 # autonamedirs
 setopt autonamedirs

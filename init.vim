@@ -55,7 +55,7 @@ Plug 'https://github.com/dkarter/bullets.vim'
 Plug 'https://github.com/gabrielelana/vim-markdown'
 
 Plug 'sheerun/vim-polyglot'
-" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/davidhalter/jedi-vim'
 
 Plug 'ncm2/ncm2'
@@ -64,7 +64,7 @@ Plug 'roxma/nvim-yarp'
 " Denne var bare buggy
 " Plug 'https://github.com/ncm2/ncm2-jedi'
 Plug 'https://github.com/Shougo/neco-vim'
-
+" Plug 'https://github.com/ncm2/ncm2-racer'
 
 Plug 'https://github.com/w0rp/ale'
 
@@ -140,8 +140,8 @@ Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
 let g:filebeagle_suppress_keymaps = 1
 nnoremap - :FileBeagleBufferDir<CR>
 
-Plug 'https://github.com/FooSoft/vim-argwrap'
-nnoremap gw :ArgWrap<CR>
+" Plug 'https://github.com/FooSoft/vim-argwrap'
+" nnoremap gw :ArgWrap<CR>
 
 Plug 'https://github.com/romainl/vim-devdocs'
 nnoremap <leader>K :DD<CR>
@@ -152,7 +152,7 @@ call plug#end()
 
 "=====STATUSLINE=====
 set statusline=
-set statusline+=%#title#\ %f%*
+set statusline+=%#title#\ %f\ %*
                              " set statusline+=%#function#\ %l
 " set statusline+=%2*[%n%M%R%W%q]%*\ 
                              " set statusline+=%#question#%{getcwd()}\
@@ -172,9 +172,9 @@ syntax enable
 set background=dark
 
 " let g:theme='onehalfdark'
-" colorscheme onehalfdark
+colorscheme onehalfdark
 " colorscheme material-theme
-colorscheme deus
+" colorscheme deus
 
 " if exists('+termguicolors')
 if has('termguicolors')
@@ -564,8 +564,11 @@ nnoremap U <C-R>
 " command mode
 " noremap ø :
 
+" record macro one key
+let g:isRecording = get(g:, 'isRecording', 0)
+nnoremap <expr> <silent> å g:isRecording ? 'q:let g:isRecording=0<CR>' : 'qq:let g:isRecording=1<CR>'
 " play macro
-nnoremap Q @q
+nnoremap Å @q
 
 " no Ex-mode
 nnoremap gQ <Nop>
@@ -677,6 +680,9 @@ nnoremap <M-M> zm
 
 "=====Test=====
 map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
+map <F10> :w <CR>:!python %<CR>
+nnoremap <leader>r :R<CR>
+xnoremap <leader>r :w !python<CR>
 " nnoremap qq :q!<CR>
 " nnoremap qw :wq!<CR>
 " nnoremap qa :qa!<CR>
@@ -846,6 +852,13 @@ nnoremap gV `[v`]
 
 inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 
+inoremap <M-2> @
+inoremap <M-4> $
+inoremap <M-5> %
+
+"Tester ut denne
+nnoremap gw yiw
+
 "=====TEST END=====
 
 
@@ -903,7 +916,7 @@ match ExtraWhitespace /\s\+$/
 highlight clear ExtraWhitespace
 function! Highlight_trailing_whitespace()
     if g:highlight_trailing == 0
-        let g:highlight_trailing= 1
+        let g:highlight_trailing = 1
         highlight ExtraWhitespace ctermbg=red guibg=red
         echom "Highlight trailing enabled"
     else
@@ -999,6 +1012,10 @@ command! CPrev call CPrev()
 
 nnoremap <silent> <F3> :CPrev<CR>
 nnoremap <silent> <F4> :CNext<CR>
+
+" Run current file as script with optional arguments to pass to the script
+" TODO: add appropriate shebang for language, chmod +x, save and run
+command! -nargs=* R w|!./% <args>
 
 " FUNCTIONS END
 "_____________
@@ -1105,5 +1122,5 @@ let g:bullets_enabled_file_types = [
             \ 'Scratch'
             \]
 
-autocmd VimEnter * ALEDisable
+" autocmd VimEnter * ALEDisable
 

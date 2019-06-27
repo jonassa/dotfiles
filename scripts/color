@@ -8,8 +8,6 @@ for f in $colorschemes/*; do
     echo $f
 done | fzf)
 
-
-
 if [[ -n $selection ]]; then
     sed -i '/Color/d' $terminalrc
     sed -n '/Color/p' $selection >> $terminalrc

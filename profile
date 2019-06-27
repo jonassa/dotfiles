@@ -15,13 +15,13 @@ appendpath () {
 
 appendpath '/usr/local/sbin'
 appendpath '/usr/local/bin'
-appendpath '/usr/local/bin/scripts'
 appendpath '/usr/bin'
 # Jonas
+appendpath '/usr/local/bin/scripts'
 appendpath "${HOME}/.local/bin"
 appendpath "${HOME}/.npm-global/bin"
-appendpath "/home/jonas/.gem/ruby/2.5.0/bin"
-appendpath "/home/jonas/.cargo/bin"
+appendpath "${HOME}/.gem/ruby/2.5.0/bin"
+appendpath "${HOME}/.cargo/bin"
 
 unset appendpath
 export PATH
