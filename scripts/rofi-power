@@ -1,20 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
-# rofi-power
-# Use rofi to call systemctl for shutdown, reboot, etc
+OPTIONS="Reboot\nPower off\nSuspend\nHibernate\nLog out\nLock"
 
-# 2016 Oliver Kraitschy - http://okraits.de
-
-OPTIONS="Reboot system\nPower-off system\nSuspend system\nHibernate system"
-
-# source configuration or use default values
-if [ -f $HOME/.config/rofi-power/config ]; then
-  source $HOME/.config/rofi-power/config
-else
-  LAUNCHER="rofi -width 30 -dmenu -i -p rofi-power:"
-  USE_LOCKER="false"
-  LOCKER="i3lock"
-fi
+LAUNCHER="rofi -width 30 -dmenu -i -p Actions"
+USE_LOCKER="false"
+LOCKER="i3lock"
 
 # Show exit wm option if exit command is provided as an argument
 if [ ${#1} -gt 0 ]; then
@@ -29,16 +19,22 @@ then
         eval $1
         ;;
       Reboot)
-        systemctl reboot
+        sudo systemctl reboot
         ;;
-      Power-off)
-        systemctl poweroff
+      "Power off")
+        sudo systemctl poweroff
         ;;
       Suspend)
-        $($USE_LOCKER) && "$LOCKER"; systemctl suspend
+        $($USE_LOCKER) && "$LOCKER"; sudo systemctl suspend
+        ;;
+      "Log out")
+        $($USE_LOCKER) && "$LOCKER"; sudo xfce4-session-logout --logout
+        ;;
+      Lock)
+        $($USE_LOCKER) && "$LOCKER"; sudo light-locker-command -l
         ;;
       Hibernate)
-        $($USE_LOCKER) && "$LOCKER"; systemctl hibernate
+        $($USE_LOCKER) && "$LOCKER"; sudo systemctl hibernate
         ;;
       *)
         ;;

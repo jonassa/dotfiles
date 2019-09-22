@@ -1,7 +1,6 @@
 set font 'Roboto 10'
 set window-icon /usr/share/icons/Papirus/22x22/mimetypes/application-pdf.svg
 set first-page-column 1:2
-set selection-clipboard clipboard
 set window-title-basename true
 set statusbar-home-tilde true
 
@@ -42,3 +41,4 @@ map S search backward
 map w adjust_window width
 map W adjust_window best-fit
 
+set selection-clipboard clipboard

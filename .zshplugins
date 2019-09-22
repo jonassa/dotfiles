@@ -1,14 +1,16 @@
 ytet5uy4/fzf-widgets
 mafredri/zsh-async
 
-urbainvaes/fzf-marks
+# urbainvaes/fzf-marks
 
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 
 # Disse må være sist
 # sindresorhus/pure
-BrandonRoehl/zsh-clean
+# BrandonRoehl/zsh-clean
+romkatv/powerlevel10k
+# denysdovhan/spaceship-prompt
 
 zsh-users/zsh-syntax-highlighting
 

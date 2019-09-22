@@ -2,7 +2,8 @@ configuration {
     width: 50;
     lines: 12;
     columns: 2;
-    font: "Roboto 11";
+    /* font: "Roboto 11"; */
+    font: "SF Pro 12";
     bw: 0;
     padding: 10;
     yoffset: 0;
@@ -25,12 +26,12 @@ configuration {
     kb-secondary-paste: "Control+v";
     kb-accept-entry: "Return";
     kb-accept-custom: "Control+Return";
-	kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q";
-	kb-remove-to-eol: "";
-	kb-row-tab: "Tab";
-	kb-row-up: "Shift+Tab,Control+k,Control+p,Alt+k,Alt+p";
-	kb-row-down: "Control+j,Control+n,Alt+j,Alt+n";
-	kb-mode-next: "Super+r,Super+g";
+    kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q,Super+w,Super+e,Super+r";
+    kb-remove-to-eol: "";
+    kb-row-tab: "Tab";
+    kb-row-up: "Up,Shift+Tab,Control+k,Control+p,Alt+k,Alt+p";
+    kb-row-down: "Down,Control+j,Control+n,Alt+j,Alt+n";
+    /* kb-mode-next: "Super+r,Super+g"; */
 }
 /* Fjern denne for custom theme lagret i theme.rasi, og uncomment linja theme: over */
-@import "/usr/share/rofi/themes/android_notification.rasi"
+@import "/usr/share/rofi/themes/Arc.rasi"

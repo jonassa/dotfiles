@@ -248,7 +248,7 @@ alias d='dirs -v'
 alias lo='locate'
 alias u='cd ..'
 alias ax='chmod a+x'
-alias cat='bat'
+alias cat='bat --theme ansi-dark'
 function vsh(){
     if [[ -n $1 ]] && [[ ! -f $1 ]]; then
         if [[ -w $(dirname $1) ]]; then
@@ -272,8 +272,8 @@ function pass() {
 }
 alias grep='grep -i --color=auto'
 alias fd='fd -H'
-# alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
-alias ag='ag --hidden --ignore .git'
+alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
+# alias ag='ag --hidden --ignore .git'
 function agl() {ag $@ --pager less 2> /dev/null}
 function gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
 alias rg='rg -uuS' # hidden, ignored, smartcase
@@ -282,12 +282,18 @@ alias udb='sudo updatedb'
 
 alias vim='nvim'
 alias svim='sudo nvim'
+function v() {vim $(fasd -f $@)}
+function c() {cd $(fasd -d $@)}
 alias em='emacsclient -c -a=""'
-alias v='nvim ~/Dropbox/notes.txt'
+alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
+alias strossa='vim "/home/jonas/Dropbox/Prosjekter/Strossa/strossa.txt"'
+# alias tmp='vim $(mktemp -t scratchXXX)'
+alias tmp='vim /tmp/scratch'
 function vimgrep() { vim -c "silent grep $@" }
 alias vrc='nvim -O ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
 alias z='nvim ~/.zshrc'
 alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
+alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/0Data/cmd/*'
 function ta() {
     if [[ -z $@ ]]; then
@@ -310,7 +316,7 @@ alias pm='sudo pacman'
 alias pa='pacaur'
 alias pu='sudo pacman -Syu --noconfirm'
 alias puu='pacaur -Syu --noconfirm'
-function pd() {sudo pacman -Rns $(pacman -Qqdt)}
+alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no orphans to remove"'
 alias pls='pacaur -Ql'
 alias pf='pacaur -Fs'
 alias po='pacaur -Qo'
@@ -373,6 +379,7 @@ cl() {
     fi
 }
 alias sel='fzf | xsel -ib'
+alias hsel='history -n|fzf|tr -d \\n|xsel -ib'
 
 
 # alias clone='git clone'
@@ -400,26 +407,20 @@ alias origmacs='env HOME=$HOME/emacs/orig emacs'
 alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
 alias winmacs='env HOME=$HOME/emacs/windows emacs'
 
+alias perm='stat -c "%a %U"'
+
 # Global aliases
 alias -g G='|grep'
 alias -g L='|less'
 alias -g C='|wc -l'
 alias -g DN='2> /dev/null'
-alias -g F='|field'
 alias -g H='--help'
+alias -g F='|field'
 function field() {
     awk "{print \$$1}"
 }
 alias f='field'
-alias f1='field 1'
-alias f2='field 2'
-alias f3='field 3'
-alias f4='field 4'
-alias f5='field 5'
-alias f6='field 6'
-alias f7='field 7'
-alias f8='field 8'
-alias f9='field 9'
+for n in {1..9}; alias f$n="field $n"
 
 
 ## Funksjoner
@@ -482,7 +483,8 @@ mykeys() {
 
 pi() {
     if [[ -n $@ ]]; then
-        result=$(comm -23 <(pacaur -Ssq $@|sort) <(pacman -Qq|sort) | fzf --preview 'pacaur -Si {}')
+        # result=$(comm -23 <(pacaur -Ssq $@|sort) <(pacman -Qq|sort) | fzf --preview 'pacaur -Si {}')
+        result=$@
     else
         result=$(comm -23 \
         <((
@@ -493,7 +495,9 @@ pi() {
         | fzf --preview 'pacaur -Si {}')
     fi
 
-    pacaur -S --noedit $result
+    if [[ -n $result ]]; then
+        pacaur -S --noedit $result
+    fi
 }
 
 pg() {
@@ -512,14 +516,14 @@ pg() {
 
 pq() {
     if [[ -n $@ ]]; then
-        result=$(pacman -Qqs $@ | fzf --preview 'pacman -Qi {}')
-    else
-        result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
-    fi
-
-    if [[ -n $result ]]; then
         pacaur -Qi $result
         pacman -Ql $result | grep --color=never "/usr/bin/"
+    else
+        result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
+        if [[ -n $result ]]; then
+            pacaur -Qi $result
+            pacman -Ql $result | grep --color=never "/usr/bin/"
+        fi
     fi
 }
 
@@ -592,6 +596,10 @@ function flag() {
     for f in "${@:2}"; do
         eval "$1 --help | grep '^\s*\-$f'"
     done
+}
+
+function bspkeys() {
+    cat ~/.config/sxhkd/sxhkdrc | awk '/^[a-z]/ && last {print $0,"\t",last} {last=""} /^#/{last=$0}' | column -t -s $'\t' | fzf
 }
 
 
@@ -829,6 +837,18 @@ bookmarks-widget() {
 }
 zle -N bookmarks-widget
 
+ls-widget() {
+    ls -l
+    zle kill-buffer
+    zle accept-line
+}
+zle -N ls-widget
+
+function ff() {
+    local target=$(fd "$@" | fzf)
+    xdg-open "$target" &
+}
+
 ## Keybindings
 
 # Hist substring search (pil opp ned) (fjernet denne pluginen
@@ -863,41 +883,41 @@ bindkey '^[E' edit-global-widget
 bindkey '^[g' global-cd-widget
 bindkey '^[k' kill-processes-widget
 bindkey '^[i' insert-widget
-bindkey '^[R' sudo-widget
+bindkey '^[r' sudo-widget
 bindkey '^[H' man-widget
 bindkey '^U' parent-directory-widget
-bindkey '^[[1;3A' parent-directory-widget
 bindkey '^[W' where-widget
 bindkey '^[|' bookmarks-widget
 
 # fzf-widgets
-bindkey '^[r' fzf-change-recent-directory
+bindkey '^[R' fzf-change-recent-directory
 
 # Cycle dirstack, må være etter plugins
 bindkey '^[P' cycledleft
 bindkey '^[N' cycledright
 
 # Alt-left, alt-right
-bindkey ';3C' forward-word
-bindkey ';3D' backward-word
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
 
 # Ctrl-left, ctrl-right
-bindkey ';5C' forward-word
-bindkey ';5D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
 
 # escape codes er riktige, men undefined-key gjør ikke det du vil
 # Ctrl-up,down, Alt-up,down
-bindkey ';3A' undefined-key
-bindkey ';3B' undefined-key
-bindkey ';5A' undefined-key
-bindkey ';5B' undefined-key
+bindkey '^[[1;3A' parent-directory-widget
+bindkey '^[[1;3B' undefined-key
+bindkey '^[[1;5A' undefined-key
+bindkey '^[[1;5B' undefined-key
 
 # Taken by tmux prefix
 bindkey '^S' undefined-key
 
-bindkey '^[L' undefined-key
+# bindkey '^[L' undefined-key
 # bindkey '^[l' undefined-key
-bindkey '^[l' clear-screen
+bindkey '^[L' clear-screen
+bindkey '^[l' ls-widget
 # Push hele bufferen til stack og hent den igjen etter du har gjort noe annet
 bindkey '^Q' push-line-or-edit
 bindkey '^[q' kill-buffer
@@ -928,3 +948,35 @@ export FZF_MARKS_NO_COLORS=1
 # autonamedirs
 setopt autonamedirs
 source ~/.zshdirs
+
+# Make ls widget on alt+l
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
+
+SPACESHIP_PROMPT_ORDER=(
+  time          # Time stamps section
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  exec_time     # Execution time
+  line_sep      # Line break
+  exit_code     # Exit code section
+  char          # Prompt character
+)
+
+
+eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
+bindkey '^X' fasd-complete
+
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+
+vasd() {
+  local file
+  file="$(fasd -Rfl "$1" | fzf -1 -0 --no-sort +m)" && nvim "${file}" || return 1
+}

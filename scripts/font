@@ -12,12 +12,14 @@ fontlist=(
     'SF Mono 11.5'
 )
 
+printf "Current font is %s\n" "$(awk -F= '/FontName/{print $2}' "$terminalrc")"
+
 selection=$(
 for f in "${fontlist[@]}"; do
     echo $f
 done | fzf)
 
 if [[ -n $selection ]]; then
-    sed -i "s/FontName=.*/FontName=$selection/" $terminalrc
+    sed -i "s/FontName=.*/FontName=$selection/" "$terminalrc"
 fi
 

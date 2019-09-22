@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+if [[ -n $(df|grep encfs) ]]; then
+    fusermount -u "$HOME/Private"
+    rmdir "$HOME/Private"
+else
+    encfsui $HOME/{.Private,Private}
+fi
+

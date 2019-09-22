@@ -63,8 +63,10 @@
     ],
 
     "workbench.iconTheme": "simple-icons",
-    "workbench.colorTheme": "Plastic",
+    "workbench.colorTheme": "Material Theme",
     "workbench.activityBar.visible": false,
     "window.enableMenuBarMnemonics": false,
     "window.titleBarStyle": "custom",
+    "editor.fontSize": 14.5,
+    "editor.minimap.renderCharacters": false,
 }

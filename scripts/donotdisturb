@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+status=$(xfconf-query --channel xfce4-notifyd --property /do-not-disturb)
+
+if [ "$status" == "false" ]; then
+    notify-send -i preferences-system-notifications "Notifications disabled"
+    xfconf-query --channel xfce4-notifyd --property /do-not-disturb --set true
+else
+    xfconf-query --channel xfce4-notifyd --property /do-not-disturb --set false
+    notify-send -i preferences-system-notifications "Notifications enabled"
+fi

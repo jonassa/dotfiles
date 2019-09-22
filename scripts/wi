@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+line=$(nmcli -colors yes -f IN-USE,BSSID,SSID,CHAN,RATE,SIGNAL,BARS,SECURITY device wifi list --rescan no | fzf --header-lines=1 --ansi)
+
+# if [[ $line =~ ^\* ]]; then
+#     nmcli device disconnect wlp2s0
+# fi
+
+if grep '^\*' <<< $line; then
+    nmcli device disconnect wlp2s0 &
+    exit 0
+fi
+
+bssid=$(sed 's/^\*\s*//' <<< $line | awk '{print $1}')
+
+if [[ -n $line && ! $bssid =~ -- ]]; then
+    nmcli device wifi connect $bssid &
+fi
+

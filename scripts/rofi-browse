@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir=$(fd -t d . /home/jonas | rofi -dmenu -i -p "Browse")
+dir=$(fd -t d . /home/jonas | rofi -dmenu -i -p "Explore")
 if [[ -n $dir ]]
 then
     thunar "${dir}"

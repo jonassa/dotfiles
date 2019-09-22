@@ -1,0 +1,15 @@
+pacman conf
+locale
+keyboard
+login
+xorg
+bootloader
+arch entry
+ramdisk
+systemd
+
+/etc/profile
+/etc/pacman.conf
+/etc/fstab
+/et
+

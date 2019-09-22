@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+sinks=$(pacmd list-sinks | grep -e "index:" | awk -F: '{print $2}')
+default_sink=$(pacmd list-sinks | grep -e "\*.*index:" | awk -F: '{print $2}')
+
+new_sink=$(sed "/$default_sink/d" <<< $sinks)
+pacmd set-default-sink "$new_sink"
+pactl list short sink-inputs|while read stream; do
+    streamId=$(echo $stream|cut '-d ' -f1)
+    echo "moving stream $streamId"
+    pactl move-sink-input "$streamId" "$new_sink"
+done
+
+

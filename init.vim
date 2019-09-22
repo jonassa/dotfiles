@@ -1,5 +1,4 @@
 runtime! archlinux.vim
-
 filetype plugin indent on
 
 
@@ -39,12 +38,17 @@ Plug 'https://github.com/logico-dev/typewriter'
 Plug 'https://github.com/NLKNguyen/papercolor-theme'
 Plug 'https://github.com/Nequo/vim-allomancer'
 Plug 'https://github.com/morhetz/gruvbox'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
+
+
 " Installert manuelt
 " Plug 'https://github.com/sonph/onehalf'
 Plug 'https://github.com/tomasr/molokai'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
+Plug 'sainnhe/vim-color-forest-night'
+Plug 'https://github.com/KKPMW/sacredforest-vim'
 
-" Er denne nødvendig når fzf er installert?
+
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
@@ -100,7 +104,7 @@ Plug 'https://github.com/Julian/vim-textobj-variable-segment'
 Plug 'https://github.com/Raimondi/delimitMate'
 
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'https://github.com/szw/vim-maximizer'
+" Plug 'https://github.com/szw/vim-maximizer'
 
 
 Plug 'https://github.com/romainl/vim-qf'
@@ -172,8 +176,8 @@ syntax enable
 set background=dark
 
 " let g:theme='onehalfdark'
-colorscheme onehalfdark
-" colorscheme material-theme
+" colorscheme onehalfdark
+colorscheme material-theme
 " colorscheme deus
 
 " if exists('+termguicolors')
@@ -343,7 +347,6 @@ let g:mapleader=" "
 nmap <silent> <leader>q :qa!<CR>
 nmap <silent> <leader>Q :qa!<CR>
 nmap <silent> <leader>w :x!<CR>
-inoremap <C-s> <Esc>:update<CR>
 nmap <silent> <leader>s :up<CR>
 nmap <silent> <leader>e :e!<CR>
 nmap <silent> <leader>d :bd!<CR>
@@ -377,13 +380,12 @@ vnoremap <M-i> c
 nmap <M-Q> <Nop>
 " nmap <M-f> <C-Right>
 " nmap <M-b> <C-Left>
-nnoremap <M-f> <C-F>zz
-nnoremap <M-b> <C-B>zz
 
-inoremap <M-f> <C-Right>
-inoremap <M-b> <C-Left>
-" inoremap <M-f> <Esc><Right><C-Right>
-" inoremap <M-b> <Esc><C-Left>
+inoremap <M-f> <Esc><Right><C-Right>
+inoremap <M-b> <Esc><C-Left>
+nnoremap <M-f> <C-Right>
+nnoremap <M-b> <C-Left>
+
 imap <M-u> <Esc>u
 imap <M-U> <Esc>U
 imap <M-o> <Esc>o
@@ -403,13 +405,13 @@ vmap <M-O> <Esc>O
 inoremap <C-D> <Del>
 inoremap <C-F> <Right>
 inoremap <C-B> <Left>
-inoremap <C-Q> <Esc>S
+" inoremap <C-Q> <Esc>S
 inoremap <M-i> <Esc>I
 inoremap <M-d> <C-\><C-O>de
 " inoremap <C-H> <C-D>
 " inoremap <C-L> <C-T>
 inoremap <C-C> <Esc>
-inoremap <C-L> <C-X><C-L>
+imap <C-L> <C-X><C-L>
 
 " Command mode editing
 noremap! <M-BS> <C-W>
@@ -434,7 +436,6 @@ noremap \ @:
 noremap ¤ ~
 nnoremap ? K
 
-nnoremap q <Nop>
 
 " Navigate changelist
 noremap , g;zz
@@ -596,7 +597,6 @@ xnoremap <M-l> >gv
 nnoremap <M-h> <<
 nnoremap <M-l> >>
 
-
 let g:yankstack_map_keys = 0
 let g:yankstack_yank_keys = ['y', 'Y', 'd', 'D']
 call yankstack#setup()
@@ -661,6 +661,7 @@ nnoremap <M-?> <C-X>
 " toggle comment
 nmap <M-2> gcc
 xmap <M-2> gc
+nmap <M-"> yyPgcc
 
 nmap <silent> <M-3> :NERDTreeToggle<CR>
 nmap <silent> <M-4> :TagbarToggle<CR>
@@ -683,10 +684,6 @@ map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
 map <F10> :w <CR>:!python %<CR>
 nnoremap <leader>r :R<CR>
 xnoremap <leader>r :w !python<CR>
-" nnoremap qq :q!<CR>
-" nnoremap qw :wq!<CR>
-" nnoremap qa :qa!<CR>
-" nnoremap qd :bd!<CR>
 
 augroup HelpKeymap
     autocmd!
@@ -734,22 +731,24 @@ nnoremap g/ :g//<CR>
 nnoremap g= =ap
 nnoremap <M-a> mz=ap`z
 " nnoremap g= gg=G``
-" nnoremap gb %
 " nnoremap Q %
-"holy shit lol ,hmmm funker ikke helt
-" nnoremap qq qq:unmap qq<CR>:nnoremap q q<CR>
 " nnoremap Q @q
 " nnoremap Q q
 nnoremap q ``
-nnoremap Q `.
+nnoremap Q `.zz
+" xnoremap q ``
+xnoremap q o<Esc>
+xnoremap <M-o> o<Esc>
 
-" xnoremap gb %
-" onoremap gb %
-nnoremap gB :ls!<CR>:b<Space>
-nnoremap gb :Buffers<CR>
+nmap gb %
+xmap gb %
+omap gb %
+" nnoremap gB :ls!<CR>:b<Space>
+" nnoremap gb :Buffers<CR>
 nnoremap <leader><Tab> :Buffers<CR>
 
-nnoremap vm :Maps!<CR>
+" nnoremap vm :Maps!<CR>
+nnoremap vm :Marks<CR>
 " nnoremap mk :mksession!<Space>
 let g:session_dir = '~/.vim/sessions'
 exec 'nnoremap mk :mks! ' . g:session_dir . '/'
@@ -770,11 +769,15 @@ exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
 " En mapping til en kommando som lagrer en ny session med et navn OG sørger
 " for at den autosaves i den samme instansen av vim (evt. bare umiddelbart
 " source sessionen for å trigge autocmden)
+" https://vim.fandom.com/wiki/Go_away_and_come_back
+" https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
 
-nnoremap <C-S> :Lines<CR>
-cnoremap <C-S> <C-C>:Lines<CR>
+" nnoremap <C-S> :Lines<CR>
+" cnoremap <C-S> <C-C>:Lines<CR>
+nnoremap <silent> <C-S> :up<CR>
+inoremap <silent> <C-s> <Esc>:up<CR>
+
 nnoremap <C-Space> <C-W>p
-" nnoremap <leader><Tab> <C-W>p
 
 nnoremap <M-x> :Commands<CR>
 
@@ -803,14 +806,25 @@ nnoremap dp dap
 
 nnoremap vv viw
 nnoremap vV viW
-nnoremap vp vip
+nnoremap VV viW
 nnoremap vo <C-W>o
-" nnoremap vs <C-W>v
+" nnoremap vp vip
 
+" v som primær-register
+nnoremap vd "vd
+nnoremap vD "vD
+nnoremap vdp "vdap
+nnoremap vp "vp
+nnoremap vP "vP
+nnoremap vy "vy
+nnoremap vY "vY
 
-" Zappend
+" Zappend/Zelect
 nnoremap zd "Zdd
 nnoremap zp "zp:let @z=''<CR>
+
+nnoremap cp "1p
+nnoremap cP "1P
 
 " nnoremap + :<C-u>+m.<left><left>
 " nnoremap - :<C-u>-m.<left><left>
@@ -858,6 +872,46 @@ inoremap <M-5> %
 
 "Tester ut denne
 nnoremap gw yiw
+
+" Bra shit
+inoremap <M-f> <Esc>w
+nnoremap <M-d> dW
+nnoremap dp  :t.<CR>
+nnoremap dP :t-1<CR>
+
+
+nnoremap <m-h> ^
+
+" Paste unnamed reg in insert mode, bruk heller C-Q for literal hvis i det hele
+" tatt nødvendig
+inoremap <C-v> <C-R>"
+
+" Insert space (hva gjør du når du skal paste noe på slutten av en linje hvor
+" det ikke er mellomrom fra før?
+nnoremap <m-s> a<Space><Esc>
+
+nnoremap <Bar> <C-W>w
+" nmap # gcc
+nmap <M-Bar> gcc
+nmap <M-c> gcc
+xmap <M-Bar> gc
+xmap <M-c> gc
+
+" Map ctrl-backspace to delete back word, funker ikke
+" inoremap <C-H> <C-W>
+
+nnoremap <M-i> >>
+nnoremap <M-I> <<
+" nnoremap <M-e> cc
+noremap <M-e> $
+" nnoremap <M-l> $
+
+nnoremap <M-i> cc
+nnoremap <M-l> >>
+nnoremap <M-L> <<
+nnoremap M zz
+nnoremap <M-v> ^v$
+
 
 "=====TEST END=====
 
@@ -1015,7 +1069,7 @@ nnoremap <silent> <F4> :CNext<CR>
 
 " Run current file as script with optional arguments to pass to the script
 " TODO: add appropriate shebang for language, chmod +x, save and run
-command! -nargs=* R w|!./% <args>
+command! -nargs=* R up|!./% <args>
 
 " FUNCTIONS END
 "_____________

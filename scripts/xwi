@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+export FZF_DEFAULT_OPTS='
+--height=50% --reverse
+--bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
+--color fg:-1,bg:-1,bg+:-1'
+
+xfce4-terminal -e wi --geometry=100x20
+
