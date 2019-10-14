@@ -1,15 +1,35 @@
 bindkey -e
 
+
+export MOOD='dark'
+export TERMGUICOLORS=1
+export VIM_COLORS='material-theme'
+
+[[ $MOOD == 'light' ]] && alias fzf='fzf --color=light'
+# funker ikke...
+# [[ $MOOD == 'light' ]] && FZF_DEFAULT_OPTS+=' --color=light'
+
 # Farger for man
+if [[ $MOOD == light ]]; then
+    MAN_SOMETHING=red
+    MAN_HEADER=black
+    MAN_BOLD=green
+else
+    MAN_SOMETHING=red
+    MAN_HEADER=white
+    MAN_BOLD=green
+fi
+
 man() {
-    env LESS_TERMCAP_mb=$'\E[1;31m' \
-    LESS_TERMCAP_md=$'\E[1;37m' \
-    LESS_TERMCAP_me=$'\E[0m' \
-    LESS_TERMCAP_se=$'\E[0m' \
-    LESS_TERMCAP_so=$'\E[1;32m' \
-    LESS_TERMCAP_ue=$'\E[0m' \
-    LESS_TERMCAP_us=$'\E[4;34m' \
-    man "$@"
+    env \
+        LESS_TERMCAP_mb=$fg_bold[$MAN_SOMETHING]  \
+        LESS_TERMCAP_md=$fg_bold[$MAN_HEADER] \
+        LESS_TERMCAP_me=$reset_color \
+        LESS_TERMCAP_se=$reset_color \
+        LESS_TERMCAP_so=$fg_bold[$MAN_BOLD] \
+        LESS_TERMCAP_ue=$reset_color \
+        LESS_TERMCAP_us=$'\E[4;34m' \
+        man "$@"
     }
 
 # Lar deg bruke navn på farger istedetfor escape codes
@@ -129,6 +149,7 @@ unsetopt flowcontrol
 setopt RC_QUOTES
 setopt clobber
 setopt globdots
+setopt promptsubst # expand variables in prompt (needed for some prompts)
 
 ## History
 HISTFILE=~/.zhistory
@@ -148,7 +169,7 @@ setopt HIST_VERIFY               # Do not execute immediately upon history expan
 setopt HIST_BEEP                 # Beep when accessing non-existent history.
 
 # Directory stack
-setopt AUTO_CD              # Auto changes to a directory without typing cd.
+# setopt AUTO_CD              # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
@@ -159,32 +180,32 @@ setopt MULTIOS              # Write to multiple descriptors.
 #for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
 switch-to-dir () {
-	[[ ${#dirstack} -eq 0 ]] && return
+    [[ ${#dirstack} -eq 0 ]] && return
 
-	while ! builtin pushd -q $1 &>/dev/null; do
-		# We found a missing directory: pop it out of the dir stack
-		builtin popd -q $1
+    while ! builtin pushd -q $1 &>/dev/null; do
+        # We found a missing directory: pop it out of the dir stack
+        builtin popd -q $1
 
-		# Stop trying if there are no more directories in the dir stack
-		[[ ${#dirstack} -eq 0 ]] && break
-	done
+        # Stop trying if there are no more directories in the dir stack
+        [[ ${#dirstack} -eq 0 ]] && break
+    done
 }
 
 cycledleft () {
-	emulate -L zsh
-	setopt nopushdminus
+    emulate -L zsh
+    setopt nopushdminus
 
-	switch-to-dir +1
-	zle reset-prompt
+    switch-to-dir +1
+    zle reset-prompt
 }
 zle -N cycledleft
 
 cycledright () {
-	emulate -L zsh
-	setopt nopushdminus
+    emulate -L zsh
+    setopt nopushdminus
 
-	switch-to-dir -0
-	zle reset-prompt
+    switch-to-dir -0
+    zle reset-prompt
 }
 zle -N cycledright
 
@@ -217,6 +238,8 @@ add-zsh-hook chpwd chpwd_recent_dirs
 
 ## Aliaser
 
+alias sudo='sudo '
+
 alias ls='ls -h --color=auto --group-directories-first'
 alias l='ls -l'
 alias ll='ls -la'
@@ -235,7 +258,8 @@ function e() {
     if [[ -n $@ ]]; then
         echo $@
     else
-        local var=$(env | cut -d= -f1 | fzf)
+        # local var=$( (env; declare -x; set) | sort -u | cut -d= -f1 | fzf)
+        local var=$( declare | grep "^\S\+=" | cut -d= -f1 | fzf )
         echo ${(P)var}
     fi
 }
@@ -243,12 +267,13 @@ compdef _vars e
 
 alias p='print -l'
 alias o='xdg-open'
-alias h='history'
+alias h='history 100'
 alias d='dirs -v'
 alias lo='locate'
 alias u='cd ..'
 alias ax='chmod a+x'
-alias cat='bat --theme ansi-dark'
+alias bat='bat --theme ansi-dark'
+alias cat='bat'
 function vsh(){
     if [[ -n $1 ]] && [[ ! -f $1 ]]; then
         if [[ -w $(dirname $1) ]]; then
@@ -266,10 +291,13 @@ function vsh(){
 alias path='echo $PATH | tr ":" "\n"'
 export LESS='-iRk /home/jonas/.less'
 export LESSOPEN='| /usr/bin/src-hilite-lesspipe.sh %s'
-alias diff='colordiff'
-function pass() {
-    dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
-}
+# function diff() {
+#     diff $@ | diffr
+# }
+
+# function pass() {
+#     dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
+# }
 alias grep='grep -i --color=auto'
 alias fd='fd -H'
 alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
@@ -282,17 +310,16 @@ alias udb='sudo updatedb'
 
 alias vim='nvim'
 alias svim='sudo nvim'
-function v() {vim $(fasd -f $@)}
-function c() {cd $(fasd -d $@)}
 alias em='emacsclient -c -a=""'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
-alias strossa='vim "/home/jonas/Dropbox/Prosjekter/Strossa/strossa.txt"'
 # alias tmp='vim $(mktemp -t scratchXXX)'
 alias tmp='vim /tmp/scratch'
 function vimgrep() { vim -c "silent grep $@" }
 alias vrc='nvim -O ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
+alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
-alias conf='nvim ".config/nvim/init.vim" ".zshrc" "/etc/profile" "/etc/xprofile" ".config/xfce4/terminal/terminalrc"'
+alias m='nvim ~/Dropbox/main.txt'
+alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc"'
 alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/0Data/cmd/*'
 function ta() {
@@ -379,7 +406,7 @@ cl() {
     fi
 }
 alias sel='fzf | xsel -ib'
-alias hsel='history -n|fzf|tr -d \\n|xsel -ib'
+alias hsel='history 0 |fzf|tr -d \\n|xsel -ib'
 
 
 # alias clone='git clone'
@@ -397,8 +424,10 @@ alias gpu='git push'
 alias g='git status'
 alias gs='git status -s'
 alias gsh='git show'
-alias gl='git log'
-alias gll='git log --pretty=oneline --abbrev-commit' 
+# alias gl='git log'
+# alias gll='git log --pretty=oneline --abbrev-commit' 
+alias gl='git log --pretty=oneline --abbrev-commit' 
+alias gll='git log'
 alias glg='git log --graph --pretty=oneline --abbrev-commit'
 alias gwh='git whatchanged -p --abbrev-commit' 
 alias gsb='git show-branch'
@@ -422,13 +451,15 @@ function field() {
 alias f='field'
 for n in {1..9}; alias f$n="field $n"
 
+alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
+
 
 ## Funksjoner
 
 # Auto-ls
 function chpwd() {
     emulate -L zsh
-    l
+    ls -l
 }
 
 # zman for å finne dokumentasjon
@@ -440,25 +471,6 @@ paclist() {
   # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
   LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
     awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
-}
-
-vg() {
-    if [[ -z $@ ]]; then
-        return
-    fi
-    local file=$(command rg -l -uu "$@" 2> /dev/null | fzf --preview="rg --color=always -C3 \"${@}\" {}");
-    if [[ -n $file ]]; then
-        local line=$(rg -n "$@" "${file}" | head -n1 | cut -d: -f1)
-        vim +$line "${file}"
-
-    fi
-}
-
-vf() {
-    local file=$(fd -tf "$@" | fzf --preview "echo {} | rg --color=always \"$@\"" --preview-window up:1);
-    if [[ -n $file ]]; then
-        vim "${file}"
-    fi
 }
 
 mykeys() {
@@ -517,12 +529,12 @@ pg() {
 pq() {
     if [[ -n $@ ]]; then
         pacaur -Qi $result
-        pacman -Ql $result | grep --color=never "/usr/bin/"
+        pacman -Ql $result | grep --color=never "/usr/bin/" | tail +2
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
         if [[ -n $result ]]; then
             pacaur -Qi $result
-            pacman -Ql $result | grep --color=never "/usr/bin/"
+            pacman -Ql $result | grep --color=never "/usr/bin/" | tail +2
         fi
     fi
 }
@@ -566,7 +578,7 @@ purl() {
 }
 
 ap() {
-    local file=$(rg --files -uu 2> /dev/null | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='~/' \
+    local file=$(rg --files -uu --no-messages | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='~/' \
         --preview='[[ $(file --mime {}) =~ binary ]] &&
         echo {} is a binary file ||
         (highlight -O ansi -l {} ||
@@ -647,10 +659,9 @@ fancy-ctrl-z() {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-# Ctrl up
 parent-directory-widget() {
-	zle kill-buffer
-	cd ..
+    zle kill-buffer
+    cd ..
     zle reset-prompt
 }
 zle -N parent-directory-widget
@@ -678,15 +689,20 @@ zle -N sc-widget
 
 global-cd-widget() {
     zle kill-buffer
-    local file="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
-    if [[ -n $file ]]; then
-        if [[ -d $file ]]; then
-            cd -- "$file"
+    local dir="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
+    if [[ -n $dir ]]; then
+        if [[ -d $dir ]]; then
+            cd -- "$dir"
         else
-            cd -- "${file:h}"
+            cd -- "${dir:h}"
         fi
+    else
+        zle redisplay
     fi
-    zle reset-prompt
+    # Last two lines dont show in multiline prompts
+    printf '\n'
+    printf '\n'
+    zle fzf-redraw-prompt
 }
 zle -N global-cd-widget
 
@@ -701,18 +717,21 @@ insert-widget() {
 }
 zle -N insert-widget
 
-
 edit-local-widget() {
     zle kill-buffer
     # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
-    local file=$(rg --files -uu 2> /dev/null | sed 's/^\/home\/jonas\///' | sed '/~$/d' | fzf --prompt='./' \
-        --preview='[[ $(file -b --mime {}) =~ binary ]] &&
-        file -b {} ||
-        (highlight -O ansi -l {} ||
-        cat {}) 2> /dev/null | head -500'
-        )
+
+    # local file=$(rg --files --no-messages --no-follow -uu | sed '/~$/d' | fzf --prompt='./' \
+    #     --preview='[[ $(file -b --mime {}) =~ binary ]] &&
+    #     file -b {} ||
+    #     (highlight -O ansi -l {} ||
+    #     cat {}) 2> /dev/null | head -500'
+    #     )
+
+    # Using bat instead of highlight for preview
+    local file=$(rg --files --no-messages --no-follow -uu | sed '/~$/d' | fzf --prompt='./')
     if [[ -n $file ]]; then
-        file=$(realpath $file)
+        # file=$(realpath $file)
         zle redisplay
         if [[ ! $(file --mime $file) =~ 'binary' ]]; then
             BUFFER="vim \"${file}\""
@@ -726,7 +745,7 @@ zle -N edit-local-widget
 
 edit-global-widget() {
     zle kill-buffer
-    find_cmd="sudo rg --files -uu 2> /dev/null"
+    find_cmd="sudo rg --files -uu --no-messages"
     local file=$(
     (eval ${find_cmd} /etc
     eval ${find_cmd} ~/
@@ -735,11 +754,11 @@ edit-global-widget() {
     eval ${find_cmd} /usr/share
     eval ${find_cmd} /var/log
     eval ${find_cmd} /var/tmp
-    eval ${find_cmd} /tmp) | \
-        rg -v '~$'| fzf --preview='[[ $(file --mime {}) =~ binary ]] &&
-        echo {} is a binary file ||
-        (highlight -O ansi -l {} ||
-        cat {}) 2> /dev/null | head -500';)
+    eval ${find_cmd} /tmp) | rg -v '~$'| fzf)
+        # rg -v '~$'| fzf --preview='[[ $(file --mime {}) =~ binary ]] &&
+        # echo {} is a binary file ||
+        # (highlight -O ansi -l {} ||
+        # cat {}) 2> /dev/null | head -500';)
 
     if [[ -n $file && (! $(file --mime $file) =~ 'binary') ]]; then
         zle redisplay
@@ -761,7 +780,7 @@ kill-processes-widget() {
     local process=$(ps hc --ppid 2 -p 2 --deselect -o pid,user,args|fzf|awk '{print $1}')
     if [[ -n $process ]]; then
         echo $process
-    	zle redisplay
+        zle redisplay
         BUFFER="sudo kill $process"
         zle accept-line
     else
@@ -929,10 +948,13 @@ source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='rg --files -uu'
 export FZF_ALT_C_COMMAND="fd -td -tl"
 export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
-export FZF_DEFAULT_OPTS='
+export FZF_DEFAULT_OPTS="
 --height=50% --reverse
 --bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
---color fg:-1,bg:-1,bg+:-1'
+--color fg:-1,bg:-1,bg+:-1
+--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'
+"
+
 
 export FZF_COMPLETION_TRIGGER=''
 bindkey '^T' fzf-completion
@@ -949,34 +971,69 @@ export FZF_MARKS_NO_COLORS=1
 setopt autonamedirs
 source ~/.zshdirs
 
-# Make ls widget on alt+l
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
+# [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+# POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 
-SPACESHIP_PROMPT_ORDER=(
-  time          # Time stamps section
-  user          # Username section
-  dir           # Current directory section
-  host          # Hostname section
-  git           # Git section (git_branch + git_status)
-  exec_time     # Execution time
-  line_sep      # Line break
-  exit_code     # Exit code section
-  char          # Prompt character
-)
+# SPACESHIP_PROMPT_ORDER=(
+#   time          # Time stamps section
+#   user          # Username section
+#   dir           # Current directory section
+#   host          # Hostname section
+#   git           # Git section (git_branch + git_status)
+#   exec_time     # Execution time
+#   line_sep      # Line break
+#   exit_code     # Exit code section
+#   char          # Prompt character
+# )
 
 
+# FASD
 eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 bindkey '^X' fasd-complete
 
+function v() {
+    if [[ -n $@ ]]; then
+        local file=$(fasd -f $@)
+        [[ -n $file ]] && vim "${file}"
+    else
+        local file=$(fasd -ftlR | fzf)
+        [[ -n $file ]] && vim "${file}"
+    fi
+}
+function c() {
+    if [[ -n $@ ]]; then
+        local dir=$(fasd -d $@)
+        [[ -n $dir ]] && cd "${dir}"
+    else
+        local dir=$(fasd -dltR | fzf)
+        [[ -n $dir ]] && cd "${dir}"
+    fi
+}
+
+
+# vg() {
+#     if [[ -z $@ ]]; then
+#         return
+#     fi
+#     local file=$(command rg -l -uu "$@" 2> /dev/null | fzf --preview="rg --color=always -C3 \"${@}\" {}");
+#     if [[ -n $file ]]; then
+#         local line=$(rg -n "$@" "${file}" | head -n1 | cut -d: -f1)
+#         vim +$line "${file}"
+#     fi
+# }
+
+# Bedre versjon av vg
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
   rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
-vasd() {
-  local file
-  file="$(fasd -Rfl "$1" | fzf -1 -0 --no-sort +m)" && nvim "${file}" || return 1
+vf() {
+    local file=$(fd -tf "$@" | fzf --preview "echo {} | rg --color=always \"$@\"" --preview-window up:1);
+    if [[ -n $file ]]; then
+        vim "${file}"
+    fi
 }
+

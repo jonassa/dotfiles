@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+terminalrc="/home/jonas/.config/xfce4/terminal/terminalrc"
+colorschemes="/home/jonas/.local/share/xfce4/terminal/colorschemes"
+
+mood=$(grep "export MOOD" "${HOME}/.zshrc" | cut -d\' -f 2)
+
+if [[ $mood == 'dark' ]]; then
+    sed -i '/export MOOD/s/dark/light/' "${HOME}/.zshrc"
+    theme="$colorschemes/papercolor.theme"
+else
+    sed -i '/export MOOD/s/light/dark/' "${HOME}/.zshrc"
+    theme="$colorschemes/tempus_dusk.theme"
+fi
+
+sed -i '/Color/d' $terminalrc
+sed -n '/Color/p' $theme >> $terminalrc

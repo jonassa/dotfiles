@@ -1,0 +1,1 @@
+xfce4-screensaver-command --lock >/dev/null 2>&1 && exit

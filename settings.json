@@ -63,7 +63,7 @@
     ],
 
     "workbench.iconTheme": "simple-icons",
-    "workbench.colorTheme": "Material Theme",
+    "workbench.colorTheme": "Tomorrow Night",
     "workbench.activityBar.visible": false,
     "window.enableMenuBarMnemonics": false,
     "window.titleBarStyle": "custom",

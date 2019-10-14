@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+chromium --app="https://devdocs.io/"

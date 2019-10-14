@@ -1,0 +1,408 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/befcb888/
++	init.vim	/^nnoremap + yyp$/;"	m
++	init.vim	/^noremap + <Nop>$/;"	m
+,	init.vim	/^noremap , g;zz$/;"	m
+-	init.vim	/^nnoremap <silent> - :FileBeagleBufferDir<CR>$/;"	m
+;	init.vim	/^noremap ; g,zz$/;"	m
+<	init.vim	/^xnoremap < <gv$/;"	m
+<BS>	init.vim	/^nnoremap <BS> `.$/;"	m
+<C-A>	init.vim	/^cnoremap <C-A> <Home>$/;"	m
+<C-A>	init.vim	/^noremap <C-A> <C-^>$/;"	m
+<C-B>	init.vim	/^cnoremap <C-B> <Left>$/;"	m
+<C-B>	init.vim	/^inoremap <C-B> <Left>$/;"	m
+<C-B>	init.vim	/^nnoremap <C-B> <C-B>zz$/;"	m
+<C-C>	init.vim	/^inoremap <C-C> <Esc>$/;"	m
+<C-C>	init.vim	/^nnoremap <C-C> "+yy$/;"	m
+<C-C>	init.vim	/^vnoremap <C-C> "+y$/;"	m
+<C-D>	init.vim	/^inoremap <C-D> <Del>$/;"	m
+<C-E>	init.vim	/^cnoremap <C-E> <End>$/;"	m
+<C-E>	init.vim	/^noremap <C-E> zt$/;"	m
+<C-F>	init.vim	/^cnoremap <C-F> <Right>$/;"	m
+<C-F>	init.vim	/^inoremap <C-F> <Right>$/;"	m
+<C-F>	init.vim	/^nnoremap <C-F> <C-F>zz$/;"	m
+<C-H>	init.vim	/^nnoremap <silent> <C-H> :TmuxNavigateLeft<cr>$/;"	m
+<C-J>	init.vim	/^inoremap <C-J> <Down>$/;"	m
+<C-J>	init.vim	/^nnoremap <silent> <C-J> :TmuxNavigateDown<cr>$/;"	m
+<C-K>	init.vim	/^inoremap <C-K> <Up>$/;"	m
+<C-K>	init.vim	/^nnoremap <silent> <C-K> :TmuxNavigateUp<cr>$/;"	m
+<C-L>	init.vim	/^imap <C-L> <C-X><C-L>$/;"	m
+<C-L>	init.vim	/^nnoremap <silent> <C-L> :TmuxNavigateRight<cr>$/;"	m
+<C-M-j>	init.vim	/^nnoremap <C-M-j> mz:m+<CR>`z$/;"	m
+<C-M-k>	init.vim	/^nnoremap <C-M-k> mz:m-2<CR>`z$/;"	m
+<C-Q>	init.vim	/^nnoremap <silent> <C-Q> :q!<CR>$/;"	m
+<C-R>	init.vim	/^nmap <silent> <C-R> :History:<CR>$/;"	m
+<C-S>	init.vim	/^nnoremap <silent> <C-S> :up<CR>$/;"	m
+<C-S>	init.vim	/^nnoremap <silent> <C-S> <C-W>p$/;"	m
+<C-Space>	init.vim	/^nnoremap <C-Space> <C-W>p$/;"	m
+<C-W><C-I>	init.vim	/^nnoremap <C-W><C-I> <C-W>}$/;"	m
+<C-X>	init.vim	/^nnoremap <C-X> :bd!<CR>$/;"	m
+<C-X>	init.vim	/^nnoremap <silent> <C-X> :bp<Bar>bd! #<Cr>$/;"	m
+<C-Y>	init.vim	/^noremap <C-Y> zb$/;"	m
+<C-n>	init.vim	/^map <silent> <C-n> :bn<CR>$/;"	m
+<C-p>	init.vim	/^map <silent> <C-p> :bp<CR>$/;"	m
+<C-s>	init.vim	/^inoremap <silent> <C-s> <Esc>:up<CR>$/;"	m
+<C-v>	init.vim	/^inoremap <C-v> <C-R>"$/;"	m
+<C-x>?	init.vim	/^imap <C-x>? <plug>(fzf-maps-i)$/;"	m
+<CR>	init.vim	/^inoremap <expr> <CR> (pumvisible() ? "\\<c-y>\\<cr>" : "\\<CR>")$/;"	m
+<CR>	init.vim	/^nnoremap <CR> <Nop>$/;"	m
+<F10>	init.vim	/^map <F10> :w <CR>:!python %<CR>$/;"	m
+<F12>	init.vim	/^map <F12> :w <CR>:!gcc -g % -o %< && .\/%< <CR>$/;"	m
+<F1>	init.vim	/^nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'$/;"	m
+<F2>	init.vim	/^map <silent> <F2> :call Highlight_trailing_whitespace()<CR>$/;"	m
+<F3>	init.vim	/^nnoremap <F3> :CPrev<CR>$/;"	m
+<F4>	init.vim	/^nnoremap <F4> :CNext<CR>$/;"	m
+<F5>	init.vim	/^nnoremap <silent> <F5> :BG<CR>$/;"	m
+<M-+>	init.vim	/^nnoremap <M-+> <C-A>$/;"	m
+<M-.>	init.vim	/^cnoremap <M-.> <Up>$/;"	m
+<M-.>	init.vim	/^nnoremap <M-.> :<Up>$/;"	m
+<M-1>	init.vim	/^map <silent> <M-1> :call Scratch()<CR>$/;"	m
+<M-2>	init.vim	/^inoremap <M-2> @$/;"	m
+<M-2>	init.vim	/^nmap <silent> <M-2> :NERDTreeToggle<Bar>TagbarToggle<CR><C-W>p$/;"	m
+<M-3>	init.vim	/^nmap <silent> <M-3> :NERDTreeToggle<CR>$/;"	m
+<M-4>	init.vim	/^inoremap <M-4> \$$/;"	m
+<M-4>	init.vim	/^nmap <silent> <M-4> :TagbarToggle<CR>$/;"	m
+<M-5>	init.vim	/^inoremap <M-5> %$/;"	m
+<M-:>	init.vim	/^cnoremap <M-:> <Down>$/;"	m
+<M-?>	init.vim	/^nnoremap <M-?> <C-X>$/;"	m
+<M-BS>	init.vim	/^noremap <M-BS> <Nop>$/;"	m
+<M-BS>	init.vim	/^noremap! <M-BS> <C-W>$/;"	m
+<M-C>	init.vim	/^nmap <M-C> :t-1<CR>gccj$/;"	m
+<M-CR>	init.vim	/^inoremap <M-CR> <ESC>:s\/\\s*$\/;<CR>j$/;"	m
+<M-CR>	init.vim	/^nnoremap <M-CR> <ESC>:s\/\\s*$\/;<CR>j$/;"	m
+<M-D>	init.vim	/^nnoremap <M-D> :t-1<CR>$/;"	m
+<M-Down>	init.vim	/^nnoremap <silent> <M-Down> :call MoveOrCreateWindow('j')<CR>$/;"	m
+<M-I>	init.vim	/^nnoremap <M-I> <<$/;"	m
+<M-J>	init.vim	/^nnoremap <M-J> J$/;"	m
+<M-K>	init.vim	/^nnoremap <silent> <M-K> :<C-u>call BreakHere()<CR>$/;"	m
+<M-Left>	init.vim	/^nnoremap <silent> <M-Left> :call MoveOrCreateWindow('h')<CR>$/;"	m
+<M-M>	init.vim	/^nnoremap <M-M> zm$/;"	m
+<M-O>	init.vim	/^inoremap <M-O> <Esc>O$/;"	m
+<M-O>	init.vim	/^nnoremap <silent> <M-O> :<c-u>call <sid>blankup(v:count1)<cr>$/;"	m
+<M-O>	init.vim	/^vmap <M-O> <Esc>O$/;"	m
+<M-Q>	init.vim	/^nmap <M-Q> <Nop>$/;"	m
+<M-R>	init.vim	/^inoremap <M-R> <C-O>R$/;"	m
+<M-Right>	init.vim	/^nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>$/;"	m
+<M-Space>	init.vim	/^nnoremap <silent> <M-Space> :JustOneSpace<CR>$/;"	m
+<M-U>	init.vim	/^inoremap <M-U> <Esc>U$/;"	m
+<M-U>	init.vim	/^nmap <M-U> U$/;"	m
+<M-U>	init.vim	/^vmap <M-U> <Esc>U$/;"	m
+<M-Up>	init.vim	/^nnoremap <silent> <M-Up> :call MoveOrCreateWindow('k')<CR>$/;"	m
+<M-W>	init.vim	/^nmap <M-W> <M-r>iW$/;"	m
+<M-a>	init.vim	/^inoremap <M-a> <Esc>A$/;"	m
+<M-a>	init.vim	/^nnoremap <M-a> mz=ap`z$/;"	m
+<M-b>	init.vim	/^cnoremap <M-b> <C-Left>$/;"	m
+<M-b>	init.vim	/^inoremap <M-b> <Esc><C-Left>$/;"	m
+<M-b>	init.vim	/^nnoremap <M-b> <C-Left>$/;"	m
+<M-c>	init.vim	/^nmap <M-c> gcc$/;"	m
+<M-c>	init.vim	/^xmap <M-c> gc$/;"	m
+<M-d>	init.vim	/^cnoremap <M-d> <C-Right><C-W>$/;"	m
+<M-d>	init.vim	/^inoremap <M-d> <C-\\><C-O>de$/;"	m
+<M-d>	init.vim	/^nnoremap <M-d> :t.<CR>$/;"	m
+<M-d>	init.vim	/^nnoremap <M-d> dW$/;"	m
+<M-d>	init.vim	/^vnoremap <M-d> :t-1<CR>$/;"	m
+<M-e>	init.vim	/^inoremap <M-e> <Esc>A$/;"	m
+<M-e>	init.vim	/^noremap <M-e> \$$/;"	m
+<M-f>	init.vim	/^cnoremap <M-f> <C-Right>$/;"	m
+<M-f>	init.vim	/^inoremap <M-f> <Esc><Right><C-Right>$/;"	m
+<M-f>	init.vim	/^inoremap <M-f> <Esc>w$/;"	m
+<M-f>	init.vim	/^nnoremap <M-f> <C-Right>$/;"	m
+<M-g>	init.vim	/^nnoremap <M-g> zz$/;"	m
+<M-h>	init.vim	/^xnoremap <M-h> <gv$/;"	m
+<M-i>	init.vim	/^inoremap <M-i> <Esc>I$/;"	m
+<M-i>	init.vim	/^nnoremap <M-i> >>$/;"	m
+<M-i>	init.vim	/^nnoremap <M-i> S$/;"	m
+<M-i>	init.vim	/^vnoremap <M-i> c$/;"	m
+<M-j>	init.vim	/^cnoremap <M-j> <C-G>$/;"	m
+<M-j>	init.vim	/^nnoremap <M-j> 4gjzz$/;"	m
+<M-j>	init.vim	/^vnoremap <M-j> :m'>+<cr>`<my`>mzgv`yo`z$/;"	m
+<M-k>	init.vim	/^cnoremap <M-k> <C-T>$/;"	m
+<M-k>	init.vim	/^nnoremap <M-k> 4gkzz$/;"	m
+<M-k>	init.vim	/^vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z$/;"	m
+<M-l>	init.vim	/^inoremap <M-l> <Esc>l$/;"	m
+<M-l>	init.vim	/^nnoremap <silent> <M-l> :Lines<CR>$/;"	m
+<M-l>	init.vim	/^xnoremap <M-l> >gv$/;"	m
+<M-m>	init.vim	/^nnoremap <M-m> zr$/;"	m
+<M-n>	init.vim	/^cnoremap <M-n> <C-n>$/;"	m
+<M-n>	init.vim	/^inoremap <M-n> <C-N>$/;"	m
+<M-n>	init.vim	/^nmap <M-n> <Plug>yankstack_substitute_newer_paste$/;"	m
+<M-o>	init.vim	/^inoremap <M-o> <Esc>o$/;"	m
+<M-o>	init.vim	/^nnoremap <silent> <M-o> :<c-u>call <sid>blankdown(v:count1)<cr>$/;"	m
+<M-o>	init.vim	/^vmap <M-o> <Esc>o$/;"	m
+<M-o>	init.vim	/^xnoremap <M-o> o<Esc>$/;"	m
+<M-p>	init.vim	/^cnoremap <M-p> <C-p>$/;"	m
+<M-p>	init.vim	/^inoremap <M-p> <C-P>$/;"	m
+<M-p>	init.vim	/^nmap <M-p> <Plug>yankstack_substitute_older_paste$/;"	m
+<M-q>	init.vim	/^cnoremap <M-q> <C-C>$/;"	m
+<M-q>	init.vim	/^inoremap <M-q> <Esc>$/;"	m
+<M-q>	init.vim	/^nnoremap <M-q> <Esc>$/;"	m
+<M-q>	init.vim	/^onoremap <M-q> <Esc>$/;"	m
+<M-q>	init.vim	/^snoremap <M-q> <Esc>$/;"	m
+<M-q>	init.vim	/^xnoremap <M-q> <Esc>$/;"	m
+<M-r>	init.vim	/^inoremap <M-r> <C-O>r$/;"	m
+<M-r>	init.vim	/^nmap <silent> <M-r> <Plug>(operator-sandwich-add)$/;"	m
+<M-r>	init.vim	/^xmap <M-r> <Plug>(operator-sandwich-add)$/;"	m
+<M-r><M-r>	init.vim	/^nmap <silent> <M-r><M-r> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)$/;"	m
+<M-t>	init.vim	/^nnoremap <M-t> <C-]>zz$/;"	m
+<M-u>	init.vim	/^inoremap <M-u> <Esc>u$/;"	m
+<M-u>	init.vim	/^nmap <M-u> u$/;"	m
+<M-u>	init.vim	/^vmap <M-u> <Esc>u$/;"	m
+<M-v>	init.vim	/^nnoremap <M-v> ^v$h$/;"	m
+<M-w>	init.vim	/^nmap <M-w> <M-r>iw$/;"	m
+<M-x>	init.vim	/^nnoremap <M-x> :Commands<CR>$/;"	m
+<S-Down>	init.vim	/^nnoremap <silent> <S-Down> 10<C-w>-$/;"	m
+<S-Left>	init.vim	/^nnoremap <silent> <S-Left> 10<C-w><$/;"	m
+<S-Right>	init.vim	/^nnoremap <silent> <S-Right> 10<C-w>>$/;"	m
+<S-Tab>	init.vim	/^inoremap <expr> <S-Tab> pumvisible() ? "\\<C-p>" : "\\<C-D>"$/;"	m
+<S-Tab>	init.vim	/^xnoremap <S-Tab> <gv$/;"	m
+<S-Up>	init.vim	/^nnoremap <silent> <S-Up> 10<C-w>+$/;"	m
+<Tab>	init.vim	/^inoremap <silent> <Tab> <C-R>=Tab_Or_Complete()<CR>$/;"	m
+<Tab>	init.vim	/^xnoremap <Tab> >gv$/;"	m
+<c-x><c-f>	init.vim	/^imap <c-x><c-f> <plug>(fzf-complete-file-ag)$/;"	m
+<c-x><c-l>	init.vim	/^imap <c-x><c-l> <plug>(fzf-complete-line)$/;"	m
+<down>	init.vim	/^nnoremap <silent> <down>  :cnext<cr>zvzz$/;"	m
+<leader>1	init.vim	/^nnoremap <leader>1 :1tabnext<CR>$/;"	m
+<leader>2	init.vim	/^nnoremap <leader>2 :2tabnext<CR>$/;"	m
+<leader>3	init.vim	/^nnoremap <leader>3 :3tabnext<CR>$/;"	m
+<leader>4	init.vim	/^nnoremap <leader>4 :4tabnext<CR>$/;"	m
+<leader>5	init.vim	/^nnoremap <leader>5 :5tabnext<CR>$/;"	m
+<leader>:	init.vim	/^nmap <silent> <leader>: :Commands<CR>$/;"	m
+<leader><Tab>	init.vim	/^nnoremap <leader><Tab> :Buffers<CR>$/;"	m
+<leader><leader>	init.vim	/^nnoremap <leader><leader> :Tags<CR>$/;"	m
+<leader>?	init.vim	/^nmap <leader>? <plug>(fzf-maps-n)$/;"	m
+<leader>?	init.vim	/^omap <leader>? <plug>(fzf-maps-o)$/;"	m
+<leader>?	init.vim	/^xmap <leader>? <plug>(fzf-maps-x)$/;"	m
+<leader>C	init.vim	/^nmap <silent> <leader>C :Directories<CR>$/;"	m
+<leader>F	init.vim	/^nmap <silent> <leader>F :Files ~<CR>$/;"	m
+<leader>K	init.vim	/^nnoremap <leader>K :DD<CR>$/;"	m
+<leader>Q	init.vim	/^nmap <silent> <leader>Q :qa!<CR>$/;"	m
+<leader>a	init.vim	/^nmap <leader>a :Ag<Space>$/;"	m
+<leader>b	init.vim	/^nmap <silent> <leader>b :Buffers<CR>$/;"	m
+<leader>c	init.vim	/^nmap <silent> <leader>c :Colors<CR>$/;"	m
+<leader>d	init.vim	/^nmap <silent> <leader>d :bd!<CR>$/;"	m
+<leader>e	init.vim	/^nmap <silent> <leader>e :e!<CR>$/;"	m
+<leader>f	init.vim	/^nmap <silent> <leader>f :Files<CR>$/;"	m
+<leader>h	init.vim	/^nmap <silent> <leader>h :Helptags<CR>$/;"	m
+<leader>k	init.vim	/^nmap <silent> <leader>k :Grep "\\b<cword>\\b"<CR>$/;"	m
+<leader>l	init.vim	/^nmap <silent> <leader>l :Lines<CR>$/;"	m
+<leader>m	init.vim	/^nmap <silent> <leader>m :Marks<CR>$/;"	m
+<leader>n	init.vim	/^nmap <silent> <leader>n :enew<CR>$/;"	m
+<leader>o	init.vim	/^nmap <leader>o :Locate<Space>$/;"	m
+<leader>on	init.vim	/^nmap <silent> <leader>on :NERDTreeToggle<CR>$/;"	m
+<leader>ot	init.vim	/^nmap <silent> <leader>ot :TagbarToggle<CR>$/;"	m
+<leader>p	init.vim	/^map <leader>p <esc>"+p$/;"	m
+<leader>q	init.vim	/^nmap <silent> <leader>q :qa!<CR>$/;"	m
+<leader>r	init.vim	/^nmap <silent> <leader>r :History<CR>$/;"	m
+<leader>r	init.vim	/^nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)$/;"	m
+<leader>r	init.vim	/^xnoremap <leader>r :w !python<CR>$/;"	m
+<leader>s	init.vim	/^nmap <silent> <leader>s :up<CR>$/;"	m
+<leader>t	init.vim	/^nmap <silent> <leader>t :Tags<CR>$/;"	m
+<leader>v	init.vim	/^nmap <silent> <leader>v :e $MYVIMRC<CR>$/;"	m
+<leader>w	init.vim	/^nmap <silent> <leader>w :x!<CR>$/;"	m
+<leader>y	init.vim	/^map <leader>y "+y$/;"	m
+<left>	init.vim	/^nnoremap <silent> <left>  :cpf<cr>zvzz$/;"	m
+<m-e>	init.vim	/^nnoremap <m-e> :Snippets<CR>$/;"	m
+<m-h>	init.vim	/^nnoremap <m-h> ^$/;"	m
+<m-s>	init.vim	/^nnoremap <m-s> a<Space><Esc>$/;"	m
+<right>	init.vim	/^nnoremap <silent> <right> :cnf<cr>zvzz$/;"	m
+<up>	init.vim	/^nnoremap <silent> <up>    :cprev<cr>zvzz$/;"	m
+>	init.vim	/^xnoremap > >gv$/;"	m
+?	init.vim	/^nnoremap ? K$/;"	m
+A	init.vim	/^xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'$/;"	m
+Ag	init.vim	/^command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--color-path "0;34" --color-line-number "0/;"	c
+BG	init.vim	/^command! BG call s:BG()$/;"	c
+BgHighlight	init.vim	/^augroup BgHighlight$/;"	a
+BreakHere	init.vim	/^function! BreakHere()$/;"	f
+BufOnly	init.vim	/^command! BufOnly silent! execute "up|%bd|e#|bd#"$/;"	c
+CNext	init.vim	/^command! CNext call CNext()$/;"	c
+CNext	init.vim	/^function! CNext()$/;"	f
+CPrev	init.vim	/^command! CPrev call CPrev()$/;"	c
+CPrev	init.vim	/^function! CPrev()$/;"	f
+Directories	init.vim	/^command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap($/;"	c
+F	init.vim	/^map F <Plug>Sneak_F$/;"	m
+Files	init.vim	/^command! -bang -nargs=? -complete=dir Files$/;"	c
+Filter	init.vim	/^command! -nargs=? Filter let @x='' | execute 'g\/<args>\/y X' | enew | setlocal bt=nofile | put!/;"	c
+G	init.vim	/^nnoremap G Gzz$/;"	m
+Grep	init.vim	/^command! -nargs=? -complete=file_in_path Grep silent grep! <args>$/;"	c
+H	init.vim	/^noremap H ^$/;"	m
+Header	init.vim	/^command! Header call Header()$/;"	c
+Header	init.vim	/^function Header()$/;"	f
+HelpKeymap	init.vim	/^augroup HelpKeymap$/;"	a
+Highlight_trailing_whitespace	init.vim	/^function! Highlight_trailing_whitespace()$/;"	f
+I	init.vim	/^xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'$/;"	m
+J	init.vim	/^nnoremap <silent> J :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>$/;"	m
+J	init.vim	/^onoremap J }$/;"	m
+J	init.vim	/^xnoremap J :<C-u>keepjumps normal! gv}<CR>$/;"	m
+JustOneSpace	init.vim	/^command! JustOneSpace call JustOneSpace()$/;"	c
+JustOneSpace	init.vim	/^function! JustOneSpace()$/;"	f
+K	init.vim	/^nnoremap <silent> K :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>$/;"	m
+K	init.vim	/^onoremap K {$/;"	m
+K	init.vim	/^xnoremap K :<C-u>keepjumps normal! gv{<CR>$/;"	m
+L	init.vim	/^noremap L \$$/;"	m
+M	init.vim	/^nnoremap M zz$/;"	m
+MoveOrCreateWindow	init.vim	/^function! MoveOrCreateWindow(key) abort$/;"	f
+P	init.vim	/^vnoremap P :t-1<CR>$/;"	m
+Q	init.vim	/^nnoremap Q `.zz$/;"	m
+Q	init.vim	/^vnoremap Q :s\/\\n\\{3,\\}\/\\r\\r<CR>$/;"	m
+QuickfixKeymap	init.vim	/^augroup QuickfixKeymap$/;"	a
+R	init.vim	/^command! -nargs=* R up|!.\/% <args>$/;"	c
+R	init.vim	/^vnoremap R :g\/^$\/d<CR>$/;"	m
+S	init.vim	/^nnoremap S ?$/;"	m
+S	init.vim	/^vnoremap S ?$/;"	m
+Scratch	init.vim	/^function! Scratch()$/;"	f
+StripTrailingWhitespace	init.vim	/^function! StripTrailingWhitespace()$/;"	f
+T	init.vim	/^map T <Plug>Sneak_T$/;"	m
+Tab_Or_Complete	init.vim	/^function! Tab_Or_Complete()$/;"	f
+ToggleWorkingDir	init.vim	/^function! ToggleWorkingDir()$/;"	f
+U	init.vim	/^nnoremap U <C-R>$/;"	m
+VV	init.vim	/^nnoremap VV viW$/;"	m
+Y	init.vim	/^map Y y\$$/;"	m
+\\	init.vim	/^noremap \\ @:$/;"	m
+aj	init.vim	/^omap aj <Plug>(textobj-sandwich-auto-a)$/;"	m
+aj	init.vim	/^xmap aj <Plug>(textobj-sandwich-auto-a)$/;"	m
+cP	init.vim	/^nnoremap cP "1P$/;"	m
+cP	init.vim	/^nnoremap cP <esc>"+P$/;"	m
+cd	init.vim	/^nnoremap cd :Directories<CR>$/;"	m
+cd	init.vim	/^nnoremap cd \/\\d\\+<CR>gnc$/;"	m
+ch	init.vim	/^nnoremap ch c^$/;"	m
+co	init.vim	/^nmap <silent> co <Plug>(qf_qf_toggle)$/;"	m
+cp	init.vim	/^nnoremap cp "1p$/;"	m
+cp	init.vim	/^nnoremap cp <esc>"+p$/;"	m
+cs	init.vim	/^nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-s/;"	m
+css	init.vim	/^nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-/;"	m
+cu	init.vim	/^nnoremap cu :<C-U>call ToggleWorkingDir()<CR>$/;"	m
+cv	init.vim	/^nmap cv civ$/;"	m
+dh	init.vim	/^nnoremap dh d^$/;"	m
+do	init.vim	/^nnoremap do :Explore<CR>$/;"	m
+dp	init.vim	/^nmap <silent> dp :t-1<CR>gccj$/;"	m
+ds	init.vim	/^nmap ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sa/;"	m
+dss	init.vim	/^nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-s/;"	m
+f	init.vim	/^map f <Plug>Sneak_f$/;"	m
+g/	init.vim	/^nnoremap g\/ :g\/\/<CR>$/;"	m
+g:AutoPairsMapCh	init.vim	/^let g:AutoPairsMapCh = 0$/;"	v
+g:AutoPairsMoveCharacter	init.vim	/^let g:AutoPairsMoveCharacter = ''$/;"	v
+g:AutoPairsShortcutBackInsert	init.vim	/^let g:AutoPairsShortcutBackInsert = ''$/;"	v
+g:AutoPairsShortcutFastWrap	init.vim	/^let g:AutoPairsShortcutFastWrap = ''$/;"	v
+g:AutoPairsShortcutJump	init.vim	/^let g:AutoPairsShortcutJump = '<M-,>'$/;"	v
+g:AutoPairsShortcutToggle	init.vim	/^let g:AutoPairsShortcutToggle = ''$/;"	v
+g:NERDTreeAutoDeleteBuffer	init.vim	/^let g:NERDTreeAutoDeleteBuffer = 1$/;"	v
+g:NERDTreeChDirMode	init.vim	/^let g:NERDTreeChDirMode = 2$/;"	v
+g:NERDTreeMinimalUI	init.vim	/^let g:NERDTreeMinimalUI = 1$/;"	v
+g:NERDTreeShowFiles	init.vim	/^let g:NERDTreeShowFiles = 1$/;"	v
+g:UltiSnipsExpandTrigger	init.vim	/^let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol$/;"	v
+g:UltiSnipsJumpBackwardTrigger	init.vim	/^let g:UltiSnipsJumpBackwardTrigger="<M-b>"$/;"	v
+g:UltiSnipsJumpForwardTrigger	init.vim	/^let g:UltiSnipsJumpForwardTrigger="<M-f>"$/;"	v
+g:bullets_enabled_file_types	init.vim	/^let g:bullets_enabled_file_types = [$/;"	v
+g:cm_completeopt	init.vim	/^let g:cm_completeopt="menu,menuone,noinsert,noselect"$/;"	v
+g:favorites	init.vim	/^let g:favorites = [$/;"	v
+g:filebeagle_suppress_keymaps	init.vim	/^let g:filebeagle_suppress_keymaps = 1$/;"	v
+g:fzf_buffers_jump	init.vim	/^let g:fzf_buffers_jump = 1$/;"	v
+g:fzf_colors	init.vim	/^let g:fzf_colors =$/;"	v
+g:fzf_history_dir	init.vim	/^let g:fzf_history_dir = '~\/.local\/share\/fzf-history'$/;"	v
+g:fzf_layout	init.vim	/^let g:fzf_layout = { 'down': '~40%' }$/;"	v
+g:fzf_nvim_statusline	init.vim	/^let g:fzf_nvim_statusline = 0$/;"	v
+g:gruvbox_contrast_dark	init.vim	/^let g:gruvbox_contrast_dark = 'hard'$/;"	v
+g:gruvbox_improved_strings	init.vim	/^let g:gruvbox_improved_strings = 1$/;"	v
+g:gruvbox_improved_warnings	init.vim	/^let g:gruvbox_improved_warnings = 1$/;"	v
+g:highlight_trailing	init.vim	/^        let g:highlight_trailing = 0$/;"	v
+g:highlight_trailing	init.vim	/^        let g:highlight_trailing = 1$/;"	v
+g:highlight_trailing	init.vim	/^let g:highlight_trailing = 0$/;"	v
+g:indentguides_ignorelist	init.vim	/^let g:indentguides_ignorelist = ['help']$/;"	v
+g:indentguides_spacechar	init.vim	/^let g:indentguides_spacechar = '┆'$/;"	v
+g:indentguides_tabchar	init.vim	/^let g:indentguides_tabchar = '|'$/;"	v
+g:isRecording	init.vim	/^let g:isRecording = get(g:, 'isRecording', 0)$/;"	v
+g:mapleader	init.vim	/^let g:mapleader=" "$/;"	v
+g:markdown_enable_spell_checking	init.vim	/^let g:markdown_enable_spell_checking = 0$/;"	v
+g:netrw_banner	init.vim	/^let g:netrw_banner = 0$/;"	v
+g:netrw_liststyle	init.vim	/^let g:netrw_liststyle = 3$/;"	v
+g:netrw_winsize	init.vim	/^let g:netrw_winsize = 25$/;"	v
+g:nord_comment_brightness	init.vim	/^let g:nord_comment_brightness = 20$/;"	v
+g:operator_sandwich_no_default_key_mappings	init.vim	/^let g:operator_sandwich_no_default_key_mappings = 1$/;"	v
+g:project_dir	init.vim	/^        let g:project_dir=getcwd()$/;"	v
+g:qf_mapping_ack_style	init.vim	/^let g:qf_mapping_ack_style = 1$/;"	v
+g:qf_max_height	init.vim	/^let g:qf_max_height = 15$/;"	v
+g:sandwich#recipes	init.vim	/^let g:sandwich#recipes += [$/;"	v
+g:sandwich#recipes	init.vim	/^let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)$/;"	v
+g:sandwich_no_default_key_mappings	init.vim	/^let g:sandwich_no_default_key_mappings = 1$/;"	v
+g:session_dir	init.vim	/^let g:session_dir = '~\/.vim\/sessions'$/;"	v
+g:sneak#s_next	init.vim	/^let g:sneak#s_next = 1$/;"	v
+g:sneak#use_ic_scs	init.vim	/^let g:sneak#use_ic_scs = 1$/;"	v
+g:targets_pairs	init.vim	/^let g:targets_pairs = '()b {}B []r <>'$/;"	v
+g:targets_quotes	init.vim	/^let g:targets_quotes = '"d ''q `'$/;"	v
+g:textobj_sandwich_no_default_key_mappings	init.vim	/^let g:textobj_sandwich_no_default_key_mappings = 1$/;"	v
+g:tmux_navigator_no_mappings	init.vim	/^let g:tmux_navigator_no_mappings = 1$/;"	v
+g:vem_tabline_multiwindow_mode	init.vim	/^let g:vem_tabline_multiwindow_mode = 0$/;"	v
+g:vem_tabline_show	init.vim	/^let g:vem_tabline_show = 2$/;"	v
+g:vrunchbang_dark_LineNr	init.vim	/^let g:vrunchbang_dark_LineNr = 'off'$/;"	v
+g:yankstack_map_keys	init.vim	/^let g:yankstack_map_keys = 0$/;"	v
+g:yankstack_yank_keys	init.vim	/^let g:yankstack_yank_keys = ['y', 'Y', 'd', 'D']$/;"	v
+g<Space>	init.vim	/^nnoremap g<Space> a<Space><Esc>$/;"	m
+g=	init.vim	/^nnoremap g= =ap$/;"	m
+gO	init.vim	/^nnoremap gO zA$/;"	m
+gQ	init.vim	/^nnoremap gQ <Nop>$/;"	m
+gV	init.vim	/^nnoremap gV `[v`]$/;"	m
+ga	init.vim	/^nmap ga <Plug>(EasyAlign)$/;"	m
+ga	init.vim	/^xmap ga <Plug>(EasyAlign)$/;"	m
+gb	init.vim	/^nmap gb %$/;"	m
+gb	init.vim	/^omap gb %$/;"	m
+gb	init.vim	/^xmap gb %$/;"	m
+gg	init.vim	/^nnoremap gg ggzz$/;"	m
+gh	init.vim	/^nnoremap <silent> gh :Header<CR>$/;"	m
+gh	init.vim	/^noremap gh H$/;"	m
+gj	init.vim	/^nmap gj ]]$/;"	m
+gk	init.vim	/^nmap gk [[$/;"	m
+gl	init.vim	/^noremap gl L$/;"	m
+gm	init.vim	/^noremap gm M$/;"	m
+go	init.vim	/^nnoremap go za$/;"	m
+gr	init.vim	/^nnoremap gr :%s\/\\<<c-r><c-w>\\>\/$/;"	m
+gr	init.vim	/^vnoremap gr y:%s\/\\<<c-r>"\\>\/$/;"	m
+gs	init.vim	/^nnoremap gs :%s:$/;"	m
+gs	init.vim	/^vnoremap gs :s\/$/;"	m
+gw	init.vim	/^nmap <silent> gw :Grep "\\b<cword>\\b"<CR>$/;"	m
+gw	init.vim	/^nnoremap gw yiw$/;"	m
+gæ	init.vim	/^nnoremap <silent> gæ :ALEDetail<CR>$/;"	m
+ij	init.vim	/^omap ij <Plug>(textobj-sandwich-auto-i)$/;"	m
+ij	init.vim	/^xmap ij <Plug>(textobj-sandwich-auto-i)$/;"	m
+j	init.vim	/^noremap <silent> j gj$/;"	m
+j	init.vim	/^xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'$/;"	m
+k	init.vim	/^noremap <silent> k gk$/;"	m
+k	init.vim	/^xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'$/;"	m
+q	init.vim	/^nnoremap q ``$/;"	m
+q	init.vim	/^xnoremap q o<Esc>$/;"	m
+s	init.vim	/^nnoremap s \/$/;"	m
+s	init.vim	/^vnoremap s \/$/;"	m
+s:BG	init.vim	/^function! s:BG()$/;"	f
+s:blankdown	init.vim	/^function! s:blankdown(count) abort$/;"	f
+s:blankup	init.vim	/^function! s:blankup(count) abort$/;"	f
+t	init.vim	/^map t <Plug>Sneak_t$/;"	m
+vD	init.vim	/^nnoremap vD "vD$/;"	m
+vP	init.vim	/^nnoremap vP "vP$/;"	m
+vV	init.vim	/^nnoremap vV viW$/;"	m
+vY	init.vim	/^nnoremap vY "vY$/;"	m
+vd	init.vim	/^nnoremap vd "vd$/;"	m
+vdp	init.vim	/^nnoremap vdp "vdap$/;"	m
+vimrc	init.vim	/^augroup vimrc$/;"	a
+vm	init.vim	/^nnoremap vm :Marks<CR>$/;"	m
+vo	init.vim	/^nnoremap vo <C-W>o$/;"	m
+vp	init.vim	/^nnoremap vp "vp$/;"	m
+vv	init.vim	/^nnoremap vv viw$/;"	m
+vy	init.vim	/^nnoremap vy "vy$/;"	m
+w!!	init.vim	/^cmap w!! w !sudo tee > \/dev\/null %$/;"	m
+yP	init.vim	/^nnoremap yP "0P$/;"	m
+yh	init.vim	/^nnoremap yh y^$/;"	m
+yp	init.vim	/^nnoremap yp "0p$/;"	m
+zd	init.vim	/^nnoremap zd "Zdd$/;"	m
+zp	init.vim	/^nnoremap zp "zp:let @z=''<CR>$/;"	m
+zx	init.vim	/^nnoremap zx :pclose<CR>$/;"	m
+¤	init.vim	/^noremap ¤ ~$/;"	m
+Å	init.vim	/^nnoremap Å @q$/;"	m
+Æ	init.vim	/^nnoremap <silent> Æ :ALEPreviousWrap<CR>$/;"	m
+å	init.vim	/^nnoremap <expr> <silent> å g:isRecording ? 'q:let g:isRecording=0<CR>' : 'qq:let g:isRecording=/;"	m
+å	init.vim	/^noremap å ^$/;"	m
+æ	init.vim	/^nnoremap <silent> æ :ALENextWrap<CR>$/;"	m
+ø	init.vim	/^noremap ø \$$/;"	m

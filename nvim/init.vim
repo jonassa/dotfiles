@@ -9,8 +9,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'https://github.com/vim-scripts/ScrollColors'
 "=====COLORSCHEMES=====
 Plug 'KeitaNakamura/neodark.vim'
-Plug 'trevordmiller/nova-vim'
-Plug 'crusoexia/vim-monokai'
+Plug 'https://github.com/sts10/vim-pink-moon'
 Plug 'arcticicestudio/nord-vim'
 let g:nord_comment_brightness = 20
 Plug 'https://github.com/rakr/vim-two-firewatch'
@@ -20,39 +19,39 @@ Plug 'https://github.com/lifepillar/vim-wwdc16-theme'
 Plug 'https://github.com/kamwitsta/nordisk'
 Plug 'https://github.com/tpozzi/Sidonia'
 Plug 'https://github.com/zeis/vim-kolor'
-Plug 'https://github.com/joshdick/onedark.vim'
 Plug 'https://github.com/ajmwagar/vim-deus'
 Plug 'https://github.com/kristijanhusak/vim-hybrid-material'
 Plug 'https://github.com/jsit/disco.vim'
 Plug 'https://github.com/jlesquembre/base16-neovim'
 Plug 'https://github.com/nightsense/vrunchbang'
 let g:vrunchbang_dark_LineNr = 'off'
-Plug 'https://github.com/nightsense/snow'
 Plug 'https://github.com/nightsense/seabird'
 Plug 'https://github.com/nightsense/stellarized'
 Plug 'https://github.com/nightsense/rusticated'
-Plug 'https://github.com/sts10/vim-pink-moon'
 Plug 'https://github.com/andreypopp/vim-colors-plain'
 Plug 'https://github.com/yuttie/inkstained-vim'
 Plug 'https://github.com/logico-dev/typewriter'
 Plug 'https://github.com/NLKNguyen/papercolor-theme'
 Plug 'https://github.com/Nequo/vim-allomancer'
 Plug 'https://github.com/morhetz/gruvbox'
+let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_improved_strings = 1
+let g:gruvbox_improved_warnings = 1
 Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
-
-
-" Installert manuelt
-" Plug 'https://github.com/sonph/onehalf'
+" Plug 'https://github.com/sonph/onehalf' " Installert manuelt
 Plug 'https://github.com/tomasr/molokai'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
-Plug 'https://github.com/KKPMW/sacredforest-vim'
-
+Plug 'Rigellute/rigel'
+" Plug 'https://github.com/joshdick/onedark.vim'
+" Plug 'trevordmiller/nova-vim'
+" Plug 'https://github.com/nightsense/snow'
+" Plug 'crusoexia/vim-monokai'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+" Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/limelight.vim'
 " Plug 'junegunn/vim-peekaboo'
 
 Plug 'https://github.com/dkarter/bullets.vim'
@@ -62,13 +61,15 @@ Plug 'sheerun/vim-polyglot'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/davidhalter/jedi-vim'
 
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-" Todo: Completion sources
-" Denne var bare buggy
-" Plug 'https://github.com/ncm2/ncm2-jedi'
-Plug 'https://github.com/Shougo/neco-vim'
-" Plug 'https://github.com/ncm2/ncm2-racer'
+Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
+Plug 'https://github.com/Shougo/neco-vim'   " vim 
+" Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
+" Plug 'https://github.com/ncm2/ncm2-racer' " rust
+
+" Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
+
+Plug 'https://github.com/SirVer/ultisnips'
+Plug 'https://github.com/honza/vim-snippets'
 
 Plug 'https://github.com/w0rp/ale'
 
@@ -78,7 +79,7 @@ let g:vem_tabline_multiwindow_mode = 0
 
 
 Plug 'https://github.com/scrooloose/nerdtree'
-Plug 'https://github.com/ryanoasis/vim-devicons'
+" Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/majutsushi/tagbar'
 
 Plug 'https://github.com/tpope/vim-commentary'
@@ -92,19 +93,18 @@ Plug 'https://github.com/kana/vim-textobj-indent'
 Plug 'https://github.com/kana/vim-textobj-function'
 Plug 'https://github.com/Julian/vim-textobj-variable-segment'
 
-" Plug 'https://github.com/jiangmiao/auto-pairs'
-" let g:AutoPairsShortcutToggle = ''
-" let g:AutoPairsShortcutBackInsert = ''
-" let g:AutoPairsMapCh = 0
-" let g:AutoPairsMoveCharacter = ''
-" let g:AutoPairsShortcutJump = '<M-,>'
-" let g:AutoPairsShortcutFastWrap = ''
+Plug 'https://github.com/jiangmiao/auto-pairs'
+let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsShortcutBackInsert = ''
+let g:AutoPairsMapCh = 0
+let g:AutoPairsMoveCharacter = ''
+let g:AutoPairsShortcutJump = '<M-,>'
+let g:AutoPairsShortcutFastWrap = ''
 
-" Bedre?
-Plug 'https://github.com/Raimondi/delimitMate'
+" Bedre? Nei fucker med parantes på ny linje
+" Plug 'https://github.com/Raimondi/delimitMate'
 
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'https://github.com/szw/vim-maximizer'
 
 
 Plug 'https://github.com/romainl/vim-qf'
@@ -133,16 +133,14 @@ xmap ga <Plug>(EasyAlign)
 "UNIX helpers
 Plug 'https://github.com/tpope/vim-eunuch'
 
-" Plug 'https://github.com/SirVer/ultisnips'
-" Plug 'https://github.com/honza/vim-snippets'
 
-Plug 'https://github.com/metakirby5/codi.vim'
-nnoremap <leader>oc :Codi!!<CR>
+" Plug 'https://github.com/metakirby5/codi.vim'
+" nnoremap <leader>oc :Codi!!<CR>
 
 
 Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
 let g:filebeagle_suppress_keymaps = 1
-nnoremap - :FileBeagleBufferDir<CR>
+nnoremap <silent> - :FileBeagleBufferDir<CR>
 
 " Plug 'https://github.com/FooSoft/vim-argwrap'
 " nnoremap gw :ArgWrap<CR>
@@ -151,6 +149,9 @@ Plug 'https://github.com/romainl/vim-devdocs'
 nnoremap <leader>K :DD<CR>
 
 Plug 'https://github.com/thaerkh/vim-indentguides'
+let g:indentguides_ignorelist = ['help']
+let g:indentguides_spacechar = '┆'
+let g:indentguides_tabchar = '|'
 
 call plug#end()
 
@@ -171,22 +172,42 @@ set statusline+=\ ‹\ %P
 set statusline+=\ %*
 
 
-
 syntax enable
 set background=dark
 
 " let g:theme='onehalfdark'
 " colorscheme onehalfdark
-colorscheme material-theme
 " colorscheme deus
 
+" if !empty($VIM_COLORS)
+"     let g:theme=$VIM_COLORS
+"     colorscheme $VIM_COLORS
+" else
+"     let g:theme='material-theme'
+"     colorscheme material-theme
+" endif
+
+if $MOOD == "light"
+    " colorscheme tempus_dawn
+    colorscheme tempus_past
+elseif $MOOD == "dark"
+    " colorscheme base16-tomorrow-night
+    colorscheme gruvbox
+else
+    colorscheme material-theme
+endif
+
 " if exists('+termguicolors')
-if has('termguicolors')
-    set termguicolors
-    if exists('$TMUX')
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+if $TERMGUICOLORS
+    if has('termguicolors')
+        set termguicolors
+        if exists('$TMUX')
+            let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+            let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+        endif
     endif
+else
+    colorscheme default
 endif
 
 " augroup TextFile
@@ -214,11 +235,9 @@ set number
 set relativenumber
 set title
 set cursorline
-set list listchars=trail:·
+set listchars=tab:\ \ ,nbsp:␣,trail:·,extends:›,precedes:‹
 
 " set iskeyword+=\-
-
-set linebreak
 
 set notimeout
 
@@ -299,7 +318,7 @@ set shortmess+=cI
 set noshowmode
 
 " Do not store options in session
-set sessionoptions-=options,folds
+set sessionoptions-=options,folds,help
 
 
 "" AUTOCOMMANDS
@@ -386,15 +405,16 @@ inoremap <M-b> <Esc><C-Left>
 nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
 
-imap <M-u> <Esc>u
-imap <M-U> <Esc>U
-imap <M-o> <Esc>o
-imap <M-O> <Esc>O
-imap <M-r> <C-O>r
-imap <M-R> <C-O>R
-imap <M-e> <Esc>A
-" imap <M-p> <C-O>p
-" imap <M-P> <C-O>P
+inoremap <M-u> <Esc>u
+inoremap <M-U> <Esc>U
+inoremap <M-o> <Esc>o
+inoremap <M-O> <Esc>O
+inoremap <M-r> <C-O>r
+inoremap <M-R> <C-O>R
+inoremap <M-e> <Esc>A
+inoremap <M-a> <Esc>A
+" inoremap <M-p> <C-O>p
+" inoremap <M-P> <C-O>P
 
 vmap <M-u> <Esc>u
 vmap <M-U> <Esc>U
@@ -429,7 +449,6 @@ cnoremap <M-p> <C-p>
 " noremap + .
 " noremap . <Nop>
 noremap + <Nop>
-noremap - <Nop>
 nnoremap <CR> <Nop>
 noremap <M-BS> <Nop>
 noremap \ @:
@@ -444,8 +463,6 @@ noremap ; g,zz
 " Alternating
 nnoremap <silent> <C-S> <C-W>p
 noremap <C-A> <C-^>
-nnoremap <M-Bar> `.
-noremap <Bar> ``
 nnoremap <BS> `.
 " nnoremap gb `.
 
@@ -476,7 +493,7 @@ noremap <C-Y> zb
 cmap w!! w !sudo tee > /dev/null %
 
 " Quickfix
-set grepprg=ag\ --vimgrep
+set grepprg=ag\ --vimgrep\ --silent
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
 nnoremap <silent> <left>  :cpf<cr>zvzz
 nnoremap <silent> <right> :cnf<cr>zvzz
@@ -594,8 +611,8 @@ xnoremap <S-Tab> <gv
 xnoremap <M-h> <gv
 xnoremap <M-l> >gv
 
-nnoremap <M-h> <<
-nnoremap <M-l> >>
+" nnoremap <M-h> <<
+" nnoremap <M-l> >>
 
 let g:yankstack_map_keys = 0
 let g:yankstack_yank_keys = ['y', 'Y', 'd', 'D']
@@ -619,10 +636,14 @@ nnoremap yP "0P
 " duplicate lines
 nnoremap <M-d> :t.<CR>
 nnoremap <M-D> :t-1<CR>
-" vnoremap P <esc>y'<g'>p
-" vnoremap <M-d> <esc>y'<g'>p
 vnoremap P :t-1<CR>
 vnoremap <M-d> :t-1<CR>
+
+" toggle comment
+nmap <M-c> gcc
+xmap <M-c> gc
+nmap <M-C> :t-1<CR>gccj
+nmap <silent> dp :t-1<CR>gccj
 
 "d/c/y to start of line
 nnoremap dh d^
@@ -658,11 +679,10 @@ vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 nnoremap <M-+> <C-A>
 nnoremap <M-?> <C-X>
 
-" toggle comment
-nmap <M-2> gcc
-xmap <M-2> gc
-nmap <M-"> yyPgcc
 
+
+
+nmap <silent> <M-2> :NERDTreeToggle<Bar>TagbarToggle<CR><C-W>p
 nmap <silent> <M-3> :NERDTreeToggle<CR>
 nmap <silent> <M-4> :TagbarToggle<CR>
 
@@ -679,241 +699,6 @@ nnoremap <M-m> zr
 nnoremap <M-M> zm
 
 
-"=====Test=====
-map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
-map <F10> :w <CR>:!python %<CR>
-nnoremap <leader>r :R<CR>
-xnoremap <leader>r :w !python<CR>
-
-augroup HelpKeymap
-    autocmd!
-    autocmd FileType help noremap <buffer> q :q<cr>
-augroup END
-
-augroup QuickfixKeymap
-    autocmd!
-    autocmd FileType qf noremap <silent> <buffer> q :q<cr>
-augroup END
-
-" nmap gw <M-s>iw
-" nmap gW <M-s>iW
-nmap <M-w> <M-r>iw
-nmap <M-W> <M-r>iW
-
-nnoremap <M-c> ciw
-nnoremap <M-C> ciW
-
-" Insert mode navigation uten å escape, undos lagres per linje
-inoremap <C-J> <Down>
-inoremap <C-K> <Up>
-" Alt-f og alt-b kan enten escape eller ikke, som C-f og C-b eller som C-J og C-K, eller kan være mer som alt-j og alt-k
-" Men, det kan være hendig å kunne go opp eller ned en linje og gå til normal mode, som alt-j og alt-k, men de funker dårlig med normal browsing j og k som jeg har, men jeg kan ikke bruke ctrl i normal mode til det fordi det må være til window nav.
-" inoremap <M-f>
-"
-nnoremap <M-.> :<Up>
-cnoremap <M-.> <Up>
-cnoremap <M-:> <Down>
-
-nnoremap mv :Rename<Space>
-nnoremap cd :Directories<CR>
-nnoremap do :Explore<CR>
-" Kan være en nyttig mapping, men den glemmer hvor vim ble startet fra, altså project root
-" :set autochdir!
-" nnoremap cu :cd %:p:h<CR>\|:pwd<CR>
-
-nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
-
-
-
-
-"cd to home?
-nnoremap g/ :g//<CR>
-nnoremap g= =ap
-nnoremap <M-a> mz=ap`z
-" nnoremap g= gg=G``
-" nnoremap Q %
-" nnoremap Q @q
-" nnoremap Q q
-nnoremap q ``
-nnoremap Q `.zz
-" xnoremap q ``
-xnoremap q o<Esc>
-xnoremap <M-o> o<Esc>
-
-nmap gb %
-xmap gb %
-omap gb %
-" nnoremap gB :ls!<CR>:b<Space>
-" nnoremap gb :Buffers<CR>
-nnoremap <leader><Tab> :Buffers<CR>
-
-" nnoremap vm :Maps!<CR>
-nnoremap vm :Marks<CR>
-" nnoremap mk :mksession!<Space>
-let g:session_dir = '~/.vim/sessions'
-exec 'nnoremap mk :mks! ' . g:session_dir . '/'
-exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
-"vim session dir, fzf to resume
-"autosave session when opened with -S, from v:this_session or SessionLoadPost autocmd
-"autosave session on vim exit
-"or map to update current session, taken from variable, or show mksession if
-"there is no current session
-" :nmap <F2> :wa<Bar>exe "mksession! " . v:this_session<CR>:so ~/sessions/
-" if exists("v:this_session")
-"     echom v:this_session
-" endif
-" Kan ikke bare sjekke variabelen, fordi den ikke er satt før vimrc kjører
-" virker det som
-" Må bruke autocommand for å sette en autocommand som lagrer ved VimLeave
-" eller VimLeavePre
-" En mapping til en kommando som lagrer en ny session med et navn OG sørger
-" for at den autosaves i den samme instansen av vim (evt. bare umiddelbart
-" source sessionen for å trigge autocmden)
-" https://vim.fandom.com/wiki/Go_away_and_come_back
-" https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
-
-" nnoremap <C-S> :Lines<CR>
-" cnoremap <C-S> <C-C>:Lines<CR>
-nnoremap <silent> <C-S> :up<CR>
-inoremap <silent> <C-s> <Esc>:up<CR>
-
-nnoremap <C-Space> <C-W>p
-
-nnoremap <M-x> :Commands<CR>
-
-" nnoremap <leader>1 <C-W>o
-" nnoremap <leader>2 <C-W>v
-nnoremap <leader>1 :1tabnext<CR>
-nnoremap <leader>2 :2tabnext<CR>
-nnoremap <leader>3 :3tabnext<CR>
-nnoremap <leader>4 :4tabnext<CR>
-nnoremap <leader>5 :5tabnext<CR>
-
-" map } i{
-" map ] i[
-" map ) i(
-"
-
-
-" Shortcuts som egentlig ikke sparer deg for så mye, men som kan være nice,
-" med mindre du finner noe bedre å bruke dem til
-nmap cv civ
-" nmap dv div gir mening i tillegg, men vil kanskje ha noe annet her?
-" clone paragraph: yapP
-" change paragraph: cip
-" delete paragraph: dap
-nnoremap dp dap
-
-nnoremap vv viw
-nnoremap vV viW
-nnoremap VV viW
-nnoremap vo <C-W>o
-" nnoremap vp vip
-
-" v som primær-register
-nnoremap vd "vd
-nnoremap vD "vD
-nnoremap vdp "vdap
-nnoremap vp "vp
-nnoremap vP "vP
-nnoremap vy "vy
-nnoremap vY "vY
-
-" Zappend/Zelect
-nnoremap zd "Zdd
-nnoremap zp "zp:let @z=''<CR>
-
-nnoremap cp "1p
-nnoremap cP "1P
-
-" nnoremap + :<C-u>+m.<left><left>
-" nnoremap - :<C-u>-m.<left><left>
-
-
-" nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<cr>:execute 'lcd '.@a<cr>A
-
-
-" resize:
-nnoremap <silent> <S-Up> 10<C-w>+
-nnoremap <silent> <S-Down> 10<C-w>-
-nnoremap <silent> <S-Left> 10<C-w><
-nnoremap <silent> <S-Right> 10<C-w>>
-
-inoremap <M-CR> <ESC>:s/\s*$/;<CR>j
-nnoremap <M-CR> <ESC>:s/\s*$/;<CR>j
-
-nnoremap zx :pclose<CR>
-
-
-inoremap <M-n> <C-N>
-inoremap <M-p> <C-P>
-
-nmap gj ][
-nmap gk []
-
-"go to next search match while searching
-cnoremap <M-j> <C-G>
-cnoremap <M-k> <C-T>
-
-xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
-xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
-
-xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
-xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
-
-" highlight last inserted text
-nnoremap gV `[v`]
-
-inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
-
-inoremap <M-2> @
-inoremap <M-4> $
-inoremap <M-5> %
-
-"Tester ut denne
-nnoremap gw yiw
-
-" Bra shit
-inoremap <M-f> <Esc>w
-nnoremap <M-d> dW
-nnoremap dp  :t.<CR>
-nnoremap dP :t-1<CR>
-
-
-nnoremap <m-h> ^
-
-" Paste unnamed reg in insert mode, bruk heller C-Q for literal hvis i det hele
-" tatt nødvendig
-inoremap <C-v> <C-R>"
-
-" Insert space (hva gjør du når du skal paste noe på slutten av en linje hvor
-" det ikke er mellomrom fra før?
-nnoremap <m-s> a<Space><Esc>
-
-nnoremap <Bar> <C-W>w
-" nmap # gcc
-nmap <M-Bar> gcc
-nmap <M-c> gcc
-xmap <M-Bar> gc
-xmap <M-c> gc
-
-" Map ctrl-backspace to delete back word, funker ikke
-" inoremap <C-H> <C-W>
-
-nnoremap <M-i> >>
-nnoremap <M-I> <<
-" nnoremap <M-e> cc
-noremap <M-e> $
-" nnoremap <M-l> $
-
-nnoremap <M-i> cc
-nnoremap <M-l> >>
-nnoremap <M-L> <<
-nnoremap M zz
-nnoremap <M-v> ^v$
-
-
-"=====TEST END=====
 
 
 
@@ -1042,30 +827,49 @@ nnoremap <silent> <F5> :BG<CR>
 
 
 
-let g:colorlist = ["material-theme", "snow", "deus", "onehalfdark"]
+let g:favorites = [
+            \ "material-theme",
+            \ "deus",
+            \ "onehalfdark",
+            \ "two-firewatch",
+            \ "allomancer",
+            \ "forest-night",
+            \ "flatwhite",
+            \ "orange-moon",
+            \ "nordisk",
+            \ "onehalfdark",
+            \ "neodark",
+            \ "base16-tomorrow-night",
+            \ "hybrid_material",
+            \ "rigel",
+            \ "molokai"
+            \ ]
+
 function! CNext()
-    let len_shortlist = len(g:colorlist)
-    let current_scheme_idx = index(g:colorlist, g:colors_name)
+    let len_shortlist = len(g:favorites)
+    let current_scheme_idx = index(g:favorites, g:colors_name)
     let next_scheme_idx = (current_scheme_idx + 1) % len_shortlist
-    let next_scheme = g:colorlist[next_scheme_idx]
+    let next_scheme = g:favorites[next_scheme_idx]
     exec 'colorscheme '.next_scheme
+    echo g:colors_name
 endfunction
 command! CNext call CNext()
 
 function! CPrev()
-    let len_shortlist = len(g:colorlist)
-    let current_scheme_idx = index(g:colorlist, g:colors_name)
+    let len_shortlist = len(g:favorites)
+    let current_scheme_idx = index(g:favorites, g:colors_name)
     let next_scheme_idx = (current_scheme_idx - 1)
     if next_scheme_idx == -1
         let next_scheme_idx = (len_shortlist - 1)
     endif
-    let next_scheme = g:colorlist[next_scheme_idx]
+    let next_scheme = g:favorites[next_scheme_idx]
     exec 'colorscheme '.next_scheme
+    echo g:colors_name
 endfunction
 command! CPrev call CPrev()
 
-nnoremap <silent> <F3> :CPrev<CR>
-nnoremap <silent> <F4> :CNext<CR>
+nnoremap <F3> :CPrev<CR>
+nnoremap <F4> :CNext<CR>
 
 " Run current file as script with optional arguments to pass to the script
 " TODO: add appropriate shebang for language, chmod +x, save and run
@@ -1129,11 +933,14 @@ let g:NERDTreeShowFiles = 1
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeAutoDeleteBuffer = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
 
 " nvim completion manager
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 "inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-D>"
 
 " ncm2
@@ -1155,15 +962,15 @@ set omnifunc=syntaxcomplete#Complete
 
 
 " Ultisnips
+" let g:UltiSnipsExpandTrigger="<m-s>" " snippet, bruk m-e for eol
+let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
 " let g:UltiSnipsJumpForwardTrigger="<tab>"
 " let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 let g:UltiSnipsJumpForwardTrigger="<M-f>"
 let g:UltiSnipsJumpBackwardTrigger="<M-b>"
 " let g:UltiSnipsRemoveSelectModeMappings = 0
+nnoremap <m-e> :Snippets<CR>
 
-
-" Maximizer
-nnoremap <silent><leader><leader> :MaximizerToggle<CR>
 
 " Vim markdown
 let g:markdown_enable_spell_checking = 0
@@ -1178,3 +985,285 @@ let g:bullets_enabled_file_types = [
 
 " autocmd VimEnter * ALEDisable
 
+
+
+"===== TESTING AREA =====
+map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
+map <F10> :w <CR>:!python %<CR>
+nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
+xnoremap <leader>r :w !python<CR>
+
+augroup HelpKeymap
+    autocmd!
+    autocmd FileType help noremap <buffer> q :q<cr>
+augroup END
+
+augroup QuickfixKeymap
+    autocmd!
+    autocmd FileType qf noremap <silent> <buffer> q :q<cr>
+augroup END
+
+nmap <M-w> <M-r>iw
+nmap <M-W> <M-r>iW
+
+" nnoremap <M-c> ciw
+" nnoremap <M-C> ciW
+
+" Insert mode navigation uten å escape, undos lagres per linje
+inoremap <C-J> <Down>
+inoremap <C-K> <Up>
+" Alt-f og alt-b kan enten escape eller ikke, som C-f og C-b eller som C-J og C-K, eller kan være mer som alt-j og alt-k
+" Men, det kan være hendig å kunne go opp eller ned en linje og gå til normal mode, som alt-j og alt-k, men de funker dårlig med normal browsing j og k som jeg har, men jeg kan ikke bruke ctrl i normal mode til det fordi det må være til window nav.
+" inoremap <M-f>
+"
+nnoremap <M-.> :<Up>
+cnoremap <M-.> <Up>
+cnoremap <M-:> <Down>
+
+nnoremap cd :Directories<CR>
+" nnoremap mv :Rename<Space>
+nnoremap do :Explore<CR>
+nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
+
+
+
+
+"cd to home?
+nnoremap g/ :g//<CR>
+nnoremap g= =ap
+nnoremap <M-a> mz=ap`z
+" nnoremap g= gg=G``
+" nnoremap Q %
+" nnoremap Q @q
+" nnoremap Q q
+nnoremap q ``
+nnoremap Q `.zz
+xnoremap q o<Esc>
+xnoremap <M-o> o<Esc>
+
+nmap gb %
+xmap gb %
+omap gb %
+" nnoremap gB :ls!<CR>:b<Space>
+" nnoremap gb :Buffers<CR>
+nnoremap <leader><Tab> :Buffers<CR>
+
+nnoremap vm :Marks<CR>
+let g:session_dir = '~/.vim/sessions'
+
+" exec 'nnoremap mk :mks! ' . g:session_dir . '/'
+" exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
+
+"vim session dir, fzf to resume
+"autosave session when opened with -S, from v:this_session or SessionLoadPost autocmd
+"autosave session on vim exit
+"or map to update current session, taken from variable, or show mksession if
+"there is no current session
+" :nmap <F2> :wa<Bar>exe "mksession! " . v:this_session<CR>:so ~/sessions/
+" if exists("v:this_session")
+"     echom v:this_session
+" endif
+" Kan ikke bare sjekke variabelen, fordi den ikke er satt før vimrc kjører
+" virker det som
+" Må bruke autocommand for å sette en autocommand som lagrer ved VimLeave
+" eller VimLeavePre
+" En mapping til en kommando som lagrer en ny session med et navn OG sørger
+" for at den autosaves i den samme instansen av vim (evt. bare umiddelbart
+" source sessionen for å trigge autocmden)
+" https://vim.fandom.com/wiki/Go_away_and_come_back
+" https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
+
+" nnoremap <C-S> :Lines<CR>
+" cnoremap <C-S> <C-C>:Lines<CR>
+nnoremap <silent> <C-S> :up<CR>
+inoremap <silent> <C-s> <Esc>:up<CR>
+
+nnoremap <C-Space> <C-W>p
+
+nnoremap <M-x> :Commands<CR>
+
+" nnoremap <leader>1 <C-W>o
+" nnoremap <leader>2 <C-W>v
+nnoremap <leader>1 :1tabnext<CR>
+nnoremap <leader>2 :2tabnext<CR>
+nnoremap <leader>3 :3tabnext<CR>
+nnoremap <leader>4 :4tabnext<CR>
+nnoremap <leader>5 :5tabnext<CR>
+
+" map } i{
+" map ] i[
+" map ) i(
+"
+
+
+" Shortcuts som egentlig ikke sparer deg for så mye, men som kan være nice,
+" med mindre du finner noe bedre å bruke dem til
+nmap cv civ
+" nmap dv div gir mening i tillegg, men vil kanskje ha noe annet her?
+" clone paragraph: yapP
+" change paragraph: cip
+" delete paragraph: dap
+
+nnoremap vv viw
+nnoremap vV viW
+nnoremap VV viW
+nnoremap vo <C-W>o
+" nnoremap vp vip
+
+" v som primær-register
+nnoremap vd "vd
+nnoremap vD "vD
+nnoremap vdp "vdap
+nnoremap vp "vp
+nnoremap vP "vP
+nnoremap vy "vy
+nnoremap vY "vY
+
+" Zappend/Zelect
+nnoremap zd "Zdd
+nnoremap zp "zp:let @z=''<CR>
+
+nnoremap cp "1p
+nnoremap cP "1P
+
+" nnoremap + :<C-u>+m.<left><left>
+" nnoremap - :<C-u>-m.<left><left>
+
+
+" nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<cr>:execute 'lcd '.@a<cr>A
+
+
+" resize:
+nnoremap <silent> <S-Up> 10<C-w>+
+nnoremap <silent> <S-Down> 10<C-w>-
+nnoremap <silent> <S-Left> 10<C-w><
+nnoremap <silent> <S-Right> 10<C-w>>
+
+inoremap <M-CR> <ESC>:s/\s*$/;<CR>j
+nnoremap <M-CR> <ESC>:s/\s*$/;<CR>j
+
+nnoremap zx :pclose<CR>
+
+
+inoremap <M-n> <C-N>
+inoremap <M-p> <C-P>
+
+nmap gj ]]
+nmap gk [[
+
+"go to next search match while searching
+cnoremap <M-j> <C-G>
+cnoremap <M-k> <C-T>
+
+xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
+xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
+
+xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
+xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
+
+" highlight last inserted text
+nnoremap gV `[v`]
+
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+
+inoremap <M-2> @
+inoremap <M-4> $
+inoremap <M-5> %
+
+"Tester ut denne
+nnoremap gw yiw
+nmap <silent> gw :Grep "\b<cword>\b"<CR>
+
+" Bra shit
+inoremap <M-f> <Esc>w
+nnoremap <M-d> dW
+
+
+nnoremap <m-h> ^
+
+" Paste unnamed reg in insert mode, bruk heller C-Q for literal hvis i det hele
+" tatt nødvendig
+inoremap <C-v> <C-R>"
+
+" Insert space (hva gjør du når du skal paste noe på slutten av en linje hvor
+" det ikke er mellomrom fra før?
+nnoremap <m-s> a<Space><Esc>
+
+" nnoremap <Bar> :Tags<CR>
+nnoremap <leader><leader> :Tags<CR>
+
+" Map ctrl-backspace to delete back word, funker ikke
+" inoremap <C-H> <C-W>
+
+nnoremap <M-i> >>
+nnoremap <M-I> <<
+noremap <M-e> $
+" nnoremap <M-l> $
+" nnoremap <M-e> cc
+" nnoremap <M-l> >>
+" nnoremap <M-L> <<
+nnoremap <silent> <M-l> :Lines<CR>
+nnoremap M zz
+nnoremap <M-v> ^v$h
+
+nnoremap + yyp
+
+" nmap å [[
+" nmap ¨ ]]
+
+" nnoremap cd :call search('\d\+')<CR>gnc
+nnoremap cd /\d\+<CR>gnc
+
+" Alternate header/source using ctags --extras=+f
+" nnoremap <silent> gh :<c-u>tjump /^<c-r>=expand("%:t:r")<cr>\.\(<c-r>=join(get(
+"             \ {
+"             \ 'c':   ['h'],
+"             \ 'cpp': ['h','hpp'],
+"             \ 'h':   ['c','cpp'],
+"             \ 'hpp': ['cpp']
+"             \ },
+"             \  expand("%:e"), ['UNKNOWN EXTENSION']), '\\\|')<cr>\)$<cr>
+
+" Does not use tags, only finds files in same directory, does not check if
+" file exists
+function Header()
+    let l:ext = expand('%:e') 
+    if l:ext == 'c'
+        if filereadable(expand('%:r') . '.h')
+            :e %:r.h
+        else
+            echo "No corresponding header"
+        endif
+    elseif l:ext == 'h'
+        if filereadable(expand('%:r') . '.c')
+            :e %:r.c
+        else
+            echo "No corresponding source"
+        endif
+    else
+        echo "Not a c or h file"
+    endif
+endfunction
+command! Header call Header()
+nnoremap <silent> gh :Header<CR>
+
+function! MoveOrCreateWindow(key) abort
+    let t:curwin = winnr()
+    exec "wincmd ".a:key
+    if (t:curwin == winnr())
+        if (match(a:key,'[jk]'))
+            wincmd v
+        else
+            wincmd s
+        endif
+        exec "wincmd ".a:key
+    endif
+endfunction
+
+nnoremap <silent> <M-Left> :call MoveOrCreateWindow('h')<CR>
+nnoremap <silent> <M-Down> :call MoveOrCreateWindow('j')<CR>
+nnoremap <silent> <M-Up> :call MoveOrCreateWindow('k')<CR>
+nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>
+
+
+nnoremap <C-W><C-I> <C-W>}
