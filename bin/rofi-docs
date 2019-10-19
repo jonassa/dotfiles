@@ -1,0 +1,7 @@
+#!/usr/bin/zsh
+
+doc=$(fd -e pdf -e djvu -e jpg -e png . $HOME | rofi -dmenu -i -p "Document")
+if [[ -n $doc ]]
+then
+    xdg-open "$doc"
+fi

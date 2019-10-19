@@ -1,1 +1,0 @@
-xdg-open "$(locate ~ | rofi -dmenu -i -p "Locate")"

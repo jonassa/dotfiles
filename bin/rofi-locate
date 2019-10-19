@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Treigere enn originale versjonen, kanskje while loopen eller stripping av $HOME?
+
+file="$(locate $HOME | tail +2 | while read -r line; do
+    echo ${line#$HOME/}
+done | rofi -dmenu -i -p "Locate")"
+
+[[ -n $file ]] && xdg-open "$HOME$file"
+

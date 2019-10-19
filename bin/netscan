@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+subnet=$(ip -br a | grep wlp2s0 | awk '{print $3}' | sed 's/\/.*$//')
+
+nmap -sL $subnet/24 | less

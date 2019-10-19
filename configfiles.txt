@@ -67,3 +67,6 @@
 
 /etc/lightdm/lightdm.conf
 /etc/lightdm/Xsession
+
+
+/usr/share/applications/*

@@ -29,8 +29,8 @@ configuration {
     kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q,Super+w,Super+e,Super+r";
     kb-remove-to-eol: "";
     kb-row-tab: "Tab";
-    kb-row-up: "Up,Shift+Tab,Control+k,Control+p,Alt+k,Alt+p";
-    kb-row-down: "Down,Control+j,Control+n,Alt+j,Alt+n";
+    kb-row-up: "ISO_Left_Tab,Up,Control+k,Control+p,Alt+k,Alt+p,Super+k,Super+p";
+    kb-row-down: "Down,Control+j,Control+n,Alt+j,Alt+n,Super+j,Super+n";
     /* kb-mode-next: "Super+r,Super+g"; */
 }
 /* Fjern denne for custom theme lagret i theme.rasi, og uncomment linja theme: over */

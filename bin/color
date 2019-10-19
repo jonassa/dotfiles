@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
-terminalrc="/home/jonas/.config/xfce4/terminal/terminalrc"
-colorschemes="/home/jonas/.local/share/xfce4/terminal/colorschemes"
+terminalrc="${HOME}/.config/xfce4/terminal/terminalrc"
+colorschemes="${HOME}/.local/share/xfce4/terminal/colorschemes"
 
 selection=$(
 for f in $colorschemes/*; do

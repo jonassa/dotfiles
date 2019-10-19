@@ -239,6 +239,7 @@ add-zsh-hook chpwd chpwd_recent_dirs
 ## Aliaser
 
 alias sudo='sudo '
+alias term='xfce4-terminal'
 
 alias ls='ls -h --color=auto --group-directories-first'
 alias l='ls -l'
@@ -267,7 +268,7 @@ compdef _vars e
 
 alias p='print -l'
 alias o='xdg-open'
-alias h='history 100'
+alias h='history -50'
 alias d='dirs -v'
 alias lo='locate'
 alias u='cd ..'
@@ -309,16 +310,16 @@ function rgl() {rg $@ 2> /dev/null | less}
 alias udb='sudo updatedb'
 
 alias vim='nvim'
+alias vimdiff='nvim -d'
 alias svim='sudo nvim'
 alias em='emacsclient -c -a=""'
-alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 # alias tmp='vim $(mktemp -t scratchXXX)'
 alias tmp='vim /tmp/scratch'
 function vimgrep() { vim -c "silent grep $@" }
-alias vrc='nvim -O ~/.config/nvim/init.vim ~/Dropbox/0Data/wiki/vim.txt'
 alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
-alias m='nvim ~/Dropbox/main.txt'
+alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
+alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc"'
 alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/0Data/cmd/*'
@@ -431,6 +432,8 @@ alias gll='git log'
 alias glg='git log --graph --pretty=oneline --abbrev-commit'
 alias gwh='git whatchanged -p --abbrev-commit' 
 alias gsb='git show-branch'
+alias gsw='git switch'
+alias gr='git restore'
 
 alias origmacs='env HOME=$HOME/emacs/orig emacs'
 alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
@@ -528,8 +531,8 @@ pg() {
 
 pq() {
     if [[ -n $@ ]]; then
-        pacaur -Qi $result
-        pacman -Ql $result | grep --color=never "/usr/bin/" | tail +2
+        pacaur -Qi $@
+        pacman -Ql $@ | grep --color=never "/usr/bin/" | tail +2
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
         if [[ -n $result ]]; then
@@ -719,8 +722,15 @@ zle -N insert-widget
 
 edit-local-widget() {
     zle kill-buffer
-    # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
+    # rg is faster at listing files than fd
+    # print **/* (zsh native) is almost as fast?
+    # print **/*(.) (for bare filer) er mye tregere enn qualifier
+    # bør bruke rg --files -uu og fallback til find -type f
 
+    # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
+    # file=$(print -l **/* | sed '/~$/d' | fzf --prompt='./' --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}')
+
+    # Using highlight
     # local file=$(rg --files --no-messages --no-follow -uu | sed '/~$/d' | fzf --prompt='./' \
     #     --preview='[[ $(file -b --mime {}) =~ binary ]] &&
     #     file -b {} ||
@@ -728,8 +738,8 @@ edit-local-widget() {
     #     cat {}) 2> /dev/null | head -500'
     #     )
 
-    # Using bat instead of highlight for preview
-    local file=$(rg --files --no-messages --no-follow -uu | sed '/~$/d' | fzf --prompt='./')
+    # Using bat
+    local file=$(rg --files -uu --no-messages --no-follow | sed '/~$/d' | fzf --prompt='./' --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}')
     if [[ -n $file ]]; then
         # file=$(realpath $file)
         zle redisplay
@@ -754,7 +764,7 @@ edit-global-widget() {
     eval ${find_cmd} /usr/share
     eval ${find_cmd} /var/log
     eval ${find_cmd} /var/tmp
-    eval ${find_cmd} /tmp) | rg -v '~$'| fzf)
+    eval ${find_cmd} /tmp) | grep -v '~$'| fzf)
         # rg -v '~$'| fzf --preview='[[ $(file --mime {}) =~ binary ]] &&
         # echo {} is a binary file ||
         # (highlight -O ansi -l {} ||
@@ -792,9 +802,15 @@ zle -N kill-processes-widget
 
 sudo-widget() {
     zle kill-buffer
-    LBUFFER='sudo !!'
+    LBUFFER='!!'
     zle expand-or-complete
-    zle accept-line
+    if [[ $LBUFFER =~ '^sudo' ]]; then
+        zle accept-line
+    else
+        LBUFFER='sudo !!'
+    zle expand-or-complete
+        zle accept-line
+    fi
 }
 zle -N sudo-widget
 
@@ -870,13 +886,11 @@ function ff() {
 
 ## Keybindings
 
-# Hist substring search (pil opp ned) (fjernet denne pluginen
-# (fzf er bedre, innebygd h-s-back holder)
-# bindkey '^[[A' history-substring-search-up
-# bindkey '^[[B' history-substring-search-down
+# bindkey '^[[A' history-search-backward
+# bindkey '^[[B' history-search-forward
 
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
 
 # Alt-n/p samme som ctrl-n/p, fjerne for å gå tilbake til substring search
 bindkey '^[p' up-history
@@ -952,8 +966,9 @@ export FZF_DEFAULT_OPTS="
 --height=50% --reverse
 --bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
 --color fg:-1,bg:-1,bg+:-1
---ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'
 "
+# Using bat instead of highlight for preview
+# --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}'
 
 
 export FZF_COMPLETION_TRIGGER=''
@@ -1025,9 +1040,10 @@ function c() {
 # }
 
 # Bedre versjon av vg
-fif() {
+va() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+  local file$(rg -l --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}")
+  [[ -n $file ]] && vim "${file}"
 }
 
 vf() {

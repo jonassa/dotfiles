@@ -61,17 +61,22 @@ Plug 'sheerun/vim-polyglot'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/davidhalter/jedi-vim'
 
-Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
-Plug 'https://github.com/Shougo/neco-vim'   " vim 
-" Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
-" Plug 'https://github.com/ncm2/ncm2-racer' " rust
+" Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" Plug 'https://github.com/Shougo/neco-vim'   " vim 
+" " Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
+" " Plug 'https://github.com/ncm2/ncm2-racer' " rust
 
-" Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
+" " Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
 
-Plug 'https://github.com/SirVer/ultisnips'
-Plug 'https://github.com/honza/vim-snippets'
+" Plug 'https://github.com/SirVer/ultisnips'
+" Plug 'https://github.com/honza/vim-snippets'
 
 Plug 'https://github.com/w0rp/ale'
+
+"LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
@@ -624,7 +629,7 @@ map Y y$
 " yank to clipboard
 map <leader>y "+y
 vnoremap <C-C> "+y
-nnoremap <C-C> "+yy
+nnoremap <silent> <C-C> "+yy
 " paste from clipboard
 map <leader>p <esc>"+p
 nnoremap cp <esc>"+p
@@ -731,10 +736,10 @@ nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)
 nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
 nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 
-omap ij <Plug>(textobj-sandwich-auto-i)
-xmap ij <Plug>(textobj-sandwich-auto-i)
-omap aj <Plug>(textobj-sandwich-auto-a)
-xmap aj <Plug>(textobj-sandwich-auto-a)
+" omap ij <Plug>(textobj-sandwich-auto-i)
+" xmap ij <Plug>(textobj-sandwich-auto-i)
+" omap aj <Plug>(textobj-sandwich-auto-a)
+" xmap aj <Plug>(textobj-sandwich-auto-a)
 
 let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 let g:sandwich#recipes += [
@@ -943,8 +948,6 @@ inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 "inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-D>"
 
-" ncm2
-autocmd BufEnter * call ncm2#enable_for_buffer()
 
 function! Tab_Or_Complete()
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
@@ -968,7 +971,8 @@ let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
 " let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 let g:UltiSnipsJumpForwardTrigger="<M-f>"
 let g:UltiSnipsJumpBackwardTrigger="<M-b>"
-" let g:UltiSnipsRemoveSelectModeMappings = 0
+let g:UltiSnipsRemoveSelectModeMappings = 0
+" noremap <M-e> $
 nnoremap <m-e> :Snippets<CR>
 
 
@@ -995,7 +999,7 @@ xnoremap <leader>r :w !python<CR>
 
 augroup HelpKeymap
     autocmd!
-    autocmd FileType help noremap <buffer> q :q<cr>
+    autocmd FileType help noremap <silent> <buffer> q :q<cr>
 augroup END
 
 augroup QuickfixKeymap
@@ -1197,7 +1201,6 @@ nnoremap <leader><leader> :Tags<CR>
 
 nnoremap <M-i> >>
 nnoremap <M-I> <<
-noremap <M-e> $
 " nnoremap <M-l> $
 " nnoremap <M-e> cc
 " nnoremap <M-l> >>
@@ -1267,3 +1270,7 @@ nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>
 
 
 nnoremap <C-W><C-I> <C-W>}
+nnoremap ø :
+
+" nnoremap something ^y$ 
+

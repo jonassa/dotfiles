@@ -1,0 +1,32 @@
+[user]
+	name = jonassa
+	email = jonas.sandb@gmail.com
+[core]
+[pager]
+    log  = /usr/bin/diffr | less -RFX
+    show = /usr/bin/diffr | less -RFX
+    diff = /usr/bin/diffr | less -RFX
+	branch = false
+    reflog = false
+[diff]
+	tool = nvim -d
+[difftool]
+	prompt = false
+#lulz
+[color]
+	interactive = auto
+	pager = true
+	ui = auto
+[color "branch"]
+	current = red bold
+	local = magenta bold
+	remote = yellow
+[color "diff"]
+	meta = cyan
+	frag = blue
+	old = red
+	new = green
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = magenta
