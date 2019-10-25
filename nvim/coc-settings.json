@@ -1,0 +1,23 @@
+{
+    "languageserver": {
+        "metals": {
+            "command": "metals-vim",
+            "rootPatterns": ["build.sbt"],
+            "filetypes": ["scala", "sbt"]
+        }
+    },
+    "diagnostic.displayByAle": true,
+    "suggest.minTriggerInputLength": 2,
+    "diagnostic.warningSign":"--",
+    "list.insertMappings": {
+        "<C-r>": "do:refresh",
+        "<C-f>": "feedkeys:\\<C-f>",
+        "<C-b>": "feedkeys:\\<C-b>",
+        "<C-n>": "normal:j",
+        "<C-p>": "normal:k",
+        "<C-t>": "action:tabe",
+        "<C-x>": "call:MyFunc",
+        "<C-v>": "eval:@@" // paste yanked text to prompt
+    }
+
+}

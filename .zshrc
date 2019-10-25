@@ -236,14 +236,14 @@ add-zsh-hook chpwd chpwd_recent_dirs
 #zstyle ':completion:*' rehash true
 
 
-## Aliaser
+## Aliases
 
 alias sudo='sudo '
-alias term='xfce4-terminal'
 
-alias ls='ls -h --color=auto --group-directories-first'
+alias ls='ls -h --color=auto --group-directories-first --no-group'
 alias l='ls -l'
 alias ll='ls -la'
+alias lh='ls -ld .?*'
 
 alias exa='exa --group-directories-first'
 # alias l='exa -l'
@@ -251,11 +251,11 @@ alias exa='exa --group-directories-first'
 alias lll='exa -lauUhmiHS --git'
 alias lt='exa -lT'
 alias ltt='exa -laT'
-function t() { exa -T --color always $@ | less --quit-if-one-screen }
-function tt() { exa -aT --color always $@ | less --quit-if-one-screen }
+t() { exa -T --color always $@ | less --quit-if-one-screen }
+tt() { exa -aT --color always $@ | less --quit-if-one-screen }
 alias tree='tree -Chal --dirsfirst'
 
-function e() {
+e() {
     if [[ -n $@ ]]; then
         echo $@
     else
@@ -275,7 +275,7 @@ alias u='cd ..'
 alias ax='chmod a+x'
 alias bat='bat --theme ansi-dark'
 alias cat='bat'
-function vsh(){
+vsh(){
     if [[ -n $1 ]] && [[ ! -f $1 ]]; then
         if [[ -w $(dirname $1) ]]; then
             echo '#!/usr/bin/bash\n\n' > $1; chmod a+x $1; $EDITOR $1 +3
@@ -303,19 +303,20 @@ alias grep='grep -i --color=auto'
 alias fd='fd -H'
 alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
 # alias ag='ag --hidden --ignore .git'
-function agl() {ag $@ --pager less 2> /dev/null}
-function gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
+agl() {ag $@ --pager less 2> /dev/null}
+gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
 alias rg='rg -uuS' # hidden, ignored, smartcase
-function rgl() {rg $@ 2> /dev/null | less}
+rgl() {rg $@ 2> /dev/null | less}
 alias udb='sudo updatedb'
 
+alias term='xfce4-terminal'
 alias vim='nvim'
 alias vimdiff='nvim -d'
 alias svim='sudo nvim'
 alias em='emacsclient -c -a=""'
 # alias tmp='vim $(mktemp -t scratchXXX)'
 alias tmp='vim /tmp/scratch'
-function vimgrep() { vim -c "silent grep $@" }
+vimgrep() { vim -c "silent grep $@" }
 alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
 alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
@@ -323,7 +324,7 @@ alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc"'
 alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/0Data/cmd/*'
-function ta() {
+ta() {
     if [[ -z $@ ]]; then
         local sessions=$(tmux list-sessions)
         if [[ "$(echo \"$sessions\"|wc -l)" == "1" ]]; then
@@ -348,16 +349,22 @@ alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no
 alias pls='pacaur -Ql'
 alias pf='pacaur -Fs'
 alias po='pacaur -Qo'
-alias pt='pactree -c'
-alias deps='pactree -cd1'
-alias sdeps='pactree -scd1'
+pt(){pactree $@}; compdef _pacman_installed_packages pt
+ptgraph() {
+    local graph=$(mktemp -t XXX.dot)
+    pactree -g $@ > $graph
+    xdot $graph 2> /dev/null &
+}
+deps() {pactree -d1 $@}; compdef _pacman_installed_packages deps
+sdeps() {pactree -sd1 $@}; compdef _pacman_installed_packages sdeps
+reqs() {pactree -rd1 $@}; compdef _pacman_installed_packages reqs
 # alias pl='paclog'
 # alias pla='paclog --color --action all'
 # alias plc='paclog --color --commandline|rg -v -e "pacman -D" -e "-Ud"'
 # alias plw='paclog --warnings'
 # alias plg='paclog --grep'
 alias plog='paclog'
-function pl() { test -n $@ && paclog --color --action all | ag --nocolor $@ || paclog --color --action all}
+pl() { test -n $@ && paclog --color --action all | ag --nocolor $@ || paclog --color --action all}
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
@@ -367,6 +374,7 @@ alias pstree='pstree -hT' # highlight current process, hide threads
 
 alias ip='ip -color'
 alias ipp='ip -br addr && ip -br link'
+alias extip="curl -fSs https://1.1.1.1/cdn-cgi/trace | awk -F= '/ip/ { print $2 }'"
 alias df='df -hT' # human, show filesystem type; -a for all
 alias dfc='dfc -T' # show type
 alias cdu='cdu -idh'
@@ -384,7 +392,7 @@ alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
-function srv() {
+srv() {
     local ip="$(ip -br -4 addr show wlp2s0 | awk '{print $3}' | cut -d/ -f1):8000"
     echo $ip
     sed 's/\x1b\[[0-9;]*m//g' <<< $ip | xsel -ib 
@@ -396,7 +404,10 @@ function srv() {
     fi
 }
 
+
+
 alias fkprint='lp -d fkprint -h printhost.samfundet.no'
+alias webcam='mpv av://v4l2:/dev/video0'
 
 alias li='light -S'
 cl() {
@@ -407,23 +418,23 @@ cl() {
     fi
 }
 alias sel='fzf | xsel -ib'
-alias hsel='history 0 |fzf|tr -d \\n|xsel -ib'
+alias hsel='history -n 0 |fzf --tac --no-sort|tr -d \\n|xsel -ib'
 
 
 # alias clone='git clone'
-function clone() {git clone $1 && cd $(basename $1 .git)}
+clone() {git clone $1 && cd $(basename $1 .git)}
 alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
 alias gd='git diff'
 alias gds='git diff-tree  --stat'
-alias gco='git checkout'
+alias gs='git checkout'
 alias gf='git fetch'
 alias gm='git merge'
 alias gpl='git pull'
 alias gpu='git push'
 alias g='git status'
-alias gs='git status -s'
+# alias gs='git status -s'
 alias gsh='git show'
 # alias gl='git log'
 # alias gll='git log --pretty=oneline --abbrev-commit' 
@@ -448,19 +459,20 @@ alias -g C='|wc -l'
 alias -g DN='2> /dev/null'
 alias -g H='--help'
 alias -g F='|field'
-function field() {
+field() {
     awk "{print \$$1}"
 }
 alias f='field'
 for n in {1..9}; alias f$n="field $n"
 
 alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
+fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
 
 
-## Funksjoner
+## Functions
 
 # Auto-ls
-function chpwd() {
+chpwd() {
     emulate -L zsh
     ls -l
 }
@@ -541,16 +553,18 @@ pq() {
         fi
     fi
 }
+compdef _pacman_installed_packages pq
 
 pr() {
     if [[ -n $@ ]]; then
-        result=$(pacman -Qqs $@ | fzf --preview 'pacman -Qi {}')
+        sudo pacman -Rns $@
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
     fi
 
     [[ -n $result ]] && sudo pacman -Rns $result
 }
+compdef _pacman_installed_packages pr
 
 ali() {
     local cmd=$(alias|fzf|cut -d\' -f2)
@@ -607,13 +621,13 @@ ap() {
 # }
 
 
-function flag() {
+flag() {
     for f in "${@:2}"; do
         eval "$1 --help | grep '^\s*\-$f'"
     done
 }
 
-function bspkeys() {
+bspkeys() {
     cat ~/.config/sxhkd/sxhkdrc | awk '/^[a-z]/ && last {print $0,"\t",last} {last=""} /^#/{last=$0}' | column -t -s $'\t' | fzf
 }
 
@@ -636,13 +650,26 @@ ZSH_HIGHLIGHT_STYLES[path]=none
 
 ## WIDGETS
 
+# # Hindre tab på tom linje
+# expand-or-complete-or-list-files() {
+#     if [[ $#BUFFER == 0 ]]; then
+#         BUFFER="ls "
+#         CURSOR=3
+#         zle list-choices
+#         zle backward-kill-word
+#     else
+#         zle expand-or-complete
+#     fi
+# }
+# zle -N expand-or-complete-or-list-files
+# bindkey '^I' expand-or-complete-or-list-files
+
 # Hindre tab på tom linje
-function expand-or-complete-or-list-files() {
+expand-or-complete-or-list-files() {
     if [[ $#BUFFER == 0 ]]; then
-        BUFFER="ls "
-        CURSOR=3
-        zle list-choices
-        zle backward-kill-word
+        ls -l
+        zle kill-buffer
+        zle accept-line
     else
         zle expand-or-complete
     fi
@@ -879,7 +906,7 @@ ls-widget() {
 }
 zle -N ls-widget
 
-function ff() {
+ff() {
     local target=$(fd "$@" | fzf)
     xdg-open "$target" &
 }
@@ -949,8 +976,9 @@ bindkey '^S' undefined-key
 
 # bindkey '^[L' undefined-key
 # bindkey '^[l' undefined-key
-bindkey '^[L' clear-screen
-bindkey '^[l' ls-widget
+# bindkey '^[l' ls-widget
+# bindkey '^[L' clear-screen
+bindkey '^[l' clear-screen
 # Push hele bufferen til stack og hent den igjen etter du har gjort noe annet
 bindkey '^Q' push-line-or-edit
 bindkey '^[q' kill-buffer
@@ -1008,7 +1036,7 @@ source ~/.zshdirs
 eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 bindkey '^X' fasd-complete
 
-function v() {
+v() {
     if [[ -n $@ ]]; then
         local file=$(fasd -f $@)
         [[ -n $file ]] && vim "${file}"
@@ -1017,7 +1045,7 @@ function v() {
         [[ -n $file ]] && vim "${file}"
     fi
 }
-function c() {
+c() {
     if [[ -n $@ ]]; then
         local dir=$(fasd -d $@)
         [[ -n $dir ]] && cd "${dir}"
@@ -1051,5 +1079,14 @@ vf() {
     if [[ -n $file ]]; then
         vim "${file}"
     fi
+}
+
+## COMPLETION FUNCTIONS
+
+_pacman_installed_packages() {
+	local -a cmd packages packages_long
+	packages_long=(/var/lib/pacman/local/*(/))
+	packages=( ${${packages_long#/var/lib/pacman/local/}%-*-*} )
+	compadd "$@" -a packages
 }
 

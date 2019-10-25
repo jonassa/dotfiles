@@ -5,6 +5,8 @@ filetype plugin indent on
 "=====PLUGINS=====
 call plug#begin('~/.vim/plugged')
 
+Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/mhinz/vim-signify'
 
 Plug 'https://github.com/vim-scripts/ScrollColors'
 "=====COLORSCHEMES=====
@@ -57,27 +59,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/dkarter/bullets.vim'
 Plug 'https://github.com/gabrielelana/vim-markdown'
 
-Plug 'sheerun/vim-polyglot'
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-" Plug 'https://github.com/davidhalter/jedi-vim'
-
-" Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" Plug 'https://github.com/Shougo/neco-vim'   " vim 
-" " Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
-" " Plug 'https://github.com/ncm2/ncm2-racer' " rust
-
-" " Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
-
-" Plug 'https://github.com/SirVer/ultisnips'
-" Plug 'https://github.com/honza/vim-snippets'
-
-Plug 'https://github.com/w0rp/ale'
-
-"LSP
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-
 Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
@@ -85,7 +66,18 @@ let g:vem_tabline_multiwindow_mode = 0
 
 Plug 'https://github.com/scrooloose/nerdtree'
 " Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'https://github.com/majutsushi/tagbar'
+" Plug 'https://github.com/majutsushi/tagbar'
+
+Plug 'liuchengxu/vista.vim'
+let g:vista_stay_on_open = 0
+let g:vista_icon_indent = [" » ", "\t"]
+let g:vista_default_executive = 'ctags'
+let g:vista_executive_for = {
+  \ 'scala': 'coc',
+  \ 'vim': 'ctags',
+  \ }
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 0
 
 Plug 'https://github.com/tpope/vim-commentary'
 
@@ -95,19 +87,9 @@ Plug 'https://github.com/machakann/vim-sandwich/'
 Plug 'https://github.com/kana/vim-textobj-user'
 Plug 'https://github.com/kana/vim-textobj-entire'
 Plug 'https://github.com/kana/vim-textobj-indent'
-Plug 'https://github.com/kana/vim-textobj-function'
+" Plug 'https://github.com/kana/vim-textobj-function'
 Plug 'https://github.com/Julian/vim-textobj-variable-segment'
 
-Plug 'https://github.com/jiangmiao/auto-pairs'
-let g:AutoPairsShortcutToggle = ''
-let g:AutoPairsShortcutBackInsert = ''
-let g:AutoPairsMapCh = 0
-let g:AutoPairsMoveCharacter = ''
-let g:AutoPairsShortcutJump = '<M-,>'
-let g:AutoPairsShortcutFastWrap = ''
-
-" Bedre? Nei fucker med parantes på ny linje
-" Plug 'https://github.com/Raimondi/delimitMate'
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -121,7 +103,7 @@ let g:qf_max_height = 15
 " let g:ack_apply_qmappings = 0
 " let g:ack_apply_lmappings = 0
 
-Plug 'junegunn/vim-slash'
+" Plug 'junegunn/vim-slash'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
 Plug 'https://github.com/tommcdo/vim-exchange'
@@ -158,6 +140,117 @@ let g:indentguides_ignorelist = ['help']
 let g:indentguides_spacechar = '┆'
 let g:indentguides_tabchar = '|'
 
+Plug 'https://github.com/jiangmiao/auto-pairs'
+let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsShortcutBackInsert = ''
+let g:AutoPairsMapCh = 0
+let g:AutoPairsMoveCharacter = ''
+let g:AutoPairsShortcutJump = ''
+let g:AutoPairsShortcutFastWrap = ''
+
+" Bedre? Nei fucker med parantes på ny linje
+" Plug 'https://github.com/Raimondi/delimitMate'
+
+
+" LANGUAGE SUPPORT
+Plug 'sheerun/vim-polyglot'
+Plug 'https://github.com/derekwyatt/vim-scala'
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+" Plug 'https://github.com/davidhalter/jedi-vim'
+
+" Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" Plug 'https://github.com/Shougo/neco-vim'   " vim 
+" " Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
+" " Plug 'https://github.com/ncm2/ncm2-racer' " rust
+
+" " Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
+
+
+" Plug 'https://github.com/SirVer/ultisnips'
+Plug 'https://github.com/honza/vim-snippets'
+
+Plug 'dense-analysis/ale'
+" autocmd VimEnter * ALEDisable
+nnoremap <silent> æ :ALENextWrap<CR>
+nnoremap <silent> Æ :ALEPreviousWrap<CR>
+nnoremap <silent> gæ :ALEDetail<CR>
+" Disable ALE for certain languages and use coc instead
+let g:ale_linters = {
+\   'scala': [''],
+\}
+
+" LSP
+Plug 'Shougo/neco-vim'
+Plug 'neoclide/coc-neco'
+" Plug 'derekwyatt/vim-scala' " Included with polyglot
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" CocInstall:
+    " coc-json
+    " coc-snippets
+    " coc-tag
+" let g:coc_global_extensions = ['coc-json', 'coc-snippets', 'coc-tag']
+" call coc#add_extension('coc-json', 'coc-snippets', 'coc-tag')
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-tag', {'do': 'yarn install --frozen-lockfile'}
+
+" Alternativt denne:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" Ingen av disse to ser ut til å gjøre noe bedre, alt funker, til og med
+" instant newline etter completion funker uten noe av dette
+" EDIT: ser ut til å fucke med undo history når du ikke bruker <C-g>u
+" Ny versjon med instant newline
+" Selv denne fucker undo history
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
+" Denne ser ut til å funke med undo, men har ikke instant newline, og den
+" confirmer første alternativ selv når du ikke har valgt noe...
+" EDIT: det er det coc#_select_confirm gjør...
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+                                           " \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Denne funker greit, kan være snippets som fucker med undo history
+" Expander ikke snippets på enter, kan være like greit
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
+
+" Ser ut til å ikke fucke undo (kan fortsatt være snippets)
+" Bruker ikke coc#_select_confirm (som confirmer uten at du har valgt noe)
+" Kjører coc#on_enter etter <CR>, som sier ifra om noe greier om man vil
+" formatte on input
+inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : 
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Close the preview window when completion is done
+" Lurer på om denne egentlig er nødvendig
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+imap <M-e> <Plug>(coc-snippets-expand)
+" vmap <C-j> <Plug>(coc-snippets-select) " usikker på hva denne gjør
+let g:coc_snippet_next = '<m-f>'
+let g:coc_snippet_prev = '<m-b>'
+
+set updatetime=300
+" set signcolumn=yes " default = auto
+set nobackup
+set nowritebackup
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" comment highlighting in jsonc
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" TAB: next or tab or trigger completion
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+" S-TAB: previous or backspace
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+
 call plug#end()
 
 "=====STATUSLINE=====
@@ -176,13 +269,8 @@ set statusline+=%10(%l:%c%)  " line and column
 set statusline+=\ ‹\ %P
 set statusline+=\ %*
 
-
 syntax enable
 set background=dark
-
-" let g:theme='onehalfdark'
-" colorscheme onehalfdark
-" colorscheme deus
 
 " if !empty($VIM_COLORS)
 "     let g:theme=$VIM_COLORS
@@ -192,15 +280,19 @@ set background=dark
 "     colorscheme material-theme
 " endif
 
+let g:dark='base16-tomorrow-night'
+" let g:light='tempus_past'
+let g:light='tempus_dawn'
+let g:fallback='material-theme'
+
 if $MOOD == "light"
-    " colorscheme tempus_dawn
-    colorscheme tempus_past
+    let g:theme=g:light
 elseif $MOOD == "dark"
-    " colorscheme base16-tomorrow-night
-    colorscheme gruvbox
+    let g:theme=g:dark
 else
-    colorscheme material-theme
+    let g:theme=g:fallback
 endif
+execute 'colorscheme ' . g:theme
 
 " if exists('+termguicolors')
 if $TERMGUICOLORS
@@ -212,26 +304,29 @@ if $TERMGUICOLORS
         endif
     endif
 else
+    let g:theme='default'
     colorscheme default
 endif
 
-" augroup TextFile
-"     autocmd!
-"     autocmd filetype text let b:textfile = 1
-" augroup END
+augroup TextFile
+    autocmd!
+    autocmd filetype text let b:textfile = 1
+    autocmd BufEnter * call SetColors()
+augroup END
 
-" augroup SetFiletypeColors
-"     autocmd!
-"     autocmd BufEnter * call SetColors()
-" augroup END
-
-" function! SetColors()
-"     if exists('b:textfile')
-"         colorscheme PaperColor
-"     else
-"         execute "colorscheme " . g:theme
-"     endif
-" endfun
+function! SetColors()
+    if &termguicolors == 0
+        " Set default/fallback that looks nice
+        let g:theme='gruvbox'
+    elseif exists('b:textfile')
+        let g:theme=g:light
+        set background=light
+    else
+        let g:theme=g:dark
+        set background=dark
+    endif
+    execute 'colorscheme ' . g:theme
+endfun
 
 "-----------------
 "" Options
@@ -325,6 +420,8 @@ set noshowmode
 " Do not store options in session
 set sessionoptions-=options,folds,help
 
+set diffopt+=vertical
+
 
 "" AUTOCOMMANDS
 " Nødvendig for huske cursor position
@@ -373,13 +470,15 @@ nmap <silent> <leader>Q :qa!<CR>
 nmap <silent> <leader>w :x!<CR>
 nmap <silent> <leader>s :up<CR>
 nmap <silent> <leader>e :e!<CR>
-nmap <silent> <leader>d :bd!<CR>
+" nmap <silent> <leader>d :bd!<CR>
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> <leader>C :Directories<CR>
 nmap <silent> <leader>ot :TagbarToggle<CR>
 nmap <silent> <leader>on :NERDTreeToggle<CR>
 nmap <silent> <leader>n :enew<CR>
 nmap <silent> <leader>t :Tags<CR>
+" nmap <silent> <leader><leader> :Tags<CRVista finder ctags
+nmap <silent> <leader><leader> :Vista finder<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <silent> <leader>r :History<CR>
 nmap <silent> <C-R> :History:<CR>
@@ -387,6 +486,7 @@ nmap <silent> <leader>: :Commands<CR>
 nmap <silent> <leader>h :Helptags<CR>
 nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>F :Files ~<CR>
+nmap <silent> <leader>g :GFiles<CR>
 nmap <silent> <leader>l :Lines<CR>
 nmap <silent> <leader>k :Grep "\b<cword>\b"<CR>
 nmap <leader>a :Ag<Space>
@@ -402,13 +502,13 @@ nmap <M-U> U
 nnoremap <M-i> S
 vnoremap <M-i> c
 nmap <M-Q> <Nop>
-" nmap <M-f> <C-Right>
-" nmap <M-b> <C-Left>
 
-inoremap <M-f> <Esc><Right><C-Right>
+inoremap <M-f> <Esc><Right><C-Right> " kan være bedre
+" inoremap <M-f> <Esc>w
 inoremap <M-b> <Esc><C-Left>
 nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
+nnoremap <M-d> dW
 
 inoremap <M-u> <Esc>u
 inoremap <M-U> <Esc>U
@@ -416,15 +516,12 @@ inoremap <M-o> <Esc>o
 inoremap <M-O> <Esc>O
 inoremap <M-r> <C-O>r
 inoremap <M-R> <C-O>R
-inoremap <M-e> <Esc>A
 inoremap <M-a> <Esc>A
 " inoremap <M-p> <C-O>p
 " inoremap <M-P> <C-O>P
 
 vmap <M-u> <Esc>u
 vmap <M-U> <Esc>U
-vmap <M-o> <Esc>o
-vmap <M-O> <Esc>O
 
 " Insert mode editing
 inoremap <C-D> <Del>
@@ -436,7 +533,8 @@ inoremap <M-d> <C-\><C-O>de
 " inoremap <C-H> <C-D>
 " inoremap <C-L> <C-T>
 inoremap <C-C> <Esc>
-imap <C-L> <C-X><C-L>
+imap <C-L> <C-X><C-L> " line completion
+imap <M-w> <C-X><C-F>
 
 " Command mode editing
 noremap! <M-BS> <C-W>
@@ -509,9 +607,6 @@ nmap <silent> co <Plug>(qf_qf_toggle)
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> J :call qf#filegroup#NextFile()<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> K :call qf#filegroup#PreviousFile()<CR>
-nnoremap <silent> æ :ALENextWrap<CR>
-nnoremap <silent> Æ :ALEPreviousWrap<CR>
-nnoremap <silent> gæ :ALEDetail<CR>
 
 "-----------------
 " Motion
@@ -535,6 +630,8 @@ nnoremap <M-k> 4gkzz
 " nnoremap <C-M-K> []
 nnoremap <C-F> <C-F>zz
 nnoremap <C-B> <C-B>zz
+nnoremap <C-D> <C-D>zz
+nnoremap <C-U> <C-U>zz
 nnoremap gg ggzz
 nnoremap G Gzz
 
@@ -639,16 +736,17 @@ nnoremap yp "0p
 nnoremap yP "0P
 
 " duplicate lines
-nnoremap <M-d> :t.<CR>
+" nnoremap <M-d> :t.<CR>
 nnoremap <M-D> :t-1<CR>
 vnoremap P :t-1<CR>
-vnoremap <M-d> :t-1<CR>
+vnoremap + :t-1<CR>
+nnoremap + yyp
+nnoremap <silent> dp :t.<CR>
 
 " toggle comment
 nmap <M-c> gcc
 xmap <M-c> gc
 nmap <M-C> :t-1<CR>gccj
-nmap <silent> dp :t-1<CR>gccj
 
 "d/c/y to start of line
 nnoremap dh d^
@@ -680,16 +778,12 @@ vnoremap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 
-" increment/decrement
-nnoremap <M-+> <C-A>
-nnoremap <M-?> <C-X>
 
-
-
-
-nmap <silent> <M-2> :NERDTreeToggle<Bar>TagbarToggle<CR><C-W>p
-nmap <silent> <M-3> :NERDTreeToggle<CR>
-nmap <silent> <M-4> :TagbarToggle<CR>
+nnoremap <silent> <M-Bar> :call Scratch()<CR>
+nnoremap <silent> <M-1> :NERDTreeToggle<CR>
+" nnoremap <silent> <M-2> :TagbarToggle<CR>
+nnoremap <silent> <M-2> :Vista!!<CR>
+nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
 " toggle fold
 set foldmethod=indent
@@ -723,11 +817,8 @@ highlight link OperatorSandwichChange IncSearch
 
 " onoremap <SID>line :normal! ^vg_<CR>
 " onoremap <SID>gul g_
-" nmap <silent> <M-s> <Plug>(operator-sandwich-add)
-" nmap <silent> <M-s><M-s> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
-" xmap <M-s> <Plug>(operator-sandwich-add)
 nmap <silent> <M-r> <Plug>(operator-sandwich-add)
-nmap <silent> <M-r><M-r> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
+" nmap <silent> <M-r><M-r> <Plug>(operator-sandwich-add)<Plug>(textobj-sandwich-auto-a)
 xmap <M-r> <Plug>(operator-sandwich-add)
 " nmap <silent> <M-s><M-s><Plug>(operator-sandwich-add)<SID>line
 " nmap <M-S> <M-s><SID>gul
@@ -735,6 +826,14 @@ nmap ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<
 nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
 nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+
+nmap <M-w> <M-r>iw
+nmap <M-W> <M-r>iW
+nmap <M-w><M-w> <M-r>iwf
+nmap <M-w><M-w> <M-r>iWf
+nmap <M-r><M-r> <M-r>$
+
 
 " omap ij <Plug>(textobj-sandwich-auto-i)
 " xmap ij <Plug>(textobj-sandwich-auto-i)
@@ -785,7 +884,6 @@ function! Scratch()
         execute "b " . bufnr('Scratch')
     endif
 endfunction
-map <silent> <M-1> :call Scratch()<CR>
 
 
 function! JustOneSpace()
@@ -890,20 +988,26 @@ command! -nargs=* R up|!./% <args>
 " fzf
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-command! -bang -nargs=? -complete=dir Files
-            \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 let g:fzf_nvim_statusline = 0
-imap <c-x><c-f> <plug>(fzf-complete-file-ag)
+" imap <c-x><c-f> <plug>(fzf-complete-file-ag)
+" complete both dirs and files using find (problem with permissions)
+imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 nmap <leader>? <plug>(fzf-maps-n)
 xmap <leader>? <plug>(fzf-maps-x)
 omap <leader>? <plug>(fzf-maps-o)
-imap <C-x>? <plug>(fzf-maps-i)
+imap <c-x>? <plug>(fzf-maps-i)
 let g:fzf_buffers_jump = 1
 
+" Files with bat previewer
+command! -bang -nargs=? -complete=dir Files
+            \ call fzf#vim#files(<q-args>, {'options': ['--preview', 'bat -p --color always {}']}, <bang>0)
+" cd to any dir under $HOME
 command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
-            \ {'source': 'fd . -H -t d ~',
+            \ {'source': 'fd . -H -td ~',
             \  'sink': 'cd'}))
+
+
 
 " Disable statusline
 autocmd! FileType fzf
@@ -939,40 +1043,41 @@ let g:NERDTreeChDirMode = 2
 let g:NERDTreeAutoDeleteBuffer = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | silent NERDTree | wincmd p | endif
 
 
-" nvim completion manager
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-D>"
+" Tab completion
+" inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>" " accept and newline or newline
+" inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"  " next or tab
 
+" Disse to kan erstattes av tilsvarende config for coc (S-Tab og Tab)
+" c-h er forsåvidt bedre enn c-d for shift-tab når det ikke completes
 
-function! Tab_Or_Complete()
-    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-        return "\<C-N>"
-    elseif pumvisible()
-        return "\<C-N>"
-    else
-        return "\<Tab>"
-    endif
-endfunction
-inoremap <silent> <Tab> <C-R>=Tab_Or_Complete()<CR>
+" Shift tab gjør ingenting nyttig default
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-D>" " previous or untab
+
+" function! Tab_Or_Complete()
+"     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"         return "\<C-N>"
+"     elseif pumvisible()
+"         return "\<C-N>"
+"     else
+"         return "\<Tab>"
+"     endif
+" endfunction
+" inoremap <silent> <Tab> <C-R>=Tab_Or_Complete()<CR>
 
 " Needed to enable omnicompletion Ctrl-X Ctrl-O
-set omnifunc=syntaxcomplete#Complete
+" set omnifunc=syntaxcomplete#Complete
 
 
 " Ultisnips
-" let g:UltiSnipsExpandTrigger="<m-s>" " snippet, bruk m-e for eol
-let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
-" let g:UltiSnipsJumpForwardTrigger="<tab>"
-" let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-let g:UltiSnipsJumpForwardTrigger="<M-f>"
-let g:UltiSnipsJumpBackwardTrigger="<M-b>"
-let g:UltiSnipsRemoveSelectModeMappings = 0
-" noremap <M-e> $
+" let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
+" " let g:UltiSnipsJumpForwardTrigger="<tab>"
+" " let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+" let g:UltiSnipsJumpForwardTrigger="<M-f>"
+" let g:UltiSnipsJumpBackwardTrigger="<M-b>"
+" let g:UltiSnipsRemoveSelectModeMappings = 0
 nnoremap <m-e> :Snippets<CR>
 
 
@@ -987,7 +1092,6 @@ let g:bullets_enabled_file_types = [
             \ 'Scratch'
             \]
 
-" autocmd VimEnter * ALEDisable
 
 
 
@@ -1007,15 +1111,12 @@ augroup QuickfixKeymap
     autocmd FileType qf noremap <silent> <buffer> q :q<cr>
 augroup END
 
-nmap <M-w> <M-r>iw
-nmap <M-W> <M-r>iW
-
 " nnoremap <M-c> ciw
 " nnoremap <M-C> ciW
 
 " Insert mode navigation uten å escape, undos lagres per linje
-inoremap <C-J> <Down>
-inoremap <C-K> <Up>
+" inoremap <C-J> <Down>
+" inoremap <C-K> <Up>
 " Alt-f og alt-b kan enten escape eller ikke, som C-f og C-b eller som C-J og C-K, eller kan være mer som alt-j og alt-k
 " Men, det kan være hendig å kunne go opp eller ned en linje og gå til normal mode, som alt-j og alt-k, men de funker dårlig med normal browsing j og k som jeg har, men jeg kan ikke bruke ctrl i normal mode til det fordi det må være til window nav.
 " inoremap <M-f>
@@ -1081,6 +1182,10 @@ let g:session_dir = '~/.vim/sessions'
 " cnoremap <C-S> <C-C>:Lines<CR>
 nnoremap <silent> <C-S> :up<CR>
 inoremap <silent> <C-s> <Esc>:up<CR>
+nnoremap <silent> <M-s> :up<CR>
+cnoremap <silent> <M-s> <C-C>:up<CR>
+xnoremap <silent> <M-s> <C-C>:up<CR>
+inoremap <silent> <M-s> <Esc>:up<CR>
 
 nnoremap <C-Space> <C-W>p
 
@@ -1103,7 +1208,7 @@ nnoremap <leader>5 :5tabnext<CR>
 " Shortcuts som egentlig ikke sparer deg for så mye, men som kan være nice,
 " med mindre du finner noe bedre å bruke dem til
 nmap cv civ
-" nmap dv div gir mening i tillegg, men vil kanskje ha noe annet her?
+nmap dv div
 " clone paragraph: yapP
 " change paragraph: cip
 " delete paragraph: dap
@@ -1178,9 +1283,6 @@ inoremap <M-5> %
 nnoremap gw yiw
 nmap <silent> gw :Grep "\b<cword>\b"<CR>
 
-" Bra shit
-inoremap <M-f> <Esc>w
-nnoremap <M-d> dW
 
 
 nnoremap <m-h> ^
@@ -1191,10 +1293,8 @@ inoremap <C-v> <C-R>"
 
 " Insert space (hva gjør du når du skal paste noe på slutten av en linje hvor
 " det ikke er mellomrom fra før?
-nnoremap <m-s> a<Space><Esc>
+" nnoremap <m-s> a<Space><Esc>
 
-" nnoremap <Bar> :Tags<CR>
-nnoremap <leader><leader> :Tags<CR>
 
 " Map ctrl-backspace to delete back word, funker ikke
 " inoremap <C-H> <C-W>
@@ -1207,12 +1307,8 @@ nnoremap <M-I> <<
 " nnoremap <M-L> <<
 nnoremap <silent> <M-l> :Lines<CR>
 nnoremap M zz
-nnoremap <M-v> ^v$h
-
-nnoremap + yyp
-
-" nmap å [[
-" nmap ¨ ]]
+nnoremap <m-v> ^v$h
+nnoremap <m-y> ^y$
 
 " nnoremap cd :call search('\d\+')<CR>gnc
 nnoremap cd /\d\+<CR>gnc
@@ -1268,9 +1364,71 @@ nnoremap <silent> <M-Down> :call MoveOrCreateWindow('j')<CR>
 nnoremap <silent> <M-Up> :call MoveOrCreateWindow('k')<CR>
 nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>
 
-
 nnoremap <C-W><C-I> <C-W>}
 nnoremap ø :
 
-" nnoremap something ^y$ 
+nmap đ <C-F>
+nmap ” <C-B>
+nnoremap } $
+nnoremap ± <C-A>
+nnoremap ¿ <C-X>
+
+nnoremap <silent> t :Tags<CR>
+nnoremap <silent> gl :Lines<CR>
+set scrolloff=999
+
+" -----------
+" COC TESTING
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" kan være alegotodefinition er bedre
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" gjør det samme som gd på en definisjon
+" nmap <silent> <leader>r <Plug>(coc-references)
+
+" Documentation
+nnoremap <silent> <m-h> :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" nmap <m-cr>  <Plug>(coc-codeaction)
+nmap <c-space> <Plug>(coc-fix-current)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+set foldmethod=manual
+" Use `:Fold` to fold current buffer
+" Fold comment, imports, region
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+
+nnoremap <silent> <leader>l  :<C-u>CocList<CR>
+nnoremap <silent> <leader>o  :<C-u>CocList outline<CR>
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<CR>
+nnoremap <silent> <leader>o  :<C-u>CocList diagnostics<CR>
+
+nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
+" coc uses ALE so coc-diagnostic-next and alenext have the same effect
+    " diagnostic.displayByAle": true,
+" nmap <silent> Æ <Plug>(coc-diagnostic-prev)
+
+
+nnoremap <leader>ov :exe ':silent !code %'<CR>:redraw!<CR>
 

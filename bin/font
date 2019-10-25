@@ -10,6 +10,12 @@ fontlist=(
     'Iosevka Regular 13'
     'SF Mono 11'
     'SF Mono 11.5'
+    'Hack Regular 11'
+    'Noto Sans Mono Regular 11'
+    'UbuntuMono Nerd Font Regular 13'
+    'LiterationMono Nerd Font Mono Book 11'
+    'FuraMono Nerd Font Regular 11'
+    'Source Code Pro 11'
 )
 
 printf "Current font is %s\n" "$(awk -F= '/FontName/{print $2}' "$terminalrc")"

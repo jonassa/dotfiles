@@ -57,3 +57,4 @@ export VISUAL=nvim
 export BROWSER=chromium
 export SYSTEMD_PAGER=less
 export SYSTEMD_EDITOR=nvim
+export JAVA_HOME=/usr/lib/jvm/default # Scala metals

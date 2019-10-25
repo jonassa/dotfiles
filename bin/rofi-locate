@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Treigere enn originale versjonen, kanskje while loopen eller stripping av $HOME?
+file="$(locate --quiet $HOME | tail +2 | sed "s:$HOME/::" | rofi -dmenu -i -p "Locate")"
 
-file="$(locate $HOME | tail +2 | while read -r line; do
-    echo ${line#$HOME/}
-done | rofi -dmenu -i -p "Locate")"
 
-[[ -n $file ]] && xdg-open "$HOME$file"
+[[ -n $file ]] && xdg-open "$HOME/$file"
 

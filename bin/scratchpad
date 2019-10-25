@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+tdrop -a -w 30% -h 60%  -f "-T scratchpad -e nvim --hide-borders" xfce4-terminal
