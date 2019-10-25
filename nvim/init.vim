@@ -135,10 +135,10 @@ nnoremap <silent> - :FileBeagleBufferDir<CR>
 Plug 'https://github.com/romainl/vim-devdocs'
 nnoremap <leader>K :DD<CR>
 
-Plug 'https://github.com/thaerkh/vim-indentguides'
-let g:indentguides_ignorelist = ['help']
-let g:indentguides_spacechar = '┆'
-let g:indentguides_tabchar = '|'
+" Plug 'https://github.com/thaerkh/vim-indentguides'
+" let g:indentguides_ignorelist = ['help']
+" let g:indentguides_spacechar = '┆'
+" let g:indentguides_tabchar = '|'
 
 Plug 'https://github.com/jiangmiao/auto-pairs'
 let g:AutoPairsShortcutToggle = ''
@@ -473,8 +473,8 @@ nmap <silent> <leader>e :e!<CR>
 " nmap <silent> <leader>d :bd!<CR>
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> <leader>C :Directories<CR>
-nmap <silent> <leader>ot :TagbarToggle<CR>
-nmap <silent> <leader>on :NERDTreeToggle<CR>
+" nmap <silent> <leader>ot :TagbarToggle<CR>
+" nmap <silent> <leader>on :NERDTreeToggle<CR>
 nmap <silent> <leader>n :enew<CR>
 nmap <silent> <leader>t :Tags<CR>
 " nmap <silent> <leader><leader> :Tags<CRVista finder ctags
@@ -780,8 +780,9 @@ vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 
 nnoremap <silent> <M-Bar> :call Scratch()<CR>
-nnoremap <silent> <M-1> :NERDTreeToggle<CR>
+" nnoremap <silent> <M-1> :NERDTreeToggle<CR>
 " nnoremap <silent> <M-2> :TagbarToggle<CR>
+nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 nnoremap <silent> <M-2> :Vista!!<CR>
 nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
@@ -1043,7 +1044,6 @@ let g:NERDTreeChDirMode = 2
 let g:NERDTreeAutoDeleteBuffer = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | silent NERDTree | wincmd p | endif
 
 
 " Tab completion

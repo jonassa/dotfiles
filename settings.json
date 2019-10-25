@@ -15,8 +15,7 @@
         {
             "before": ["<C-q>"],
             "after": ["<esc>"]
-            // "commands": ["extension.vim_escape"]
-        }
+        },
     ],
     "vim.normalModeKeyBindingsNonRecursive": [
         {
@@ -40,36 +39,18 @@
             "before": ["L"],
             "after": ["$"]
         }
-        // {
-        //     "before": ["<leader>", "w"],
-        //     "after": [],
-        //     "commands": [
-        //         {
-        //             "command": "workbench.action.files.save",
-        //             "args": []
-        //         },
-        //         {
-        //             "command": "workbench.action.closeActiveEditor",
-        //             "args": []
-        //         }
-        //     ]
-        // },
-        //funker ikke...
-        // {
-        //     "before": ["<leader>", "e"],
-        //     "after": [],
-        //     "commands": ["workbench.action.files.revert"]
-        // }
     ],
 
     "workbench.iconTheme": "simple-icons",
     "workbench.activityBar.visible": true,
-    "window.enableMenuBarMnemonics": false,
     "window.titleBarStyle": "custom",
     "editor.fontSize": 14.5,
     "editor.minimap.renderCharacters": false,
     "workbench.sideBar.location": "left",
     "update.mode": "none",
-    "workbench.colorTheme": "Gruvbox Dark (Hard)",
+    "workbench.colorTheme": "Gruvbox Material Hard Dark",
     "sync.gist": "0cf9ce3b42fa4ccc88d4f15c1eae55e1",
+    "vim.neovimPath": "/usr/bin/nvim",
+    "window.customMenuBarAltFocus": false,
+    "window.enableMenuBarMnemonics": false,
 }

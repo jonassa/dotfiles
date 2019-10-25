@@ -19,5 +19,4 @@
 	ui = auto
 [color "status"]
 	added = green
-	changed = yellow
 	untracked = cyan
