@@ -9,10 +9,17 @@
 	branch = false
     reflog = false
 [diff]
-	tool = nvim -d
+	tool = vimdiff
 [difftool]
-	prompt = false
-#lulz
+	prompt = true
+[difftool "vimdiff"]
+    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = true
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [color]
 	interactive = auto
 	pager = true
