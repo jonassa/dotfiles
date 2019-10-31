@@ -427,7 +427,7 @@ alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
 alias gd='git diff'
-alias gds='git diff-tree  --stat'
+alias gds='git diff --stat'
 alias gs='git checkout'
 alias gf='git fetch'
 alias gm='git merge'
@@ -468,6 +468,12 @@ for n in {1..9}; alias f$n="field $n"
 alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
 fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
 
+dec(){
+  echo "ibase=16; $@"|bc
+}
+hex(){
+  echo "obase=16; $@"|bc
+}
 
 ## Functions
 
@@ -1041,7 +1047,7 @@ v() {
         local file=$(fasd -f $@)
         [[ -n $file ]] && vim "${file}"
     else
-        local file=$(fasd -ftlR | fzf)
+        local file=$(fasd -ftlR | fzf --no-sort)
         [[ -n $file ]] && vim "${file}"
     fi
 }
@@ -1050,7 +1056,7 @@ c() {
         local dir=$(fasd -d $@)
         [[ -n $dir ]] && cd "${dir}"
     else
-        local dir=$(fasd -dltR | fzf)
+        local dir=$(fasd -dltR | fzf --no-sort)
         [[ -n $dir ]] && cd "${dir}"
     fi
 }

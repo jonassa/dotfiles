@@ -280,7 +280,8 @@ set background=dark
 "     colorscheme material-theme
 " endif
 
-let g:dark='base16-tomorrow-night'
+" let g:dark='base16-tomorrow-night'
+let g:dark='allomancer'
 " let g:light='tempus_past'
 let g:light='tempus_dawn'
 let g:fallback='material-theme'
@@ -1428,7 +1429,4 @@ nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
 " coc uses ALE so coc-diagnostic-next and alenext have the same effect
     " diagnostic.displayByAle": true,
 " nmap <silent> Æ <Plug>(coc-diagnostic-prev)
-
-
-nnoremap <leader>ov :exe ':silent !code %'<CR>:redraw!<CR>
 
