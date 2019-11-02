@@ -21,9 +21,10 @@
 [mergetool "vimdiff"]
   cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [color]
+	ui = auto
 	interactive = auto
 	pager = true
-	ui = auto
 [color "status"]
 	added = green
 	untracked = cyan
+    unmergerd = magenta
