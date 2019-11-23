@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+terminalrc="${HOME}/.config/xfce4/terminal/terminalrc"
+colorschemes="${HOME}/.config/kitty/kitty-themes/themes"
+symlink="${HOME}/.config/kitty/theme.conf"
+
+selection=$(
+for f in $colorschemes/*; do
+    echo $(basename $f)
+done | fzf)
+
+if [[ -n $selection ]]; then
+    selection="$colorschemes/$selection"
+    kitty @set-colors --all --configured $selection
+    ln -sf $selection $symlink
+fi
+

@@ -1,30 +1,34 @@
 [user]
-	name = jonassa
-	email = jonas.sandb@gmail.com
+    name = Jonas Sandberg
+    email = jonas.sandb@gmail.com
 [core]
 [pager]
     log  = /usr/bin/diffr | less -RFX
     show = /usr/bin/diffr | less -RFX
     diff = /usr/bin/diffr | less -RFX
-	branch = false
+    branch = false
     reflog = false
 [diff]
-	tool = vimdiff
+    tool = nvim
 [difftool]
-	prompt = true
+    prompt = false
 [difftool "vimdiff"]
-    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED
+[difftool "nvim"]
+    cmd = nvim -d $LOCAL $REMOTE
 [merge]
-  tool = vimdiff
+    tool = nvim
 [mergetool]
-  prompt = true
+    prompt = true
 [mergetool "vimdiff"]
-  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[mergetool "nvim"]
+    cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
 [color]
-	ui = auto
-	interactive = auto
-	pager = true
+    ui = auto
+    interactive = auto
+    pager = true
 [color "status"]
-	added = green
-	untracked = cyan
+    added = green
+    untracked = cyan
     unmergerd = magenta

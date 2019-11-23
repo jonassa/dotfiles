@@ -14,7 +14,9 @@
         "<C-f>": "feedkeys:\\<C-f>",
         "<C-b>": "feedkeys:\\<C-b>",
         "<C-n>": "normal:j",
-        "<C-p>": "normal:k",
+        "<C-j>": "normal:k",
+        "<A-j>": "normal:j",
+        "<A-k>": "normal:k",
         "<C-t>": "action:tabe",
         "<C-x>": "call:MyFunc",
         "<C-v>": "eval:@@" // paste yanked text to prompt

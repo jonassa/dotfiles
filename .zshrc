@@ -32,6 +32,16 @@ man() {
         man "$@"
     }
 
+manopt() {
+  local cmd=$1 opt=$2
+  [[ $opt == -* ]] || { (( ${#opt} == 1 )) && opt="-$opt" || opt="--$opt"; }
+  man "$cmd" | col -b | awk -v opt="$opt" -v RS= '$0 ~ "(^|,)[[:blank:]]+" opt "([[:punct:][:space:]]|$)"'
+}
+
+mg() {
+    man $1 | less +"/$2"
+}
+
 # Lar deg bruke navn på farger istedetfor escape codes
 autoload -U colors && colors
 
@@ -245,6 +255,15 @@ alias l='ls -l'
 alias ll='ls -la'
 alias lh='ls -ld .?*'
 
+alias ..='cd ..'
+
+alias md='mkdir -p'
+alias rd='rmdir'
+function take() {
+  mkdir -p $@ && cd ${@:$#}
+}
+
+
 alias exa='exa --group-directories-first'
 # alias l='exa -l'
 # alias ll='exa -la'
@@ -266,12 +285,21 @@ e() {
 }
 compdef _vars e
 
+alias wh='which'
 alias p='print -l'
 alias o='xdg-open'
+alias x='atool -x'
 alias h='history -50'
 alias d='dirs -v'
 alias lo='locate'
-alias u='cd ..'
+# alias u='cd ..'
+siblings() {
+    local target=$(command fd -d1 -td . .. --color=always | tail +2 | fzf --ansi )
+    [[ -n $target ]] && [[ -d $target ]] && cd "${target}"
+}
+alias s='siblings' // siblings
+alias u='siblings' // up
+
 alias ax='chmod a+x'
 alias bat='bat --theme ansi-dark'
 alias cat='bat'
@@ -321,7 +349,7 @@ alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
 alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
-alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc"'
+alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc" "$HOME/.config/kitty/kitty.conf"'
 alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/0Data/cmd/*'
 ta() {
@@ -342,13 +370,14 @@ alias tl='tmux ls'
 alias tk='tmux kill-session -t $(tmux list-sessions|fzf|cut -f1 -d:)'
 
 alias pm='sudo pacman'
-alias pa='pacaur'
+alias pa='yay'
 alias pu='sudo pacman -Syu --noconfirm'
-alias puu='pacaur -Syu --noconfirm'
-alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no orphans to remove"'
-alias pls='pacaur -Ql'
-alias pf='pacaur -Fs'
-alias po='pacaur -Qo'
+alias puu='yay'
+# alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no orphans to remove"'
+alias pd='yay -c'
+alias pls='yay -Ql'
+alias pf='yay -F'
+alias po='yay -Qo'
 pt(){pactree $@}; compdef _pacman_installed_packages pt
 ptgraph() {
     local graph=$(mktemp -t XXX.dot)
@@ -356,15 +385,15 @@ ptgraph() {
     xdot $graph 2> /dev/null &
 }
 deps() {pactree -d1 $@}; compdef _pacman_installed_packages deps
-sdeps() {pactree -sd1 $@}; compdef _pacman_installed_packages sdeps
 reqs() {pactree -rd1 $@}; compdef _pacman_installed_packages reqs
-# alias pl='paclog'
-# alias pla='paclog --color --action all'
-# alias plc='paclog --color --commandline|rg -v -e "pacman -D" -e "-Ud"'
-# alias plw='paclog --warnings'
-# alias plg='paclog --grep'
 alias plog='paclog'
-pl() { test -n $@ && paclog --color --action all | ag --nocolor $@ || paclog --color --action all}
+pl() {
+    if [[ -n $@ ]]; then
+        paclog --color --action all | ag --nocolor $@
+    else
+        paclog --action all
+    fi
+}
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
@@ -393,7 +422,7 @@ alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
 srv() {
-    local ip="$(ip -br -4 addr show wlp2s0 | awk '{print $3}' | cut -d/ -f1):8000"
+    local ip="$(ip -br -4 addr show wlan0 | awk '{print $3}' | cut -d/ -f1):8000"
     echo $ip
     sed 's/\x1b\[[0-9;]*m//g' <<< $ip | xsel -ib 
     # xdg-open "http://$ip"
@@ -426,15 +455,20 @@ clone() {git clone $1 && cd $(basename $1 .git)}
 alias g='git status'
 # alias gs='git status -sb'
 alias ga='git add'
-alias gb='git branch'
+alias gb='git branch -av'
 alias gc='git checkout'
 alias gcm='git commit'
 alias gca='git commit -av'
 alias gd='git diff'
 alias gdd='git diff --staged'
 alias gds='git diff --stat'
+alias gdds='git diff --staged --stat'
+alias gdt='git difftoo'
+alias gdw='git diff --word-diff'
 alias gs='git checkout'
 alias gf='git fetch'
+alias gfp='git fetch --prune'
+alias gfa='git fetch --all --prune'
 alias gm='git merge'
 alias gpl='git pull'
 alias gpu='git push'
@@ -442,11 +476,19 @@ alias gsh='git show'
 alias gl='git log --all --oneline'
 alias gll='git log --all'
 alias glg='git log --graph --oneline --all'
+alias gls='git log --stat'
+alias glp='git log -p'
 alias gwh='git whatchanged -p --abbrev-commit' 
 alias gsb='git show-branch'
 alias gsw='git switch'
 alias gr='git restore'
-alias gg='git pull --ff-only'
+alias grs='git reset'
+alias grh='git reset --hard'
+alias grb='git rebase'
+# alias gg='git pull --ff-only'
+alias gst='git stash'
+alias gsp='git stash pop'
+alias gsl='git shortlog -n --no-merges'
 
 alias origmacs='env HOME=$HOME/emacs/orig emacs'
 alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
@@ -466,9 +508,11 @@ field() {
 }
 alias f='field'
 for n in {1..9}; alias f$n="field $n"
+alias -g R='; echo $?'
 
 alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
 fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
+fs='kitty @set-font-size'
 
 dec(){
   echo "ibase=16; $@"|bc
@@ -479,6 +523,19 @@ hex(){
 
 ## Functions
 
+available() {
+    command -v "$1" &> /dev/null
+}
+
+# does not work with aliases, should bypass the alias
+executable() {
+    [ -x "$(command -v $1)" ]
+}
+
+installed() {
+    pacman -Q $1 &> /dev/null
+}
+
 # Auto-ls
 chpwd() {
     emulate -L zsh
@@ -488,12 +545,6 @@ chpwd() {
 # zman for å finne dokumentasjon
 zman() {
  PAGER="less -g -s '+/^       "$1"'" man zshall
-}
-
-paclist() {
-  # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
-  LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
-    awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
 }
 
 mykeys() {
@@ -521,42 +572,44 @@ pi() {
         # result=$(comm -23 <(pacaur -Ssq $@|sort) <(pacman -Qq|sort) | fzf --preview 'pacaur -Si {}')
         result=$@
     else
-        result=$(comm -23 \
-        <((
-        curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
-        pacman -Slq;
-            )|sort) \
-        <(pacman -Qq|sort) \
-        | fzf --preview 'pacaur -Si {}')
+        # result=$(comm -23 \
+        # <((
+        # curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
+        # pacman -Slq;
+        #     )|sort) \
+        # <(pacman -Qq|sort) \
+        # | fzf --preview 'yay -Si {}')
+        result=$(yay -Pc | field 1 | fzf --preview 'yay -Si {}')
     fi
 
     if [[ -n $result ]]; then
-        pacaur -S --noedit $result
+        yay -S $result
     fi
 }
 
 pg() {
     if [[ -n $@ ]]; then
-        result=$(pacaur -Ssq $@ | fzf --preview 'pacaur -Si {}')
+        result=$(yay -Ssq $@ | fzf --preview 'yay -Si {}')
     else
-        result=$( \
-            (
-        curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
-        pacman -Slq;
-            ) | sort | fzf --preview 'pacaur -Si {}')
+        # result=$( \
+        #     (
+        #     curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
+        #     pacman -Slq;
+        #     ) | sort | fzf --preview 'yay -Si {}')
+        result=$( yay -Pc | field 1 | sort | fzf --preview 'yay -Si {}')
     fi
 
-    pacaur -Si $result
+    yay -Si $result
 }
 
 pq() {
     if [[ -n $@ ]]; then
-        pacaur -Qi $@
+        yay -Qi $@
         pacman -Ql $@ | grep --color=never "/usr/bin/" | tail +2
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
         if [[ -n $result ]]; then
-            pacaur -Qi $result
+            yay -Qi $result
             pacman -Ql $result | grep --color=never "/usr/bin/" | tail +2
         fi
     fi
@@ -598,7 +651,7 @@ psq() {
 }
 
 purl() {
-    local url=$(pacaur -Qi `pm -Qq|fzf` | rg '^URL'|awk '{print $3}')
+    local url=$(yay -Qi `pacman -Qq|fzf` | rg '^URL'|awk '{print $3}')
     test -n $url && xdg-open "${url}" &> /dev/null
 }
 
@@ -741,6 +794,7 @@ global-cd-widget() {
     printf '\n'
     printf '\n'
     zle fzf-redraw-prompt
+    zle reset-prompt
 }
 zle -N global-cd-widget
 
@@ -1098,3 +1152,15 @@ _pacman_installed_packages() {
 	compadd "$@" -a packages
 }
 
+
+# Use lf to switch directories
+lfcd () {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
+    fi
+}
+bindkey -s 'o' 'lfcd\n'

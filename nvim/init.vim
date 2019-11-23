@@ -23,7 +23,6 @@ Plug 'https://github.com/tpozzi/Sidonia'
 Plug 'https://github.com/zeis/vim-kolor'
 Plug 'https://github.com/ajmwagar/vim-deus'
 Plug 'https://github.com/kristijanhusak/vim-hybrid-material'
-Plug 'https://github.com/jsit/disco.vim'
 Plug 'https://github.com/jlesquembre/base16-neovim'
 Plug 'https://github.com/nightsense/vrunchbang'
 let g:vrunchbang_dark_LineNr = 'off'
@@ -49,6 +48,8 @@ Plug 'Rigellute/rigel'
 " Plug 'trevordmiller/nova-vim'
 " Plug 'https://github.com/nightsense/snow'
 " Plug 'crusoexia/vim-monokai'
+Plug 'https://github.com/drewtempelmeyer/palenight.vim'
+Plug 'junegunn/seoul256.vim'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -57,12 +58,18 @@ Plug 'junegunn/fzf.vim'
 " Plug 'junegunn/vim-peekaboo'
 
 Plug 'https://github.com/dkarter/bullets.vim'
+let g:bullets_enabled_file_types = [
+            \ 'markdown',
+            \ 'text',
+            \ 'gitcommit',
+            \ 'Scratch'
+            \]
 Plug 'https://github.com/gabrielelana/vim-markdown'
+let g:markdown_enable_spell_checking = 0
 
 Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
-
 
 Plug 'https://github.com/scrooloose/nerdtree'
 " Plug 'https://github.com/ryanoasis/vim-devicons'
@@ -93,52 +100,28 @@ Plug 'https://github.com/Julian/vim-textobj-variable-segment'
 
 Plug 'christoomey/vim-tmux-navigator'
 
-
 Plug 'https://github.com/romainl/vim-qf'
 let g:qf_mapping_ack_style = 1
 let g:qf_max_height = 15
 
-" Plug 'https://github.com/mileszs/ack.vim/'
-" let g:ackprg = "ag --vimgrep"
-" let g:ack_apply_qmappings = 0
-" let g:ack_apply_lmappings = 0
+Plug 'junegunn/vim-slash'
+" Husker ikke hva ulempen med denne var
+" Lar deg automatisk gjøre nohlsearch etter søk
+" Lar deg gjøre * uten å bevege deg
+" Lar deg gjøre * på en visual selection
+" Ser ut til å også gjøre gd veldig lik * (står stille, highlight)
 
-" Plug 'junegunn/vim-slash'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
+Plug 'unblevable/quick-scope'
 Plug 'https://github.com/tommcdo/vim-exchange'
+" Plug 'https://github.com/AndrewRadev/splitjoin.vim'
 "Bruk gJ og gS
-Plug 'https://github.com/AndrewRadev/splitjoin.vim'
+Plug 'https://github.com/FooSoft/vim-argwrap'
+" nnoremap gw :ArgWrap<CR>
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
-
-" Plug 'https://github.com/kana/vim-submode'
-" let g:submode_timeout = 0
-" let g:submode_keep_leaving_key = 1
-
-"UNIX helpers
-Plug 'https://github.com/tpope/vim-eunuch'
-
-
-" Plug 'https://github.com/metakirby5/codi.vim'
-" nnoremap <leader>oc :Codi!!<CR>
-
-
-Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
-let g:filebeagle_suppress_keymaps = 1
-nnoremap <silent> - :FileBeagleBufferDir<CR>
-
-" Plug 'https://github.com/FooSoft/vim-argwrap'
-" nnoremap gw :ArgWrap<CR>
-
-Plug 'https://github.com/romainl/vim-devdocs'
-nnoremap <leader>K :DD<CR>
-
-" Plug 'https://github.com/thaerkh/vim-indentguides'
-" let g:indentguides_ignorelist = ['help']
-" let g:indentguides_spacechar = '┆'
-" let g:indentguides_tabchar = '|'
 
 Plug 'https://github.com/jiangmiao/auto-pairs'
 let g:AutoPairsShortcutToggle = ''
@@ -151,12 +134,45 @@ let g:AutoPairsShortcutFastWrap = ''
 " Bedre? Nei fucker med parantes på ny linje
 " Plug 'https://github.com/Raimondi/delimitMate'
 
+Plug 'https://github.com/AndrewRadev/sideways.vim'
+" disse funker bare for lister/argumenter?
+nnoremap <silent> <m-B> :SidewaysLeft<CR>
+nnoremap <silent> <m-F> :SidewaysRight<CR>
+" funker dårlig når:
+" ordet er siste på en linje (kopierer med space på starten istedetfor slutten)
+" du flytter ordet til siste på en linje (hopper over linja fordi next word
+" ikke finnes)
+" Må lage funksjoner som sjekker innholdet av registeret for posisjon av
+" space, og om neste ord er siste på linja (må da gå til slutten av linja,
+" prepende en space til registeret, fjerne space på slutten av registeret, og
+" paste)
+nnoremap <c-m-f> daWWPB
+nnoremap <c-m-b> daWBPB
+
+" UNIX helpers
+" Brukes bare til Rename og Remove, kanskje Chmod
+Plug 'https://github.com/tpope/vim-eunuch'
+
+Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
+let g:filebeagle_suppress_keymaps = 1
+nnoremap <silent> - :FileBeagleBufferDir<CR>
+
+" Plug 'https://github.com/romainl/vim-devdocs'
+" nnoremap <leader>K :DD<CR>
+
+" Plug 'https://github.com/thaerkh/vim-indentguides'
+" let g:indentguides_ignorelist = ['help']
+" let g:indentguides_spacechar = '┆'
+" let g:indentguides_tabchar = '|'
+
 
 " LANGUAGE SUPPORT
 Plug 'sheerun/vim-polyglot'
 Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/davidhalter/jedi-vim'
+" Plug 'https://github.com/metakirby5/codi.vim'
+" nnoremap <leader>oc :Codi!!<CR>
 
 " Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
 " autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -183,7 +199,6 @@ let g:ale_linters = {
 " LSP
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
-" Plug 'derekwyatt/vim-scala' " Included with polyglot
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " CocInstall:
     " coc-json
@@ -216,7 +231,7 @@ Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 " Bruker ikke coc#_select_confirm (som confirmer uten at du har valgt noe)
 " Kjører coc#on_enter etter <CR>, som sier ifra om noe greier om man vil
 " formatte on input
-inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : 
+inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : 
                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Close the preview window when completion is done
@@ -256,16 +271,16 @@ call plug#end()
 "=====STATUSLINE=====
 set statusline=
 set statusline+=%#title#\ %f\ %*
-                             " set statusline+=%#function#\ %l
+" set statusline+=%#function#\ %l
 " set statusline+=%2*[%n%M%R%W%q]%*\ 
-                             " set statusline+=%#question#%{getcwd()}\
+" set statusline+=%#question#%{getcwd()}\
 set statusline+=\ %m
 set statusline+=%=
-                             " set statusline+=\ %{strftime('%R',getftime(expand('%')))}
+" set statusline+=\ %{strftime('%R',getftime(expand('%')))}
 set statusline+=%=%y%*%*     " file type
-                             " set statusline+=\ %{(&fenc!=''?&fenc:&enc)}
+" set statusline+=\ %{(&fenc!=''?&fenc:&enc)}
 set statusline+=%10(%l:%c%)  " line and column
-                             " set statusline+=\ %L\       " total lines
+" set statusline+=\ %L\       " total lines
 set statusline+=\ ‹\ %P
 set statusline+=\ %*
 
@@ -281,7 +296,8 @@ set background=dark
 " endif
 
 " let g:dark='base16-tomorrow-night'
-let g:dark='allomancer'
+" let g:dark='allomancer'
+let g:dark='material-theme'
 " let g:light='tempus_past'
 let g:light='tempus_dawn'
 let g:fallback='material-theme'
@@ -332,6 +348,8 @@ endfun
 "-----------------
 "" Options
 
+set winaltkeys=no
+
 set number
 set relativenumber
 set title
@@ -359,6 +377,9 @@ set smartindent
 set expandtab
 set smarttab
 
+set wrap
+set linebreak
+
 set backup
 set backupdir=/var/tmp/nvim
 set swapfile
@@ -382,7 +403,6 @@ set gdefault
 set inccommand=split
 
 
-" set scrolloff=3
 set scrolloff=5
 set sidescrolloff=3
 
@@ -411,8 +431,8 @@ set switchbuf=usetab
 set tags=./tags;/
 set path=**
 
-" split border uten |
-" :set fillchars+=vert:\ 
+" No ~ in end of buffer
+set fillchars=eob:\ 
 
 " Ikke vis vimintro, completion-meldinger
 set shortmess+=cI
@@ -422,7 +442,6 @@ set noshowmode
 set sessionoptions-=options,folds,help
 
 set diffopt+=vertical
-
 
 "" AUTOCOMMANDS
 " Nødvendig for huske cursor position
@@ -457,7 +476,6 @@ augroup END
 
 " Escape
 inoremap <M-q> <Esc>
-inoremap <M-l> <Esc>l
 nnoremap <M-q> <Esc>
 xnoremap <M-q> <Esc>
 snoremap <M-q> <Esc>
@@ -471,14 +489,12 @@ nmap <silent> <leader>Q :qa!<CR>
 nmap <silent> <leader>w :x!<CR>
 nmap <silent> <leader>s :up<CR>
 nmap <silent> <leader>e :e!<CR>
-" nmap <silent> <leader>d :bd!<CR>
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> <leader>C :Directories<CR>
 " nmap <silent> <leader>ot :TagbarToggle<CR>
 " nmap <silent> <leader>on :NERDTreeToggle<CR>
 nmap <silent> <leader>n :enew<CR>
 nmap <silent> <leader>t :Tags<CR>
-" nmap <silent> <leader><leader> :Tags<CRVista finder ctags
 nmap <silent> <leader><leader> :Vista finder<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <silent> <leader>r :History<CR>
@@ -496,16 +512,14 @@ nmap <silent> <leader>m :Marks<CR>
 nmap <silent> <leader>c :Colors<CR>
 
 
-set winaltkeys=no
 
 nmap <M-u> u
 nmap <M-U> U
-nnoremap <M-i> S
-vnoremap <M-i> c
+" nnoremap <M-i> S
+" vnoremap <M-i> c
 nmap <M-Q> <Nop>
 
-inoremap <M-f> <Esc><Right><C-Right> " kan være bedre
-" inoremap <M-f> <Esc>w
+inoremap <M-f> <Esc><C-Right>
 inoremap <M-b> <Esc><C-Left>
 nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
@@ -517,9 +531,6 @@ inoremap <M-o> <Esc>o
 inoremap <M-O> <Esc>O
 inoremap <M-r> <C-O>r
 inoremap <M-R> <C-O>R
-inoremap <M-a> <Esc>A
-" inoremap <M-p> <C-O>p
-" inoremap <M-P> <C-O>P
 
 vmap <M-u> <Esc>u
 vmap <M-U> <Esc>U
@@ -528,11 +539,11 @@ vmap <M-U> <Esc>U
 inoremap <C-D> <Del>
 inoremap <C-F> <Right>
 inoremap <C-B> <Left>
+" TODO: finne noe bedre for change line fra insert mode og normal mode
 " inoremap <C-Q> <Esc>S
 inoremap <M-i> <Esc>I
+inoremap <M-a> <Esc>A
 inoremap <M-d> <C-\><C-O>de
-" inoremap <C-H> <C-D>
-" inoremap <C-L> <C-T>
 inoremap <C-C> <Esc>
 imap <C-L> <C-X><C-L> " line completion
 imap <M-w> <C-X><C-F>
@@ -550,8 +561,6 @@ cnoremap <M-n> <C-n>
 cnoremap <M-p> <C-p>
 
 " Small keys
-" noremap + .
-" noremap . <Nop>
 noremap + <Nop>
 nnoremap <CR> <Nop>
 noremap <M-BS> <Nop>
@@ -566,32 +575,31 @@ noremap ; g,zz
 
 " Alternating
 nnoremap <silent> <C-S> <C-W>p
-noremap <C-A> <C-^>
-nnoremap <BS> `.
-" nnoremap gb `.
+nnoremap <silent> <C-A> <C-^>
+nnoremap <BS> `.zz
+nnoremap q ``
+nnoremap Q `.zz
+xnoremap q o<Esc>
+xnoremap <M-o> o<Esc>
 
 
 
 " Windows and buffers
-" nnoremap <C-Q> <C-W><C-Q>
 nnoremap <silent> <C-Q> :q!<CR>
 nnoremap <C-X> :bd!<CR>
 nnoremap <silent> <C-X> :bp<Bar>bd! #<Cr>
 map <silent> <C-n> :bn<CR>
 map <silent> <C-p> :bp<CR>
+" nnoremap <C-H> <C-W><C-H>
 " nnoremap <C-J> <C-W><C-J>
 " nnoremap <C-K> <C-W><C-K>
 " nnoremap <C-L> <C-W><C-L>
-" nnoremap <C-H> <C-W><C-H>
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-H> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-J> :TmuxNavigateDown<cr>
-nnoremap <silent> <C-K> :TmuxNavigateUp<cr>
-nnoremap <silent> <C-L> :TmuxNavigateRight<cr>
-"nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
-nnoremap <M-g> zz
-noremap <C-E> zt
-noremap <C-Y> zb
+nnoremap <silent> <C-H> :TmuxNavigateLeft<CR>
+nnoremap <silent> <C-J> :TmuxNavigateDown<CR>
+nnoremap <silent> <C-K> :TmuxNavigateUp<CR>
+nnoremap <silent> <C-L> :TmuxNavigateRight<CR>
+"nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<CR>
 
 " Sudo write trick
 cmap w!! w !sudo tee > /dev/null %
@@ -599,15 +607,22 @@ cmap w!! w !sudo tee > /dev/null %
 " Quickfix
 set grepprg=ag\ --vimgrep\ --silent
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
-nnoremap <silent> <left>  :cpf<cr>zvzz
-nnoremap <silent> <right> :cnf<cr>zvzz
-nnoremap <silent> <up>    :cprev<cr>zvzz
-nnoremap <silent> <down>  :cnext<cr>zvzz
-" nmap <silent> <leader>g <Plug>(qf_qf_toggle)
+nnoremap <silent> <left>  :cpf<CR>zvzz
+nnoremap <silent> <right> :cnf<CR>zvzz
+" nnoremap <silent> <up>    :cprev<CR>zvzz
+" nnoremap <silent> <down>  :cnext<CR>zvzz
 nmap <silent> co <Plug>(qf_qf_toggle)
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> J :call qf#filegroup#NextFile()<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> K :call qf#filegroup#PreviousFile()<CR>
+
+" Diff mode
+nnoremap <silent> <expr> <up>    &diff ? '[c' : ':cprev<CR>zvzz'
+nnoremap <silent> <expr> <down>  &diff ? ']c' : ':cnext<CR>zvzz'
+nnoremap <silent> <expr> <left>  &diff ? 'do' ':cpf<CR>zvzz'
+nnoremap <silent> <expr> <right> &diff ? 'dp' ':cnf<CR>zvzz'
+nnoremap <silent> <expr> dp &diff ? 'dp' : ':t.<CR>'
+nnoremap <silent> <expr> do &diff ? 'do' : ':Explore<CR>'
 
 "-----------------
 " Motion
@@ -623,8 +638,6 @@ xnoremap J :<C-u>keepjumps normal! gv}<CR>
 xnoremap K :<C-u>keepjumps normal! gv{<CR>
 onoremap J }
 onoremap K {
-" nnoremap <M-j> 4gj4<C-e>
-" nnoremap <M-k> 4gk4<C-y>
 nnoremap <M-j> 4gjzz
 nnoremap <M-k> 4gkzz
 " nnoremap <C-M-J> ][
@@ -635,6 +648,9 @@ nnoremap <C-D> <C-D>zz
 nnoremap <C-U> <C-U>zz
 nnoremap gg ggzz
 nnoremap G Gzz
+nnoremap <M-g> zz
+nnoremap <C-E> zt
+nnoremap <C-Y> zb
 
 
 " søk
@@ -644,8 +660,7 @@ vnoremap s /
 vnoremap S ?
 
 " substsitute
-" nnoremap gs :%s/
-nnoremap gs :%s:
+nnoremap gs :%s/
 " replace word
 nnoremap gr :%s/\<<c-r><c-w>\>/
 " substitute within visual selection
@@ -683,7 +698,7 @@ nnoremap <M-t> <C-]>zz
 nnoremap U <C-R>
 
 " command mode
-" noremap ø :
+noremap ø :
 
 " record macro one key
 let g:isRecording = get(g:, 'isRecording', 0)
@@ -695,8 +710,7 @@ nnoremap Å @q
 nnoremap gQ <Nop>
 
 " join line
-" gJ preserver whitespace, men var ikke bra oppførsel når du preserver
-" indentering
+" gJ preserver whitespace, men var ikke bra oppførsel når du preserver indentering
 nnoremap <M-J> J
 " split line
 " nnoremap <M-K> a<CR><Esc><BS>
@@ -713,6 +727,11 @@ xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv
 xnoremap <M-h> <gv
 xnoremap <M-l> >gv
+xnoremap <M-i> >gv
+xnoremap <M-I> <gv
+
+nnoremap <M-i> >>
+nnoremap <M-I> <<
 
 " nnoremap <M-h> <<
 " nnoremap <M-l> >>
@@ -742,7 +761,6 @@ nnoremap <M-D> :t-1<CR>
 vnoremap P :t-1<CR>
 vnoremap + :t-1<CR>
 nnoremap + yyp
-nnoremap <silent> dp :t.<CR>
 
 " toggle comment
 nmap <M-c> gcc
@@ -765,18 +783,18 @@ function! s:blankdown(count) abort
     '[
 endfunction
 
-nnoremap <silent> <M-o> :<c-u>call <sid>blankdown(v:count1)<cr>
-nnoremap <silent> <M-O> :<c-u>call <sid>blankup(v:count1)<cr>
+nnoremap <silent> <M-o> :<c-u>call <sid>blankdown(v:count1)<CR>
+nnoremap <silent> <M-O> :<c-u>call <sid>blankup(v:count1)<CR>
 
 " insert space
 nnoremap g<Space> a<Space><Esc>
 
 " " move lines
-nnoremap <C-M-j> mz:m+<CR>`z
-nnoremap <C-M-k> mz:m-2<CR>`z
+nnoremap <silent> <C-M-j> mz:m+<CR>`z
+nnoremap <silent> <C-M-k> mz:m-2<CR>`z
 " Må modifiseres for å også autoindentere
-vnoremap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vnoremap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+vnoremap <M-j> :m'>+<CR>`<my`>mzgv`yo`z
+vnoremap <M-k> :m'<-2<CR>`>my`<mzgv`yo`z
 
 
 
@@ -829,13 +847,11 @@ nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)
 nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
 nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 
-
 nmap <M-w> <M-r>iw
 nmap <M-W> <M-r>iW
 nmap <M-w><M-w> <M-r>iwf
 nmap <M-w><M-w> <M-r>iWf
 nmap <M-r><M-r> <M-r>$
-
 
 " omap ij <Plug>(textobj-sandwich-auto-i)
 " xmap ij <Plug>(textobj-sandwich-auto-i)
@@ -897,6 +913,19 @@ nnoremap <silent> <M-Space> :JustOneSpace<CR>
 
 command! -nargs=? Filter let @x='' | execute 'g/<args>/y X' | enew | setlocal bt=nofile | put! x
 
+function! Redir(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "No output"
+  else
+    enew | setlocal bt=nofile
+    silent put=message
+  endif
+endfunction
+command! -nargs=+ -complete=command Redir call Redir(<q-args>)
+
 command! BufOnly silent! execute "up|%bd|e#|bd#"
 
 function! ToggleWorkingDir()
@@ -947,7 +976,10 @@ let g:favorites = [
             \ "base16-tomorrow-night",
             \ "hybrid_material",
             \ "rigel",
-            \ "molokai"
+            \ "molokai",
+            \ "palenight",
+            \ "seoul256",
+            \ "seoul256-light",
             \ ]
 
 function! CNext()
@@ -978,7 +1010,15 @@ nnoremap <F4> :CNext<CR>
 
 " Run current file as script with optional arguments to pass to the script
 " TODO: add appropriate shebang for language, chmod +x, save and run
-command! -nargs=* R up|!./% <args>
+command! -nargs=* R up|!% <args>
+nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
+
+" Save, compile with gcc, and run binary
+map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
+" Save and run python interpreter on file
+map <F10> :w <CR>:!python %<CR>
+" Send selection to python interpreter
+xnoremap <leader>r :w !python<CR>
 
 " FUNCTIONS END
 "_____________
@@ -1082,53 +1122,29 @@ autocmd StdinReadPre * let s:std_in=1
 nnoremap <m-e> :Snippets<CR>
 
 
-" Vim markdown
-let g:markdown_enable_spell_checking = 0
-
-" Bullets
-let g:bullets_enabled_file_types = [
-            \ 'markdown',
-            \ 'text',
-            \ 'gitcommit',
-            \ 'Scratch'
-            \]
-
 
 
 
 "===== TESTING AREA =====
-map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
-map <F10> :w <CR>:!python %<CR>
-nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
-xnoremap <leader>r :w !python<CR>
-
 augroup HelpKeymap
     autocmd!
-    autocmd FileType help noremap <silent> <buffer> q :q<cr>
+    autocmd FileType help noremap <silent> <buffer> q :q<CR>
 augroup END
 
 augroup QuickfixKeymap
     autocmd!
-    autocmd FileType qf noremap <silent> <buffer> q :q<cr>
+    autocmd FileType qf noremap <silent> <buffer> q :q<CR>
 augroup END
 
-" nnoremap <M-c> ciw
-" nnoremap <M-C> ciW
-
-" Insert mode navigation uten å escape, undos lagres per linje
-" inoremap <C-J> <Down>
-" inoremap <C-K> <Up>
-" Alt-f og alt-b kan enten escape eller ikke, som C-f og C-b eller som C-J og C-K, eller kan være mer som alt-j og alt-k
 " Men, det kan være hendig å kunne go opp eller ned en linje og gå til normal mode, som alt-j og alt-k, men de funker dårlig med normal browsing j og k som jeg har, men jeg kan ikke bruke ctrl i normal mode til det fordi det må være til window nav.
-" inoremap <M-f>
-"
 nnoremap <M-.> :<Up>
 cnoremap <M-.> <Up>
 cnoremap <M-:> <Down>
 
 nnoremap cd :Directories<CR>
-" nnoremap mv :Rename<Space>
-nnoremap do :Explore<CR>
+" nnoremap cd :call search('\d\+')<CR>gnc
+nnoremap cd /\d\+<CR>gnc
+nnoremap mv :Rename<Space>
 nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
 
 
@@ -1137,21 +1153,11 @@ nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
 "cd to home?
 nnoremap g/ :g//<CR>
 nnoremap g= =ap
-nnoremap <M-a> mz=ap`z
 " nnoremap g= gg=G``
-" nnoremap Q %
-" nnoremap Q @q
-" nnoremap Q q
-nnoremap q ``
-nnoremap Q `.zz
-xnoremap q o<Esc>
-xnoremap <M-o> o<Esc>
+nnoremap <M-a> mz=ap`z
 
-nmap gb %
-xmap gb %
-omap gb %
-" nnoremap gB :ls!<CR>:b<Space>
-" nnoremap gb :Buffers<CR>
+map gb %
+" nnoremap gB :ls!<CR>:b<Space> " nice om du ikke har fzf
 nnoremap <leader><Tab> :Buffers<CR>
 
 nnoremap vm :Marks<CR>
@@ -1179,8 +1185,6 @@ let g:session_dir = '~/.vim/sessions'
 " https://vim.fandom.com/wiki/Go_away_and_come_back
 " https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
 
-" nnoremap <C-S> :Lines<CR>
-" cnoremap <C-S> <C-C>:Lines<CR>
 nnoremap <silent> <C-S> :up<CR>
 inoremap <silent> <C-s> <Esc>:up<CR>
 nnoremap <silent> <M-s> :up<CR>
@@ -1192,19 +1196,16 @@ nnoremap <C-Space> <C-W>p
 
 nnoremap <M-x> :Commands<CR>
 
-" nnoremap <leader>1 <C-W>o
-" nnoremap <leader>2 <C-W>v
-nnoremap <leader>1 :1tabnext<CR>
-nnoremap <leader>2 :2tabnext<CR>
-nnoremap <leader>3 :3tabnext<CR>
-nnoremap <leader>4 :4tabnext<CR>
-nnoremap <leader>5 :5tabnext<CR>
+" TODO: make new tab if error
+nnoremap <silent> <leader>1 :1tabnext<CR>
+nnoremap <silent> <leader>2 :2tabnext<CR>
+nnoremap <silent> <leader>3 :3tabnext<CR>
+nnoremap <silent> <leader>4 :4tabnext<CR>
+nnoremap <silent> <leader>5 :5tabnext<CR>
 
 " map } i{
 " map ] i[
 " map ) i(
-"
-
 
 " Shortcuts som egentlig ikke sparer deg for så mye, men som kan være nice,
 " med mindre du finner noe bedre å bruke dem til
@@ -1218,8 +1219,8 @@ nnoremap vv viw
 nnoremap vV viW
 nnoremap VV viW
 nnoremap vo <C-W>o
-" nnoremap vp vip
 
+" nnoremap vp vip
 " v som primær-register
 nnoremap vd "vd
 nnoremap vD "vD
@@ -1240,7 +1241,7 @@ nnoremap cP "1P
 " nnoremap - :<C-u>-m.<left><left>
 
 
-" nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<cr>:execute 'lcd '.@a<cr>A
+" nnoremap goh :let @a=getcwd() \| lcd %:h \| terminal<CR>:execute 'lcd '.@a<CR>A
 
 
 " resize:
@@ -1297,32 +1298,20 @@ inoremap <C-v> <C-R>"
 " nnoremap <m-s> a<Space><Esc>
 
 
-" Map ctrl-backspace to delete back word, funker ikke
-" inoremap <C-H> <C-W>
-
-nnoremap <M-i> >>
-nnoremap <M-I> <<
-" nnoremap <M-l> $
-" nnoremap <M-e> cc
-" nnoremap <M-l> >>
-" nnoremap <M-L> <<
-nnoremap <silent> <M-l> :Lines<CR>
 nnoremap M zz
 nnoremap <m-v> ^v$h
 nnoremap <m-y> ^y$
 
-" nnoremap cd :call search('\d\+')<CR>gnc
-nnoremap cd /\d\+<CR>gnc
 
 " Alternate header/source using ctags --extras=+f
-" nnoremap <silent> gh :<c-u>tjump /^<c-r>=expand("%:t:r")<cr>\.\(<c-r>=join(get(
+" nnoremap <silent> gh :<c-u>tjump /^<c-r>=expand("%:t:r")<CR>\.\(<c-r>=join(get(
 "             \ {
 "             \ 'c':   ['h'],
 "             \ 'cpp': ['h','hpp'],
 "             \ 'h':   ['c','cpp'],
 "             \ 'hpp': ['cpp']
 "             \ },
-"             \  expand("%:e"), ['UNKNOWN EXTENSION']), '\\\|')<cr>\)$<cr>
+"             \  expand("%:e"), ['UNKNOWN EXTENSION']), '\\\|')<CR>\)$<CR>
 
 " Does not use tags, only finds files in same directory, does not check if
 " file exists
@@ -1366,7 +1355,6 @@ nnoremap <silent> <M-Up> :call MoveOrCreateWindow('k')<CR>
 nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>
 
 nnoremap <C-W><C-I> <C-W>}
-nnoremap ø :
 
 nmap đ <C-F>
 nmap ” <C-B>
@@ -1375,7 +1363,9 @@ nnoremap ± <C-A>
 nnoremap ¿ <C-X>
 
 nnoremap <silent> t :Tags<CR>
+nnoremap <silent> <M-l> :Lines<CR>
 nnoremap <silent> gl :Lines<CR>
+nnoremap <silent> S :Lines<CR>
 set scrolloff=999
 
 " -----------
@@ -1385,13 +1375,13 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " kan være alegotodefinition er bedre
-nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 " gjør det samme som gd på en definisjon
 " nmap <silent> <leader>r <Plug>(coc-references)
 
-" Documentation
+" Documentation DWIM
 nnoremap <silent> <m-h> :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)

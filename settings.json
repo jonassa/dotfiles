@@ -48,7 +48,7 @@
     "editor.minimap.renderCharacters": false,
     "workbench.sideBar.location": "left",
     "update.mode": "none",
-    "workbench.colorTheme": "Horizon Bold",
+    "workbench.colorTheme": "Monokai Pro (Filter Machine)",
     "sync.gist": "0cf9ce3b42fa4ccc88d4f15c1eae55e1",
     "vim.neovimPath": "/usr/bin/nvim",
     "window.customMenuBarAltFocus": false,

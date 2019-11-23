@@ -16,6 +16,7 @@ fontlist=(
     'LiterationMono Nerd Font Mono Book 11'
     'FuraMono Nerd Font Regular 11'
     'Source Code Pro 11'
+    'Hasklig Medium 11'
 )
 
 printf "Current font is %s\n" "$(awk -F= '/FontName/{print $2}' "$terminalrc")"
