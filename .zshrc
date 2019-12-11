@@ -283,7 +283,9 @@ e() {
     else
         # local var=$( (env; declare -x; set) | sort -u | cut -d= -f1 | fzf)
         local var=$( declare | grep "^\S\+=" | cut -d= -f1 | fzf )
-        echo ${(P)var}
+        # echo ${(P)var}
+        var='$'$var
+        eval echo $var
     fi
 }
 compdef _vars e
