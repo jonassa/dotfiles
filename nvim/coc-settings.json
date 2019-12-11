@@ -14,12 +14,18 @@
         "<C-f>": "feedkeys:\\<C-f>",
         "<C-b>": "feedkeys:\\<C-b>",
         "<C-n>": "normal:j",
-        "<C-j>": "normal:k",
+        "<C-p>": "normal:k",
         "<A-j>": "normal:j",
         "<A-k>": "normal:k",
+        "<A-n>": "prompt:next", // does not work
+        "<A-p>": "prompt:previous", // does not work
+        "<Tab>": "normal:j",
+        "<S-Tab>": "normal:k",
         "<C-t>": "action:tabe",
         "<C-x>": "call:MyFunc",
-        "<C-v>": "eval:@@" // paste yanked text to prompt
-    }
-
+        "<C-C>": "do:exit",
+        "<C-v>": "eval:@@"
+    },
+    // Use Microsoft LS without jedi, could try Palantir with jedi (custom languageserver), or just jedi (set to true)
+    // "python.jediEnabled": false
 }

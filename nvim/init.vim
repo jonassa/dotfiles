@@ -1,8 +1,9 @@
+set termguicolors
+" vim: foldmethod=marker
 runtime! archlinux.vim
 filetype plugin indent on
 
-
-"=====PLUGINS=====
+"{{{ PLUGINS
 call plug#begin('~/.vim/plugged')
 
 Plug 'https://github.com/tpope/vim-fugitive'
@@ -111,14 +112,22 @@ Plug 'junegunn/vim-slash'
 " Lar deg gjøre * på en visual selection
 " Ser ut til å også gjøre gd veldig lik * (står stille, highlight)
 
-Plug 'maxbrunsfeld/vim-yankstack'
-Plug 'justinmk/vim-sneak'
 Plug 'unblevable/quick-scope'
+Plug 'justinmk/vim-sneak'
+let g:sneak#s_next = 1
+let g:sneak#use_ic_scs = 1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+highlight link Sneak IncSearch
+
+Plug 'maxbrunsfeld/vim-yankstack'
+
 Plug 'https://github.com/tommcdo/vim-exchange'
 " Plug 'https://github.com/AndrewRadev/splitjoin.vim'
-"Bruk gJ og gS
 Plug 'https://github.com/FooSoft/vim-argwrap'
-" nnoremap gw :ArgWrap<CR>
+nnoremap gw :ArgWrap<CR>
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
@@ -136,8 +145,8 @@ let g:AutoPairsShortcutFastWrap = ''
 
 Plug 'https://github.com/AndrewRadev/sideways.vim'
 " disse funker bare for lister/argumenter?
-nnoremap <silent> <m-B> :SidewaysLeft<CR>
-nnoremap <silent> <m-F> :SidewaysRight<CR>
+nnoremap <silent> <c-m-b> :SidewaysLeft<CR>
+nnoremap <silent> <c-m-f> :SidewaysRight<CR>
 " funker dårlig når:
 " ordet er siste på en linje (kopierer med space på starten istedetfor slutten)
 " du flytter ordet til siste på en linje (hopper over linja fordi next word
@@ -146,8 +155,8 @@ nnoremap <silent> <m-F> :SidewaysRight<CR>
 " space, og om neste ord er siste på linja (må da gå til slutten av linja,
 " prepende en space til registeret, fjerne space på slutten av registeret, og
 " paste)
-nnoremap <c-m-f> daWWPB
-nnoremap <c-m-b> daWBPB
+nnoremap <m-F> daWWPB
+nnoremap <m-B> daWBPB
 
 " UNIX helpers
 " Brukes bare til Rename og Remove, kanskje Chmod
@@ -165,29 +174,18 @@ nnoremap <silent> - :FileBeagleBufferDir<CR>
 " let g:indentguides_spacechar = '┆'
 " let g:indentguides_tabchar = '|'
 
-
 " LANGUAGE SUPPORT
 Plug 'sheerun/vim-polyglot'
 Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-" Plug 'https://github.com/davidhalter/jedi-vim'
 " Plug 'https://github.com/metakirby5/codi.vim'
 " nnoremap <leader>oc :Codi!!<CR>
-
-" Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " ncm2 requirement
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" Plug 'https://github.com/Shougo/neco-vim'   " vim 
-" " Plug 'https://github.com/ncm2/ncm2-jedi'  " python, buggy
-" " Plug 'https://github.com/ncm2/ncm2-racer' " rust
-
-" " Plug 'https://github.com/ncm2/ncm2-ultisnips' "funker dårlig...
-
 
 " Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/honza/vim-snippets'
 
 Plug 'dense-analysis/ale'
-" autocmd VimEnter * ALEDisable
+" au VimEnter * ALEDisable
 nnoremap <silent> æ :ALENextWrap<CR>
 nnoremap <silent> Æ :ALEPreviousWrap<CR>
 nnoremap <silent> gæ :ALEDetail<CR>
@@ -210,36 +208,18 @@ Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'neoclide/coc-tag', {'do': 'yarn install --frozen-lockfile'}
 
-" Alternativt denne:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-" Ingen av disse to ser ut til å gjøre noe bedre, alt funker, til og med
-" instant newline etter completion funker uten noe av dette
-" EDIT: ser ut til å fucke med undo history når du ikke bruker <C-g>u
-" Ny versjon med instant newline
-" Selv denne fucker undo history
+" Ikke bruk coc#_select_confirm (som confirmer uten at du har valgt noe)
+" coc#on_enter etter <CR>, sier ifra om noe greier om man vil formatte on input
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
-" Denne ser ut til å funke med undo, men har ikke instant newline, og den
-" confirmer første alternativ selv når du ikke har valgt noe...
-" EDIT: det er det coc#_select_confirm gjør...
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           " \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Denne funker greit, kan være snippets som fucker med undo history
-" Expander ikke snippets på enter, kan være like greit
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
-
-" Ser ut til å ikke fucke undo (kan fortsatt være snippets)
-" Bruker ikke coc#_select_confirm (som confirmer uten at du har valgt noe)
-" Kjører coc#on_enter etter <CR>, som sier ifra om noe greier om man vil
-" formatte on input
 inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : 
                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Close the preview window when completion is done
 " Lurer på om denne egentlig er nødvendig
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 imap <M-e> <Plug>(coc-snippets-expand)
-" vmap <C-j> <Plug>(coc-snippets-select) " usikker på hva denne gjør
+" vmap <C-j> <Plug>(coc-snippets-select) " Hva er dette?
 let g:coc_snippet_next = '<m-f>'
 let g:coc_snippet_prev = '<m-b>'
 
@@ -247,10 +227,11 @@ set updatetime=300
 " set signcolumn=yes " default = auto
 set nobackup
 set nowritebackup
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline^=%{coc#status()}
 
 " comment highlighting in jsonc
-autocmd FileType json syntax match Comment +\/\/.\+$+
+au FileType json syntax match Comment +\/\/.\+$+
 
 " TAB: next or tab or trigger completion
 inoremap <silent><expr> <TAB>
@@ -265,10 +246,12 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+Plug 'https://github.com/tpope/vim-apathy'
 
 call plug#end()
+"}}}
 
-"=====STATUSLINE=====
+"{{{ STATUSLINE
 set statusline=
 set statusline+=%#title#\ %f\ %*
 " set statusline+=%#function#\ %l
@@ -283,7 +266,9 @@ set statusline+=%10(%l:%c%)  " line and column
 " set statusline+=\ %L\       " total lines
 set statusline+=\ ‹\ %P
 set statusline+=\ %*
+"}}}
 
+"{{{ COLORS
 syntax enable
 set background=dark
 
@@ -297,7 +282,7 @@ set background=dark
 
 " let g:dark='base16-tomorrow-night'
 " let g:dark='allomancer'
-let g:dark='material-theme'
+let g:dark='neodark'
 " let g:light='tempus_past'
 let g:light='tempus_dawn'
 let g:fallback='material-theme'
@@ -311,25 +296,13 @@ else
 endif
 execute 'colorscheme ' . g:theme
 
-" if exists('+termguicolors')
-if $TERMGUICOLORS
-    if has('termguicolors')
-        set termguicolors
-        if exists('$TMUX')
-            let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-            let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-        endif
+if has('termguicolors')
+    set termguicolors
+    if exists('$TMUX')
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
-else
-    let g:theme='default'
-    colorscheme default
 endif
-
-augroup TextFile
-    autocmd!
-    autocmd filetype text let b:textfile = 1
-    autocmd BufEnter * call SetColors()
-augroup END
 
 function! SetColors()
     if &termguicolors == 0
@@ -345,13 +318,59 @@ function! SetColors()
     execute 'colorscheme ' . g:theme
 endfun
 
-"-----------------
-"" Options
+let g:favorites = [
+            \ "material-theme",
+            \ "deus",
+            \ "onehalfdark",
+            \ "two-firewatch",
+            \ "allomancer",
+            \ "forest-night",
+            \ "flatwhite",
+            \ "orange-moon",
+            \ "nordisk",
+            \ "onehalfdark",
+            \ "neodark",
+            \ "base16-tomorrow-night",
+            \ "hybrid_material",
+            \ "rigel",
+            \ "molokai",
+            \ "palenight",
+            \ "seoul256",
+            \ "seoul256-light",
+            \ ]
+
+function! CRotate()
+    let len_shortlist = len(g:favorites)
+    let current_scheme_idx = index(g:favorites, g:colors_name)
+    let next_scheme_idx = (current_scheme_idx - 1)
+    if next_scheme_idx == -1
+        let next_scheme_idx = (len_shortlist - 1)
+    endif
+    let next_scheme = g:favorites[next_scheme_idx]
+    exec 'colorscheme '.next_scheme
+    echo g:colors_name
+endfunction
+command! CRotate call CRotate()
+
+nnoremap <F3> :CRotate<CR>
+
+function! s:BG()
+    let &background = ( &background == "dark" ? "light" : "dark" )
+    if exists("g:colors_name")
+        exe "colorscheme " . g:colors_name
+    endif
+endfunction
+command! BG call s:BG()
+nnoremap <silent> <F5> :BG<CR>
+
+"}}}
+
+"{{{ OPTIONS
 
 set winaltkeys=no
 
 set number
-set relativenumber
+" set relativenumber
 set title
 set cursorline
 set listchars=tab:\ \ ,nbsp:␣,trail:·,extends:›,precedes:‹
@@ -371,11 +390,16 @@ set encoding=utf8
 set fileencoding=utf8
 
 set tabstop=4 shiftwidth=4
-set copyindent
-set autoindent
-set smartindent
 set expandtab
 set smarttab
+
+set autoindent
+" set smartindent
+set cindent " should override smartindent (and maybe autoindent)
+set copyindent " use same type of indentation (spaces/tabs) as previous line
+
+" may require additional config: align wrapped lines with indentation
+set breakindent
 
 set wrap
 set linebreak
@@ -411,7 +435,7 @@ set nojoinspaces
 " set formatoptions-=o
 " Kan være dette ikke er beste autocommand event å bruke, men funker.
 " Formatoptions er ellers ikke persistent
-autocmd! BufEnter * set formatoptions=jncrql
+au! BufEnter * set formatoptions=jncrql
 
 " Tror jeg liker select, altså ikke noselect
 " Nei tydeligvis ikke, den gjorde det verre...
@@ -429,7 +453,14 @@ let g:cm_completeopt="menu,menuone,noinsert,noselect"
 set switchbuf=usetab
 
 set tags=./tags;/
-set path=**
+
+" Using vim-apathy instead, which should make it possible to :find, gf,
+" :isplit and so on to included files (standard library at least, but maybe
+" also for the current project?) However, go to symbol/tag is better than
+" :ijump, and these things are probably better solved by a langserver or ctags anyway.
+" set path=**
+" Go back to this if something fails
+" set path=.,,**
 
 " No ~ in end of buffer
 set fillchars=eob:\ 
@@ -443,32 +474,43 @@ set sessionoptions-=options,folds,help
 
 set diffopt+=vertical
 
-"" AUTOCOMMANDS
-" Nødvendig for huske cursor position
-autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+set wildignorecase
 
-" Automatisk normalisering av splits
-autocmd VimResized * wincmd =
+"}}}
 
-" Forhindre netrw i å ikke lukkes
-autocmd FileType netrw setl bufhidden=delete
+" AUTOCOMMANDS {{{
+augroup vimrc
+autocmd!
 
-" Lukk preview window automatisk
-autocmd CompleteDone * pclose
-
-" Highlight cursorline kun i aktivt vindu
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cul
-    autocmd WinLeave * set nocul
-augroup END
+" Restore cursor position and other state from shada/viminfo
+au BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
 " Autoreload vimrc
-augroup vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-augroup END
+au BufWritePost $MYVIMRC source $MYVIMRC
 
+" Normalize splits on resize
+au VimResized * wincmd =
+
+" Close Netrw when exiting
+au FileType netrw setlocal bufhidden=delete
+
+" Close preview window after completion
+au CompleteDone * pclose
+
+" Highlight cursorline only in active window
+au WinEnter * set cursorline
+au WinLeave * set nocursorline
+
+" Use q to close help and quickfix windows
+au FileType qf noremap <silent> <buffer> q :close<CR>
+au FileType help noremap <silent> <buffer> q :close<CR>
+
+" Use custom colorscheme for text files
+au FileType text let b:textfile = 1
+au BufEnter * call SetColors()
+
+augroup END
+"}}}
 
 "------------
 " KEYBINDINGS
@@ -481,6 +523,8 @@ xnoremap <M-q> <Esc>
 snoremap <M-q> <Esc>
 cnoremap <M-q> <C-C>
 onoremap <M-q> <Esc>
+inoremap <ScrollWheelUp> <Esc>
+inoremap <ScrollWheelDown> <Esc>
 
 " Leader maps
 let g:mapleader=" "
@@ -491,12 +535,11 @@ nmap <silent> <leader>s :up<CR>
 nmap <silent> <leader>e :e!<CR>
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> <leader>C :Directories<CR>
-" nmap <silent> <leader>ot :TagbarToggle<CR>
-" nmap <silent> <leader>on :NERDTreeToggle<CR>
 nmap <silent> <leader>n :enew<CR>
 nmap <silent> <leader>t :Tags<CR>
 nmap <silent> <leader><leader> :Vista finder<CR>
-nmap <silent> <leader>b :Buffers<CR>
+" nmap <silent> <leader>b :Buffers<CR>
+nnoremap <leader><Tab> :Buffers<CR>
 nmap <silent> <leader>r :History<CR>
 nmap <silent> <C-R> :History:<CR>
 nmap <silent> <leader>: :Commands<CR>
@@ -504,20 +547,12 @@ nmap <silent> <leader>h :Helptags<CR>
 nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>F :Files ~<CR>
 nmap <silent> <leader>g :GFiles<CR>
-nmap <silent> <leader>l :Lines<CR>
-nmap <silent> <leader>k :Grep "\b<cword>\b"<CR>
+" nmap <silent> <leader>l :Lines<CR>
 nmap <leader>a :Ag<Space>
 nmap <leader>o :Locate<Space>
 nmap <silent> <leader>m :Marks<CR>
 nmap <silent> <leader>c :Colors<CR>
-
-
-
-nmap <M-u> u
-nmap <M-U> U
-" nnoremap <M-i> S
-" vnoremap <M-i> c
-nmap <M-Q> <Nop>
+nmap <silent> <leader>d :Gdiffsplit<CR>
 
 inoremap <M-f> <Esc><C-Right>
 inoremap <M-b> <Esc><C-Left>
@@ -525,12 +560,14 @@ nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
 nnoremap <M-d> dW
 
+" Undo from insert mode
 inoremap <M-u> <Esc>u
 inoremap <M-U> <Esc>U
+nnoremap <M-u> u
+nnoremap <M-U> <C-R>
+
 inoremap <M-o> <Esc>o
 inoremap <M-O> <Esc>O
-inoremap <M-r> <C-O>r
-inoremap <M-R> <C-O>R
 
 vmap <M-u> <Esc>u
 vmap <M-U> <Esc>U
@@ -556,25 +593,33 @@ cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
 cnoremap <C-F> <Right>
 cnoremap <C-B> <Left>
-cnoremap <M-d> <C-Right><C-W>
-cnoremap <M-n> <C-n>
-cnoremap <M-p> <C-p>
+cnoremap <M-D> <C-Right><C-W>
+cnoremap <M-N> <C-n>
+cnoremap <M-P> <C-p>
+
+" Go to next/prev search match while searching
+cnoremap <M-j> <C-G>
+cnoremap <M-k> <C-T>
+
+" Up/down command history
+nnoremap <M-.> :<Up>
+cnoremap <M-.> <Up>
+cnoremap <M-:> <Down>
 
 " Small keys
-noremap + <Nop>
-nnoremap <CR> <Nop>
-noremap <M-BS> <Nop>
 noremap \ @:
-noremap ¤ ~
-nnoremap ? K
-
+" nnoremap ? K
+" noremap <M-BS> <Nop>
+" noremap ¤ ~
 
 " Navigate changelist
 noremap , g;zz
 noremap ; g,zz
 
 " Alternating
-nnoremap <silent> <C-S> <C-W>p
+" nnoremap <silent> <C-S> <C-W>p
+" used by coc quickfix
+nnoremap <C-Space> <C-W>p
 nnoremap <silent> <C-A> <C-^>
 nnoremap <BS> `.zz
 nnoremap q ``
@@ -582,10 +627,8 @@ nnoremap Q `.zz
 xnoremap q o<Esc>
 xnoremap <M-o> o<Esc>
 
-
-
 " Windows and buffers
-nnoremap <silent> <C-Q> :q!<CR>
+nnoremap <silent> <C-Q> :close<CR>
 nnoremap <C-X> :bd!<CR>
 nnoremap <silent> <C-X> :bp<Bar>bd! #<Cr>
 map <silent> <C-n> :bn<CR>
@@ -607,20 +650,25 @@ cmap w!! w !sudo tee > /dev/null %
 " Quickfix
 set grepprg=ag\ --vimgrep\ --silent
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
+" nmap <silent> <leader>k :Grep "\b<cword>\b"<CR>
+" nmap <silent> gw :Grep "\b<cword>\b"<CR>
 nnoremap <silent> <left>  :cpf<CR>zvzz
 nnoremap <silent> <right> :cnf<CR>zvzz
 " nnoremap <silent> <up>    :cprev<CR>zvzz
 " nnoremap <silent> <down>  :cnext<CR>zvzz
 nmap <silent> co <Plug>(qf_qf_toggle)
-autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> J :call qf#filegroup#NextFile()<CR>
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> K :call qf#filegroup#PreviousFile()<CR>
+augroup QuickfixKeys
+au!
+au BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+au BufReadPost quickfix nnoremap <silent> <buffer> J :call qf#filegroup#NextFile()<CR>
+au BufReadPost quickfix nnoremap <silent> <buffer> K :call qf#filegroup#PreviousFile()<CR>
+augroup END
 
 " Diff mode
 nnoremap <silent> <expr> <up>    &diff ? '[c' : ':cprev<CR>zvzz'
 nnoremap <silent> <expr> <down>  &diff ? ']c' : ':cnext<CR>zvzz'
-nnoremap <silent> <expr> <left>  &diff ? 'do' ':cpf<CR>zvzz'
-nnoremap <silent> <expr> <right> &diff ? 'dp' ':cnf<CR>zvzz'
+nnoremap <silent> <expr> <left>  &diff ? 'do' : ':cpf<CR>zvzz'
+nnoremap <silent> <expr> <right> &diff ? 'dp' : ':cnf<CR>zvzz'
 nnoremap <silent> <expr> dp &diff ? 'dp' : ':t.<CR>'
 nnoremap <silent> <expr> do &diff ? 'do' : ':Explore<CR>'
 
@@ -681,18 +729,9 @@ noremap gm M
 nnoremap <C-F> <C-F>zz
 nnoremap <C-B> <C-B>zz
 
-" Sneak
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-let g:sneak#s_next = 1
-let g:sneak#use_ic_scs = 1
-" hi Sneak ctermfg=6 ctermbg=8
-highlight link Sneak IncSearch
-
 " go to tag
-nnoremap <M-t> <C-]>zz
+nnoremap <CR> <C-]>zz
+nnoremap <M-g> <C-]>zz
 
 " redo
 nnoremap U <C-R>
@@ -708,12 +747,11 @@ nnoremap Å @q
 
 " no Ex-mode
 nnoremap gQ <Nop>
+nnoremap <M-Q> <Nop> 
 
 " join line
-" gJ preserver whitespace, men var ikke bra oppførsel når du preserver indentering
 nnoremap <M-J> J
 " split line
-" nnoremap <M-K> a<CR><Esc><BS>
 function! BreakHere()
     s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
     call histdel("/", -1)
@@ -733,16 +771,11 @@ xnoremap <M-I> <gv
 nnoremap <M-i> >>
 nnoremap <M-I> <<
 
-" nnoremap <M-h> <<
-" nnoremap <M-l> >>
-
 let g:yankstack_map_keys = 0
 let g:yankstack_yank_keys = ['y', 'Y', 'd', 'D']
 call yankstack#setup()
 nmap <M-p> <Plug>yankstack_substitute_older_paste
 nmap <M-n> <Plug>yankstack_substitute_newer_paste
-" yank to end of line
-map Y y$
 " yank to clipboard
 map <leader>y "+y
 vnoremap <C-C> "+y
@@ -756,7 +789,6 @@ nnoremap yp "0p
 nnoremap yP "0P
 
 " duplicate lines
-" nnoremap <M-d> :t.<CR>
 nnoremap <M-D> :t-1<CR>
 vnoremap P :t-1<CR>
 vnoremap + :t-1<CR>
@@ -767,6 +799,8 @@ nmap <M-c> gcc
 xmap <M-c> gc
 nmap <M-C> :t-1<CR>gccj
 
+" yank to end of line
+map Y y$
 "d/c/y to start of line
 nnoremap dh d^
 nnoremap ch c^
@@ -796,8 +830,6 @@ nnoremap <silent> <C-M-k> mz:m-2<CR>`z
 vnoremap <M-j> :m'>+<CR>`<my`>mzgv`yo`z
 vnoremap <M-k> :m'<-2<CR>`>my`<mzgv`yo`z
 
-
-
 nnoremap <silent> <M-Bar> :call Scratch()<CR>
 " nnoremap <silent> <M-1> :NERDTreeToggle<CR>
 " nnoremap <silent> <M-2> :TagbarToggle<CR>
@@ -805,21 +837,18 @@ nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : buf
 nnoremap <silent> <M-2> :Vista!!<CR>
 nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
-" toggle fold
-set foldmethod=indent
-set nofoldenable "folding ikke på default når du åpner en fil
+"{{{ FOLDING
+" set foldmethod=indent
+set nofoldenable " don't fold by default (not great when working on vimrc and using folds)
 set foldlevel=2
-set foldnestmax=2 " 1 = klassenivå, 2 = funksjoner
+set foldnestmax=2 " 1 = classes, 2 = functions
 set foldopen+=jump
 nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
-nnoremap go za
-nnoremap gO zA
-nnoremap <M-m> zr
-nnoremap <M-M> zm
-
-
-
-
+" nnoremap go za
+" nnoremap gO zA
+nnoremap <M-m> zm
+nnoremap <M-M> zr
+"}}}
 
 
 " WORD OBJECTS
@@ -849,9 +878,7 @@ nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count
 
 nmap <M-w> <M-r>iw
 nmap <M-W> <M-r>iW
-nmap <M-w><M-w> <M-r>iwf
-nmap <M-w><M-w> <M-r>iWf
-nmap <M-r><M-r> <M-r>$
+" nmap <M-r><M-r> <M-r>$
 
 " omap ij <Plug>(textobj-sandwich-auto-i)
 " xmap ij <Plug>(textobj-sandwich-auto-i)
@@ -869,8 +896,8 @@ let g:sandwich#recipes += [
             \]
 
 "-----------------
-" FUNCTIONS
 
+"{{{ FUNCTIONS
 let g:highlight_trailing = 0
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
@@ -902,7 +929,6 @@ function! Scratch()
         execute "b " . bufnr('Scratch')
     endif
 endfunction
-
 
 function! JustOneSpace()
     s/\s\+/ /
@@ -950,68 +976,17 @@ function! StripTrailingWhitespace()
     call cursor(l, c)
 endfunction
 
-function! s:BG()
-    let &background = ( &background == "dark" ? "light" : "dark" )
-    if exists("g:colors_name")
-        exe "colorscheme " . g:colors_name
-    endif
-endfunction
-command! BG call s:BG()
-nnoremap <silent> <F5> :BG<CR>
-
-
-
-let g:favorites = [
-            \ "material-theme",
-            \ "deus",
-            \ "onehalfdark",
-            \ "two-firewatch",
-            \ "allomancer",
-            \ "forest-night",
-            \ "flatwhite",
-            \ "orange-moon",
-            \ "nordisk",
-            \ "onehalfdark",
-            \ "neodark",
-            \ "base16-tomorrow-night",
-            \ "hybrid_material",
-            \ "rigel",
-            \ "molokai",
-            \ "palenight",
-            \ "seoul256",
-            \ "seoul256-light",
-            \ ]
-
-function! CNext()
-    let len_shortlist = len(g:favorites)
-    let current_scheme_idx = index(g:favorites, g:colors_name)
-    let next_scheme_idx = (current_scheme_idx + 1) % len_shortlist
-    let next_scheme = g:favorites[next_scheme_idx]
-    exec 'colorscheme '.next_scheme
-    echo g:colors_name
-endfunction
-command! CNext call CNext()
-
-function! CPrev()
-    let len_shortlist = len(g:favorites)
-    let current_scheme_idx = index(g:favorites, g:colors_name)
-    let next_scheme_idx = (current_scheme_idx - 1)
-    if next_scheme_idx == -1
-        let next_scheme_idx = (len_shortlist - 1)
-    endif
-    let next_scheme = g:favorites[next_scheme_idx]
-    exec 'colorscheme '.next_scheme
-    echo g:colors_name
-endfunction
-command! CPrev call CPrev()
-
-nnoremap <F3> :CPrev<CR>
-nnoremap <F4> :CNext<CR>
-
 " Run current file as script with optional arguments to pass to the script
 " TODO: add appropriate shebang for language, chmod +x, save and run
+" Separate command to shebang and make executable
+" A file will not be run with right interpreter, even with .py extension,
+" without shebang. Note: this should be used for files intended to be run as
+" executable scripts, and has the advantage that it is filetype agnostic. However, many
+" programs should not be executables, so there should be a different function
+" for running a file with the right interpreter
 command! -nargs=* R up|!% <args>
 nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
+" nnoremap <leader>r :w <CR>:!python %<CR>
 
 " Save, compile with gcc, and run binary
 map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
@@ -1020,14 +995,15 @@ map <F10> :w <CR>:!python %<CR>
 " Send selection to python interpreter
 xnoremap <leader>r :w !python<CR>
 
-" FUNCTIONS END
-"_____________
+" Copy a register to the clipboard
+command! -nargs=1 Clip let @+=@<args>
+"}}}
 
 
 "-----------------
 " PLUGINS
 
-" fzf
+"{{{ FZF
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_nvim_statusline = 0
@@ -1049,12 +1025,10 @@ command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
             \ {'source': 'fd . -H -td ~',
             \  'sink': 'cd'}))
 
-
-
 " Disable statusline
-autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-            \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+au! FileType fzf
+au  FileType fzf set laststatus=0 noshowmode noruler
+            \| au BufLeave <buffer> set laststatus=2 showmode ruler
 
 let g:fzf_colors =
           \ { 'fg':      ['fg', 'Normal'],
@@ -1072,20 +1046,21 @@ let g:fzf_colors =
             \ 'header':  ['fg', 'Comment'] }
 
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--color-path "0;34" --color-line-number "0;32"', fzf#vim#with_preview(), <bang>0)
+"}}}
 
 " Netrw
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_winsize = 25
 
-" NERDTree
+" NERDTree {{{
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeShowFiles = 1
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeAutoDeleteBuffer = 1
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd StdinReadPre * let s:std_in=1
-
+au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+au StdinReadPre * let s:std_in=1
+"}}}
 
 " Tab completion
 " inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>" " accept and newline or newline
@@ -1112,7 +1087,7 @@ autocmd StdinReadPre * let s:std_in=1
 " set omnifunc=syntaxcomplete#Complete
 
 
-" Ultisnips
+" Ultisnips {{{
 " let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
 " " let g:UltiSnipsJumpForwardTrigger="<tab>"
 " " let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
@@ -1120,26 +1095,14 @@ autocmd StdinReadPre * let s:std_in=1
 " let g:UltiSnipsJumpBackwardTrigger="<M-b>"
 " let g:UltiSnipsRemoveSelectModeMappings = 0
 nnoremap <m-e> :Snippets<CR>
+"}}}
 
+" TESTING {{{
 
-
-
-
-"===== TESTING AREA =====
-augroup HelpKeymap
-    autocmd!
-    autocmd FileType help noremap <silent> <buffer> q :q<CR>
-augroup END
-
-augroup QuickfixKeymap
-    autocmd!
-    autocmd FileType qf noremap <silent> <buffer> q :q<CR>
-augroup END
-
-" Men, det kan være hendig å kunne go opp eller ned en linje og gå til normal mode, som alt-j og alt-k, men de funker dårlig med normal browsing j og k som jeg har, men jeg kan ikke bruke ctrl i normal mode til det fordi det må være til window nav.
-nnoremap <M-.> :<Up>
-cnoremap <M-.> <Up>
-cnoremap <M-:> <Down>
+" if winnr('$') == 1
+"   " only one window
+"   " make expression mapping to bd when last window in help buffer
+" endif
 
 nnoremap cd :Directories<CR>
 " nnoremap cd :call search('\d\+')<CR>gnc
@@ -1157,8 +1120,8 @@ nnoremap g= =ap
 nnoremap <M-a> mz=ap`z
 
 map gb %
-" nnoremap gB :ls!<CR>:b<Space> " nice om du ikke har fzf
-nnoremap <leader><Tab> :Buffers<CR>
+" nice om du ikke har fzf
+nnoremap gB :ls!<CR>:b<Space>
 
 nnoremap vm :Marks<CR>
 let g:session_dir = '~/.vim/sessions'
@@ -1188,11 +1151,7 @@ let g:session_dir = '~/.vim/sessions'
 nnoremap <silent> <C-S> :up<CR>
 inoremap <silent> <C-s> <Esc>:up<CR>
 nnoremap <silent> <M-s> :up<CR>
-cnoremap <silent> <M-s> <C-C>:up<CR>
-xnoremap <silent> <M-s> <C-C>:up<CR>
 inoremap <silent> <M-s> <Esc>:up<CR>
-
-nnoremap <C-Space> <C-W>p
 
 nnoremap <M-x> :Commands<CR>
 
@@ -1250,8 +1209,8 @@ nnoremap <silent> <S-Down> 10<C-w>-
 nnoremap <silent> <S-Left> 10<C-w><
 nnoremap <silent> <S-Right> 10<C-w>>
 
-inoremap <M-CR> <ESC>:s/\s*$/;<CR>j
-nnoremap <M-CR> <ESC>:s/\s*$/;<CR>j
+inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
+nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
 
 nnoremap zx :pclose<CR>
 
@@ -1261,10 +1220,6 @@ inoremap <M-p> <C-P>
 
 nmap gj ]]
 nmap gk [[
-
-"go to next search match while searching
-cnoremap <M-j> <C-G>
-cnoremap <M-k> <C-T>
 
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
@@ -1280,11 +1235,6 @@ inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype
 inoremap <M-2> @
 inoremap <M-4> $
 inoremap <M-5> %
-
-"Tester ut denne
-nnoremap gw yiw
-nmap <silent> gw :Grep "\b<cword>\b"<CR>
-
 
 
 nnoremap <m-h> ^
@@ -1367,18 +1317,17 @@ nnoremap <silent> <M-l> :Lines<CR>
 nnoremap <silent> gl :Lines<CR>
 nnoremap <silent> S :Lines<CR>
 set scrolloff=999
+"}}}
 
-" -----------
-" COC TESTING
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" COC TESTING {{{
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " kan være alegotodefinition er bedre
-" nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
-" gjør det samme som gd på en definisjon
+" gjør det samme som gd på en definisjon (gjorde hvertfall det for scala)
 " nmap <silent> <leader>r <Plug>(coc-references)
 
 " Documentation DWIM
@@ -1402,21 +1351,50 @@ omap af <Plug>(coc-funcobj-a)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
-set foldmethod=manual
+" set foldmethod=manual
 " Use `:Fold` to fold current buffer
 " Fold comment, imports, region
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" command! -nargs=? Fold :call CocAction('fold', <f-args>)
 " use `:OR` for organize import of current buffer
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+" command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 
-nnoremap <silent> <leader>l  :<C-u>CocList<CR>
-nnoremap <silent> <leader>o  :<C-u>CocList outline<CR>
+nnoremap <silent> <leader>ll  :<C-u>CocList<CR>
+nnoremap <silent> <leader>lc  :<C-u>CocCommand<CR>
+nnoremap <silent> <leader>lo  :<C-u>CocList outline<CR>
 nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<CR>
-nnoremap <silent> <leader>o  :<C-u>CocList diagnostics<CR>
+" nnoremap <silent> <leader>o  :<C-u>CocList diagnostics<CR>
 
 nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
 " coc uses ALE so coc-diagnostic-next and alenext have the same effect
     " diagnostic.displayByAle": true,
 " nmap <silent> Æ <Plug>(coc-diagnostic-prev)
+
+" <Plug>(coc-diagnostic-info)
+" <Plug>(coc-diagnostic-next)
+" <Plug>(coc-diagnostic-prev)
+" <Plug>(coc-diagnostic-next-error)
+" <Plug>(coc-diagnostic-prev-error)
+" <Plug>(coc-definition)
+" <Plug>(coc-declaration)
+" <Plug>(coc-implementation)
+" <Plug>(coc-type-definition)
+" <Plug>(coc-references)
+" <Plug>(coc-format-selected)
+ " <Plug>(coc-format)
+nnoremap <leader>lr <Plug>(coc-rename)
+" <Plug>(coc-codeaction)
+" <Plug>(coc-codeaction-selected)
+" <Plug>(coc-openlink)
+" <Plug>(coc-codelens-action)
+" <Plug>(coc-fix-current)
+" <Plug>(coc-float-hide)
+" <Plug>(coc-float-jump)
+" <Plug>(coc-refactor)
+" <Plug>(coc-range-select)
+" <Plug>(coc-range-select)
+" <Plug>(coc-range-select-backward)
+" <Plug>(coc-funcobj-i)
+" <Plug>(coc-funcobj-a)
+"}}}
 

@@ -258,6 +258,9 @@ alias lh='ls -ld .?*'
 alias ..='cd ..'
 
 alias md='mkdir -p'
+mkcd() {
+    mkdir $1 && cd $1
+}
 alias rd='rmdir'
 function take() {
   mkdir -p $@ && cd ${@:$#}
@@ -289,7 +292,7 @@ alias wh='which'
 alias p='print -l'
 alias o='xdg-open'
 alias x='atool -x'
-alias h='history -50'
+alias h='history -nd -50'
 alias d='dirs -v'
 alias lo='locate'
 # alias u='cd ..'
@@ -320,19 +323,16 @@ vsh(){
 alias path='echo $PATH | tr ":" "\n"'
 export LESS='-iRk /home/jonas/.less'
 export LESSOPEN='| /usr/bin/src-hilite-lesspipe.sh %s'
+export NMON='MMMm1'
 # function diff() {
-#     diff $@ | diffr
-# }
-
-# function pass() {
-#     dump.py|awk '{print $2":",$4}'|rg https://|sed 's,https://,,'|fzf|cut -d' ' -f2|tr -d '\n'|xsel -ib
+#     diff -u "$1" "$2" | diffr
 # }
 alias grep='grep -i --color=auto'
 alias fd='fd -H'
 alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
 # alias ag='ag --hidden --ignore .git'
 agl() {ag $@ --pager less 2> /dev/null}
-gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/0Data; fi}
+gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/Data; fi}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 rgl() {rg $@ 2> /dev/null | less}
 alias udb='sudo updatedb'
@@ -351,7 +351,7 @@ alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc" "$HOME/.config/kitty/kitty.conf"'
 alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
-alias cmd='nvim ~/Dropbox/0Data/cmd/*'
+alias cmd='nvim ~/Dropbox/Data/cmd/*'
 ta() {
     if [[ -z $@ ]]; then
         local sessions=$(tmux list-sessions)
@@ -376,7 +376,7 @@ alias puu='yay'
 # alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no orphans to remove"'
 alias pd='yay -c'
 alias pls='yay -Ql'
-alias pf='yay -F'
+alias pf='pacman -F'
 alias po='yay -Qo'
 pt(){pactree $@}; compdef _pacman_installed_packages pt
 ptgraph() {
@@ -397,17 +397,25 @@ pl() {
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
-alias dmesg='dmesg -HP --color=always' # human, no-pager, farger kan være problem men funker med grep og less
+alias se='service'
+alias dmesg='dmesg -e --color=always' # human, no-pager, farger kan være problem men funker med grep og less
 alias jc='journalctl'
 alias pstree='pstree -hT' # highlight current process, hide threads
 
 alias ip='ip -color'
 alias ipp='ip -br addr && ip -br link'
-alias extip="curl -fSs https://1.1.1.1/cdn-cgi/trace | awk -F= '/ip/ { print $2 }'"
+alias ipinfo='http ipinfo.io || curl ipinfo.io'
+i() {
+    (
+    echo "IP: $(ip -br addr | grep -E 'wlan|wlp' | f3)"
+    echo "MAC: $(ip -br link | grep -E 'wlan|wlp' | f3)"
+    echo "PUB: $(curl ifconfig.co 2> /dev/null)"
+    ) | column -t
+}
+alias subnet='ip route | awk "END {print \$1}"'
 alias df='df -hT' # human, show filesystem type; -a for all
 alias dfc='dfc -T' # show type
-alias cdu='cdu -idh'
-alias htop='sudo htop'
+alias cdu='cdu -is -dh &> /dev/null'
 # function smem() {
 #     (sudo smem -pt $@ | tail -n 1;
 #     smem -kt $@) | command less
@@ -489,6 +497,7 @@ alias grb='git rebase'
 alias gst='git stash'
 alias gsp='git stash pop'
 alias gsl='git shortlog -n --no-merges'
+function gi() { curl -sLw n https://www.gitignore.io/api/$@ ;}
 
 alias origmacs='env HOME=$HOME/emacs/orig emacs'
 alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
@@ -506,13 +515,14 @@ alias -g F='|field'
 field() {
     awk "{print \$$1}"
 }
-alias f='field'
+# alias f='field'
 for n in {1..9}; alias f$n="field $n"
 alias -g R='; echo $?'
+alias -g IMG='*.(jpg|jpeg|png|gif)'
 
 alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
 fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
-fs='kitty @set-font-size'
+alias fs='kitty @set-font-size'
 
 dec(){
   echo "ibase=16; $@"|bc
@@ -527,7 +537,7 @@ available() {
     command -v "$1" &> /dev/null
 }
 
-# does not work with aliases, should bypass the alias
+# TODO: does not work with aliases, should bypass the alias
 executable() {
     [ -x "$(command -v $1)" ]
 }
@@ -535,6 +545,8 @@ executable() {
 installed() {
     pacman -Q $1 &> /dev/null
 }
+
+in_git(){ git rev-parse --is-inside-work-tree >/dev/null; }
 
 # Auto-ls
 chpwd() {
@@ -548,12 +560,7 @@ zman() {
 }
 
 mykeys() {
-    (
-    echo "ZSH";
-    ag 'bindkey|alias' --nonumbers ~/.zshrc --color;
-    echo "TMUX";
-    ag 'bind ' --nonumbers ~/.tmux.conf --color;
-    ) | less
+    ag '^bindkey' --nocolor --nonumbers ~/.zshrc --color;
 }
 
 # pi() {
@@ -621,9 +628,9 @@ pr() {
         sudo pacman -Rns $@
     else
         result=$(pacman -Qq | fzf --preview 'pacman -Qi {}')
+        [[ -n $result ]] && sudo pacman -Rns $result
     fi
 
-    [[ -n $result ]] && sudo pacman -Rns $result
 }
 compdef _pacman_installed_packages pr
 
@@ -665,7 +672,7 @@ ap() {
     if [[ -n $file ]]; then
         file=$(realpath $file)
         if [[ $(file --mime $file) != *"binary"* ]]; then
-            echo "$@" >> $file
+            echo "\n$@" >> $file
         else
             echo "Binary file, nothing appended"
             return 1
@@ -799,7 +806,7 @@ global-cd-widget() {
 zle -N global-cd-widget
 
 insert-widget() {
-    local target="$(locate -Ai -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
+    local target="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
     if [[ -n $target ]]; then
         LBUFFER+="\"$target\" "
         zle redisplay
@@ -842,6 +849,7 @@ edit-local-widget() {
 }
 zle -N edit-local-widget
 
+# locate -0 -r ^/etc -r ^/usr/lib -r ^/usr/local -r ^/usr/share -r /home/jonas
 edit-global-widget() {
     zle kill-buffer
     find_cmd="sudo rg --files -uu --no-messages"
@@ -1053,7 +1061,7 @@ export FZF_DEFAULT_COMMAND='rg --files -uu'
 export FZF_ALT_C_COMMAND="fd -td -tl"
 export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_OPTS="
---height=50% --reverse
+--height=35% --reverse
 --bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
 --color fg:-1,bg:-1,bg+:-1
 "
@@ -1164,3 +1172,7 @@ lfcd () {
     fi
 }
 bindkey -s 'o' 'lfcd\n'
+
+eval "$(direnv hook zsh)"
+eval "$(starship init zsh)"
+

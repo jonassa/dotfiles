@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/jonas/Dropbox'
+let g:netrw_dirhist_8='/home/jonas/Dropbox/0Data/wiki'
 let g:netrw_dirhist_7='/home/jonas/Dropbox/Backup/dotfiles'
 let g:netrw_dirhist_6='/home/jonas/Dropbox/Backup/dotfiles/nvim'
 let g:netrw_dirhist_5='/home/jonas/Dropbox/Backup'

@@ -26,7 +26,7 @@ configuration {
     kb-secondary-paste: "Control+v";
     kb-accept-entry: "Return";
     kb-accept-custom: "Control+Return";
-    kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q,Super+w,Super+e,Super+r";
+    kb-cancel: "Escape,Control+g,Control+q,Control+c,Alt-q,Super+q,Super+w,Super+e,Super+r,Super+Escape";
     kb-remove-to-eol: "";
     kb-row-tab: "Tab";
     kb-row-up: "ISO_Left_Tab,Up,Control+k,Control+p,Alt+k,Alt+p,Super+k,Super+p";
