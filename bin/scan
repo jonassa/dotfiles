@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+# subnet=$(ip -br addr | awk '/wlan|wlp/ {print $3}')
+subnet=$(ip route | awk 'END {print $1}')
+
+nmap -sT -O $subnet

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+service="${1}"
+
+if [[ -z $service ]]; then
+    service=$(systemctl list-unit-files | grep -v '@' | awk '{print $1}'| sed -n '/service/s/.service//p' | fzf --preview="systemctl status -n0 {}");
+fi
+if [[ -n $service ]]; then
+    systemctl status --no-pager $service;
+    echo -n "s> "
+    read -r command
+    while [ "$command" != "" ]; do
+        if [[ "$command" = "h" || $command = "?" ]]; then
+            printf "cat\nshow\nenable\ndisable\nstart\nstop\nrestart\nreload\n"
+        else
+            if [[ $command =~ enable|disable|start|stop|restart|reload ]]; then
+                eval "sudo systemctl $command $service" && systemctl status --no-pager $service
+            else
+                eval "systemctl $command $service" && systemctl status --no-pager $service
+            fi
+        fi
+        printf "%s> " "$prompt"
+        read -r command
+    done
+else
+    echo "No service selected" >&2 
+fi
+

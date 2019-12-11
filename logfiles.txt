@@ -1,0 +1,8 @@
+xorg
+pacman
+optimus-manager
+lightdm
+faillog
+arch-news.log
+tallylog
+wtmp

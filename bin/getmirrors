@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+# Using both reflector and rankmirrors is probably unnecessary
+# Reflector is able to fetch a new list itself, while rankmirrors may be better at ranking actual performance
+
+# Should be run as root
+if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
+
+tmp=$(mktemp)
+reflector --protocol https --latest 30 --number 20 --sort rate > $tmp
+rankmirrors -n 6 $tmp | sponge /etc/pacman.d/mirrorlist
