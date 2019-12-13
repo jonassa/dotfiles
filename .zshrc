@@ -1,15 +1,9 @@
 bindkey -e
 
-
-export MOOD='dark'
-export TERMGUICOLORS=1
-export VIM_COLORS='material-theme'
+MOOD=$(</tmp/mood)
 
 [[ $MOOD == 'light' ]] && alias fzf='fzf --color=light'
-# funker ikke...
-# [[ $MOOD == 'light' ]] && FZF_DEFAULT_OPTS+=' --color=light'
 
-# Farger for man
 if [[ $MOOD == light ]]; then
     MAN_SOMETHING=red
     MAN_HEADER=black
@@ -283,9 +277,7 @@ e() {
     else
         # local var=$( (env; declare -x; set) | sort -u | cut -d= -f1 | fzf)
         local var=$( declare | grep "^\S\+=" | cut -d= -f1 | fzf )
-        # echo ${(P)var}
-        var='$'$var
-        eval echo $var
+        eval echo \$$var
     fi
 }
 compdef _vars e
@@ -351,25 +343,31 @@ alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
 alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
-alias conf='nvim "$HOME/.config/nvim/init.vim" "$HOME/.zshrc" "/etc/profile" "$HOME/.xprofile" "$HOME/.config/xfce4/terminal/terminalrc" "$HOME/.config/kitty/kitty.conf"'
-alias bsconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
+CONFIG_FILES=(
+    "$HOME/.zshrc"
+    "$HOME/.profile"
+    "$HOME/.config/nvim/init.vim"
+    "$HOME/.xprofile"
+    "$HOME/.config/xfce4/terminal/terminalrc"
+    "$HOME/.config/kitty/kitty.conf"
+)
+alias conf='nvim $CONFIG_FILES'
+alias bspconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/Data/cmd/*'
+
+alias tm='tmux'
+alias tn='tmux new -s'
+alias tl='tmux ls'
+alias tk='tmux kill-session -t $(tmux list-sessions|fzf|cut -f1 -d:)'
+alias tq='tmux kill-server'
 ta() {
     if [[ -z $@ ]]; then
         local sessions=$(tmux list-sessions)
-        if [[ "$(echo \"$sessions\"|wc -l)" == "1" ]]; then
-            tmux attach
-        else
-            tmux attach -t $(echo $sessions|fzf|cut -f1 -d:)
-        fi
+        [[ -n $sessions ]] && tmux attach -t $(fzf -1 <<< $sessions|cut -f1 -d:)
     else
         tmux attach -t $@
     fi
 }
-alias tn='tmux new -s'
-alias tm='tmux'
-alias tl='tmux ls'
-alias tk='tmux kill-session -t $(tmux list-sessions|fzf|cut -f1 -d:)'
 
 alias pm='sudo pacman'
 alias pa='yay'
@@ -379,7 +377,7 @@ alias puu='yay'
 alias pd='yay -c'
 alias pls='yay -Ql'
 alias pf='pacman -F'
-alias po='yay -Qo'
+alias po='pacman -Qo'
 pt(){pactree $@}; compdef _pacman_installed_packages pt
 ptgraph() {
     local graph=$(mktemp -t XXX.dot)
@@ -1021,8 +1019,8 @@ bindkey '^U' parent-directory-widget
 bindkey '^[W' where-widget
 bindkey '^[|' bookmarks-widget
 
-# fzf-widgets
-bindkey '^[R' fzf-change-recent-directory
+# requires fzf-widgets
+# bindkey '^[R' fzf-change-recent-directory
 
 # Cycle dirstack, må være etter plugins
 bindkey '^[P' cycledleft
@@ -1060,16 +1058,16 @@ bindkey '^[q' kill-buffer
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='rg --files -uu'
-export FZF_ALT_C_COMMAND="fd -td -tl"
+export FZF_ALT_C_COMMAND="fd -H -td -tl"
 export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_OPTS="
 --height=35% --reverse
 --bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
 --color fg:-1,bg:-1,bg+:-1
+ --inline-info
 "
-# Using bat instead of highlight for preview
+# Using bat instead of highlight for file preview
 # --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}'
-
 
 export FZF_COMPLETION_TRIGGER=''
 bindkey '^T' fzf-completion
@@ -1142,7 +1140,7 @@ c() {
 # Bedre versjon av vg
 va() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  local file$(rg -l --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}")
+  local file=$(rg -l --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}")
   [[ -n $file ]] && vim "${file}"
 }
 
