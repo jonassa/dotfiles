@@ -20,7 +20,7 @@ Plug 'https://github.com/andreypopp/vim-colors-plain'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'https://github.com/drewtempelmeyer/palenight.vim'
-Plug 'https://github.com/tomasr/molokai'
+Plug 'https://github.com/fatih/molokai'
 Plug 'https://github.com/sts10/vim-pink-moon'
 Plug 'https://github.com/rakr/vim-two-firewatch'
 Plug 'https://github.com/tyrannicaltoucan/vim-quantum'
@@ -40,6 +40,7 @@ Plug 'https://github.com/relastle/bluewery.vim'
 " Plug 'crusoexia/vim-monokai'
 " Plug 'https://github.com/NLKNguyen/papercolor-theme'
 " Plug 'https://github.com/jlesquembre/base16-neovim'
+Plug 'https://github.com/flrnd/plastic.vim'
 "}}}
 
 Plug 'junegunn/fzf'
@@ -547,6 +548,7 @@ nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>t :Tags<CR>
 " nnoremap <silent> <leader>r :History<CR>
 " nnoremap <silent> <leader>l :Lines<CR>
+nnoremap <M-x> :Commands<CR>
 
 " Escape
 noremap  <M-q> <Esc>
@@ -625,6 +627,8 @@ inoremap <M-a> <Esc>A
 " inoremap <C-Q> <Esc>S
 
 " Insert mode completion
+inoremap <M-n> <C-N>
+inoremap <M-p> <C-P>
 imap <C-L> <C-X><C-L>
 imap <M-l> <C-X><C-L>
 imap <M-w> <C-X><C-F>
@@ -678,6 +682,12 @@ nnoremap <silent> <C-J> :TmuxNavigateDown<CR>
 nnoremap <silent> <C-K> :TmuxNavigateUp<CR>
 nnoremap <silent> <C-L> :TmuxNavigateRight<CR>
 
+" Save
+nnoremap <silent> <C-S> :up<CR>
+inoremap <silent> <C-s> <Esc>:up<CR>
+nnoremap <silent> <M-s> :up<CR>
+inoremap <silent> <M-s> <Esc>:up<CR>
+
 " Quickfix
 if executable('ag') | set grepprg=ag\ --vimgrep\ --silent | endif
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
@@ -706,11 +716,9 @@ nnoremap <silent> <expr> <leader>d &diff ? ':diffoff!<CR>:q<CR>' : ':Gdiffsplit<
 
 " substsitute
 nnoremap gs :%s/
-" substitute within visual selection
 xnoremap gs :s/
-" replace word
+" replace word/visual
 nnoremap gr :%s/\<<c-r><c-w>\>/
-" replace visual selection
 xnoremap gr y:%s/\<<c-r>"\>/
 " remove empty lines
 xnoremap R :g/^$/d<CR>
@@ -810,6 +818,24 @@ nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : buf
 nnoremap <silent> <M-2> :Vista!!<CR>
 nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
+nnoremap vv viw
+nnoremap VV viW
+
+nnoremap cd :Directories<CR>
+nnoremap mv :Rename<Space>
+nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
+nnoremap gB :ls!<CR>:b<Space>
+nnoremap vm :Marks<CR>
+
+xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
+xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
+
+xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
+xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
+
+nnoremap <m-v> ^vg_
+nnoremap <m-y> ^y$
+
 "{{{ Less useful keybindings
 nnoremap M zz
 nnoremap <C-E> zt
@@ -823,7 +849,11 @@ noremap gm M
 " Sudo write trick
 " cmap w!! w !sudo tee > /dev/null %
 cmap w!! SudoWrite
-
+nnoremap g/ :g//<CR>
+nnoremap g= =ap
+" nnoremap g= gg=G``
+nnoremap <M-a> mz=ap`z
+" nnoremap cd /\d\+<CR>gnc
 "}}}
 "}}}
 
@@ -1087,31 +1117,16 @@ let g:netrw_winsize = 25
 "   " make expression mapping to bd when last window in help buffer
 " endif
 
-nnoremap cd :Directories<CR>
-" nnoremap cd :call search('\d\+')<CR>gnc
-nnoremap cd /\d\+<CR>gnc
 "inc/decrement number
 nnoremap ± <C-A>
 nnoremap ¿ <C-X>
 
-nnoremap mv :Rename<Space>
-nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
-
-nnoremap g/ :g//<CR>
-nnoremap g= =ap
-" nnoremap g= gg=G``
-nnoremap <M-a> mz=ap`z
-
-" nice om du ikke har fzf
-nnoremap gB :ls!<CR>:b<Space>
-
-nnoremap vm :Marks<CR>
 let g:session_dir = '~/.vim/sessions'
 
 " exec 'nnoremap mk :mks! ' . g:session_dir . '/'
 " exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
 
-"vim session dir, fzf to resume
+"INFO: vim session dir, fzf to resume
 "autosave session when opened with -S, from v:this_session or SessionLoadPost autocmd
 "autosave session on vim exit
 "or map to update current session, taken from variable, or show mksession if
@@ -1122,7 +1137,7 @@ let g:session_dir = '~/.vim/sessions'
 " endif
 " Kan ikke bare sjekke variabelen, fordi den ikke er satt fÃ¸r vimrc kjÃ¸rer
 " virker det som
-" MÃ¥ bruke autocommand for Ã¥ sette en autocommand som lagrer ved VimLeave
+" Må bruke autocommand for å sette en autocommand som lagrer ved VimLeave
 " eller VimLeavePre
 " En mapping til en kommando som lagrer en ny session med et navn OG sÃ¸rger
 " for at den autosaves i den samme instansen av vim (evt. bare umiddelbart
@@ -1130,28 +1145,17 @@ let g:session_dir = '~/.vim/sessions'
 " https://vim.fandom.com/wiki/Go_away_and_come_back
 " https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
 
-nnoremap <silent> <C-S> :up<CR>
-inoremap <silent> <C-s> <Esc>:up<CR>
-nnoremap <silent> <M-s> :up<CR>
-inoremap <silent> <M-s> <Esc>:up<CR>
-
-nnoremap <M-x> :Commands<CR>
-
-" Shortcuts som egentlig ikke sparer deg for sÃ¥ mye, men som kan vÃ¦re nice,
-" med mindre du finner noe bedre Ã¥ bruke dem til
+" Shortcuts som egentlig ikke sparer deg for å mye, men som kan være nice,
+" med mindre du finner noe bedre å bruke dem til
 nmap cv civ
 nmap dv div
 " clone paragraph: yapP
 " change paragraph: cip
 " delete paragraph: dap
 
-nnoremap vv viw
-nnoremap vV viW
-nnoremap VV viW
 nnoremap vo <C-W>o
 
 " nnoremap vp vip
-" v som primÃ¦r-register
 nnoremap vd "vd
 nnoremap vD "vD
 nnoremap vdp "vdap
@@ -1177,16 +1181,6 @@ nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
 
 nnoremap zx :pclose<CR>
 
-
-inoremap <M-n> <C-N>
-inoremap <M-p> <C-P>
-
-xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
-xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
-
-xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
-xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
-
 " highlight last inserted text
 nnoremap gV `[v`]
 
@@ -1200,9 +1194,6 @@ inoremap <M-5> %
 " Insert space (hva gjÃ¸r du nÃ¥r du skal paste noe pÃ¥ slutten av en linje hvor
 " det ikke er mellomrom fra fÃ¸r?
 " nnoremap <m-s> a<Space><Esc>
-
-nnoremap <m-v> ^vg_
-nnoremap <m-y> ^y$
 
 " Alternate header/source using ctags --extras=+f
 " nnoremap <silent> gh :<c-u>tjump /^<c-r>=expand("%:t:r")<CR>\.\(<c-r>=join(get(
