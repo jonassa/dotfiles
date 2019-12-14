@@ -101,6 +101,9 @@ nnoremap <silent> - :FileBeagleBufferDir<CR>
 
 " EDITING {{{
 Plug 'wellle/targets.vim'
+let g:targets_quotes = '"d ''q `'
+let g:targets_pairs = '()b {}B []r <>'
+
 Plug 'https://github.com/tpope/vim-commentary'
 Plug 'https://github.com/machakann/vim-sandwich/'
 
@@ -118,10 +121,10 @@ Plug 'https://github.com/tommcdo/vim-exchange'
 
 Plug 'https://github.com/AndrewRadev/splitjoin.vim'
 nnoremap <M-J> J
-function! BreakHere()
+fun! BreakHere()
     s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
     call histdel("/", -1)
-endfunction
+endf
 nnoremap <silent> <M-K> :<C-u>call BreakHere()<CR>
 " Fallback to m-J/normal J
 let g:splitjoin_split_mapping = '<m-K>'
@@ -136,34 +139,6 @@ nnoremap gw :ArgWrap<CR>
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
-" From: https://github.com/junegunn/dotfiles/blob/master/vimrc
-let g:easy_align_delimiters = {
-\ '>': { 'pattern': '>>\|=>\|>' },
-\ '\': { 'pattern': '\\' },
-\ '/': { 'pattern': '//\+\|/\*\|\*/', 'delimiter_align': 'l', 'ignore_groups': ['!Comment'] },
-\ ']': {
-\     'pattern':       '\]\zs',
-\     'left_margin':   0,
-\     'right_margin':  1,
-\     'stick_to_left': 0
-\   },
-\ ')': {
-\     'pattern':       ')\zs',
-\     'left_margin':   0,
-\     'right_margin':  1,
-\     'stick_to_left': 0
-\   },
-\ 'f': {
-\     'pattern': ' \(\S\+(\)\@=',
-\     'left_margin': 0,
-\     'right_margin': 0
-\   },
-\ 'd': {
-\     'pattern': ' \ze\S\+\s*[;=]',
-\     'left_margin': 0,
-\     'right_margin': 0
-\   }
-\ }
 
 Plug 'https://github.com/jiangmiao/auto-pairs'
 let g:AutoPairsShortcutToggle = ''
@@ -230,12 +205,20 @@ let g:bullets_enabled_file_types = [
             \]
 
 Plug 'https://github.com/honza/vim-snippets'
+
+" ULTISNIPS {{{
 " Plug 'https://github.com/SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger="<m-e>"
+" let g:UltiSnipsJumpForwardTrigger="<M-f>"
+" let g:UltiSnipsJumpBackwardTrigger="<M-b>"
+" let g:UltiSnipsRemoveSelectModeMappings = 0
+nnoremap <m-e> :Snippets<CR>
+"}}}
 
 Plug 'dense-analysis/ale'
-nnoremap <silent> Ã¦ :ALENextWrap<CR>
-nnoremap <silent> Ã :ALEPreviousWrap<CR>
-nnoremap <silent> gÃ¦ :ALEDetail<CR>
+nnoremap <silent> æ :ALENextWrap<CR>
+nnoremap <silent> Æ :ALEPreviousWrap<CR>
+nnoremap <silent> gæ :ALEDetail<CR>
 " Disable ALE for certain languages and use coc instead
 let g:ale_linters = {
 \   'scala': [''],
@@ -243,49 +226,58 @@ let g:ale_linters = {
 "}}}
 
 " LSP {{{
+
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" CocInstall:
-    " coc-json
-    " coc-snippets
-    " coc-tag
-" let g:coc_global_extensions = ['coc-json', 'coc-snippets', 'coc-tag']
-" call coc#add_extension('coc-json', 'coc-snippets', 'coc-tag')
+
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'neoclide/coc-tag', {'do': 'yarn install --frozen-lockfile'}
-
-" Ikke bruk coc#_select_confirm (som confirmer uten at du har valgt noe)
-" coc#on_enter etter <CR>, sier ifra om noe greier om man vil formatte on input
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
-inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-imap <M-e> <Plug>(coc-snippets-expand)
-" vmap <C-j> <Plug>(coc-snippets-select) " Hva er dette?
-let g:coc_snippet_next = '<m-f>'
-let g:coc_snippet_prev = '<m-b>'
-
-set updatetime=300
-set nobackup
-set nowritebackup
+" let g:coc_global_extensions = ['coc-json', 'coc-snippets', 'coc-tag']
+" call coc#add_extension('coc-json', 'coc-snippets', 'coc-tag')
 
 " Highlight comments in CocConfig
 au FileType json syntax match Comment +\/\/.\+$+
+
+" Don't use coc#_select_confirm (performs completion when not asked to) 
+" Don't use coc#on_enter (only used for formatOnType)
+inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>\<CR>" : "\<C-g>u\<CR>"
 
 " TAB: next or tab or trigger completion
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-" S-TAB: previous or backspace
+" STAB: previous or backspace
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
+" Check whether cursor at word end
+fun! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+endf
+
+imap <M-e> <Plug>(coc-snippets-expand)
+let g:coc_snippet_next = '<m-f>'
+let g:coc_snippet_prev = '<m-b>'
+
+fun! CocOptions()
+    set updatetime=300
+    set nobackup
+    set nowritebackup
+endf
+
+" Help DWIM
+nnoremap <silent> <m-h> :call <SID>show_documentation()<CR>
+fun! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endf
+
 "}}}
 
 call plug#end()
@@ -299,8 +291,6 @@ set backspace=indent,eol,start
 set hidden
 set switchbuf=usetab
 set autoread
-
-" set iskeyword+=\-
 
 set tags=./tags;/
 
@@ -326,6 +316,8 @@ set directory=/var/tmp/nvim
 set undofile
 set undodir=/var/tmp/nvim
 
+call CocOptions()
+
 set number
 set relativenumber
 set title
@@ -348,13 +340,12 @@ set smarttab
 
 " set autoindent
 " set smartindent
-set cindent    " should override smartindent (and maybe autoindent)
+set cindent    " should override smartindent and autoindent
 set copyindent " use same type of indentation (spaces/tabs) as previous line
 
 set wrap
 set linebreak
-" align wrapped lines with indentation (may require tweaking)
-set breakindent
+set breakindent " align wrapped lines with indentation (may require tweaking)
 
 set nojoinspaces
 
@@ -381,9 +372,9 @@ set noshowmode
 set statusline=
 set statusline^=%{coc#status()}
 set statusline+=%#title#\ %f\ %*
-" set statusline+=%#function#\ %l
-" set statusline+=%2*[%n%M%R%W%q]%*\ 
-" set statusline+=%#question#%{getcwd()}\
+" Should have a trailing newline
+set statusline+=%2*[%n%M%R%W%q]%*\ 
+" set statusline+=%#question#%{getcwd()}\ " working directory
 set statusline+=\ %m
 set statusline+=%=
 " set statusline+=\ %{strftime('%R',getftime(expand('%')))}
@@ -412,9 +403,7 @@ let g:dark='palenight'
 let g:light='tempus_dawn'
 let g:fallback='gruvbox'
 
-" execute 'colorscheme ' . g:theme
-
-function! SetColors()
+fun! SetColors()
     if &termguicolors == 0
         let g:theme=g:fallback
     elseif exists('b:textfile')
@@ -433,7 +422,7 @@ function! SetColors()
         endif
     endif
     execute 'colorscheme ' . g:theme
-endfun
+endf
 
 let g:favorite_colors = [
             \ "material-theme",
@@ -455,7 +444,7 @@ let g:favorite_colors = [
             \ "seoul256-light",
             \ ]
 
-function! CRotate()
+fun! CRotate()
     let len_shortlist = len(g:favorite_colors)
     let current_scheme_idx = index(g:favorite_colors, g:colors_name)
     let next_scheme_idx = (current_scheme_idx - 1)
@@ -465,17 +454,17 @@ function! CRotate()
     let next_scheme = g:favorite_colors[next_scheme_idx]
     exec 'colorscheme '.next_scheme
     echo g:colors_name
-endfunction
+endf
 command! CRotate call CRotate()
 
 nnoremap <F3> :CRotate<CR>
 
-function! s:BG()
+fun! s:BG()
     let &background = ( &background == "dark" ? "light" : "dark" )
     if exists("g:colors_name")
         exe "colorscheme " . g:colors_name
     endif
-endfunction
+endf
 command! BG call s:BG()
 nnoremap <silent> <F5> :BG<CR>
 
@@ -525,6 +514,7 @@ aug END
 
 " Leader
 let g:mapleader=" "
+nnoremap <M-x> :Commands<CR>
 nnoremap <silent> <leader>q :qa!<CR>
 nnoremap <silent> <leader>Q :qa!<CR>
 nnoremap <silent> <leader>w :x!<CR>
@@ -533,7 +523,6 @@ nnoremap <silent> <leader>e :e!<CR>
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
 nnoremap <silent> <leader>C :Directories<CR>
 nnoremap <silent> <leader>n :enew<CR>
-nnoremap <silent> <leader><leader> :Vista finder<CR>
 nnoremap <silent> <leader><Tab> :Buffers<CR>
 nnoremap <silent> <C-R> :History:<CR>
 nnoremap <silent> <leader>: :Commands<CR>
@@ -545,10 +534,12 @@ nnoremap <silent> <leader>c :Colors<CR>
 nnoremap <silent> <leader>' :Marks<CR>
 nnoremap <leader>a :Ag<Space>
 nnoremap <leader>o :Locate<Space>
-" nnoremap <silent> <leader>t :Tags<CR>
 " nnoremap <silent> <leader>r :History<CR>
+nnoremap <silent> <leader><leader> :Vista finder<CR>
+nnoremap <silent> t :Tags<CR>
 " nnoremap <silent> <leader>l :Lines<CR>
-nnoremap <M-x> :Commands<CR>
+nnoremap <silent> S :Lines<CR>
+nnoremap <silent> <M-l> :Lines<CR>
 
 " Escape
 noremap  <M-q> <Esc>
@@ -569,7 +560,7 @@ noremap Ã¸ :
 " Repeat last command
 noremap \ @:
 
-" Movin around
+" Moving around
 noremap <silent> j gj
 noremap <silent> k gk
 noremap L $
@@ -592,6 +583,8 @@ nnoremap <C-D> <C-D>zz
 nnoremap <C-U> <C-U>zz
 nnoremap G Gzz
 map gb %
+xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
+xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
 
 " Redo
 nnoremap U <C-R>
@@ -658,6 +651,8 @@ xnoremap s /
 xnoremap S ?
 nnoremap <M-n> *
 nnoremap <M-N> #
+xnoremap <M-n> *
+xnoremap <M-N> #
 
 " Navigate changelist
 noremap , g;zvzz
@@ -739,9 +734,9 @@ nnoremap <M-g> <C-]>zz
 nnoremap <M-Q> q
 " record toggle
 let g:isRecording = get(g:, 'isRecording', 0)
-nnoremap <expr> <silent> Ã¥ g:isRecording ? 'q:let g:isRecording=0<CR>' : 'qq:let g:isRecording=1<CR>'
+nnoremap <expr> <silent> å g:isRecording ? 'q:let g:isRecording=0<CR>' : 'qq:let g:isRecording=1<CR>'
 " play macro
-nnoremap Ã @q
+nnoremap Å @q
 
 " visual indent
 xnoremap > >gv
@@ -757,6 +752,10 @@ xnoremap <M-I> <gv
 nnoremap <M-i> >>
 nnoremap <M-I> <<
 
+" autoindent
+nnoremap g= gg=G``
+nnoremap <M-a> mz=ap`z
+
 " toggle comment
 nmap <M-c> gcc
 xmap <M-c> gc
@@ -770,12 +769,16 @@ nmap <M-P> <Plug>yankstack_substitute_newer_paste
 xnoremap <C-C> "+y
 nnoremap <C-C> "+yy
 " paste from clipboard
-nnoremap cp <esc>"+p
-nnoremap cP <esc>"+P
+nnoremap <leader>p "+p
+" nnoremap cp <esc>"+p
+" nnoremap cP <esc>"+P
+" paste from numreg
+nnoremap cp "1p
+nnoremap cP "1P
 " paste from yank register
 nnoremap yp "0p
 nnoremap yP "0P
-" paste unnamed reg in insert mode, use C-Q to insert literal
+" paste unnamed reg in insert mode (use C-Q to insert literal)
 inoremap <C-v> <C-R>"
 
 " duplicate lines
@@ -792,15 +795,15 @@ nnoremap ch c^
 nnoremap yh y^
 
 " insert blank lines
-function! s:blankup(count) abort
+fun! s:blankup(count) abort
     put!=repeat(nr2char(10), a:count)
     ']
-endfunction
+endf
 
-function! s:blankdown(count) abort
+fun! s:blankdown(count) abort
     put =repeat(nr2char(10), a:count)
     '[
-endfunction
+endf
 
 nnoremap <silent> <M-o> :<c-u>call <SID>blankdown(v:count1)<CR>
 nnoremap <silent> <M-O> :<c-u>call <SID>blankup(v:count1)<CR>
@@ -818,76 +821,40 @@ nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : buf
 nnoremap <silent> <M-2> :Vista!!<CR>
 nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
-nnoremap vv viw
-nnoremap VV viW
-
 nnoremap cd :Directories<CR>
 nnoremap mv :Rename<Space>
 nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
 nnoremap gB :ls!<CR>:b<Space>
 nnoremap vm :Marks<CR>
 
+nnoremap vv viw
+nnoremap VV viW
+nnoremap <m-v> ^vg_
+nnoremap <m-y> ^y$
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
-xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
-xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
-
-nnoremap <m-v> ^vg_
-nnoremap <m-y> ^y$
+nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
 nnoremap M zz
 nnoremap <C-E> zt
 nnoremap <C-Y> zb
 nnoremap g<Space> a<Space><Esc>
+" nnoremap <m-s> a<Space><Esc>
 " nnoremap <silent> <M-Bar> :call Scratch()<CR>
-" go high, low, mid
 noremap gh H
 noremap gl L
 noremap gm M
-" Sudo write trick
 " cmap w!! w !sudo tee > /dev/null %
 cmap w!! SudoWrite
 nnoremap g/ :g//<CR>
-nnoremap g= =ap
-" nnoremap g= gg=G``
-nnoremap <M-a> mz=ap`z
 " nnoremap cd /\d\+<CR>gnc
-"}}}
-"}}}
 
-" COMPLETION {{{
-" TAB COMPLETION {{{
-" inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"   " accept and newline or newline
-" inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"      " next or tab
+"inc/decrement number
+nnoremap ± <C-A>
+nnoremap ¿ <C-X>
 
-" Shift tab gjÃ¸r ingenting nyttig default
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-D>" " previous or untab
-
-" function! Tab_Or_Complete()
-"     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-"         return "\<C-N>"
-"     elseif pumvisible()
-"         return "\<C-N>"
-"     else
-"         return "\<Tab>"
-"     endif
-" endfunction
-" inoremap <silent> <Tab> <C-R>=Tab_Or_Complete()<CR>
-
-" Enable omnicompletion
-" set omnifunc=syntaxcomplete#Complete
-"}}}
-
-" ULTISNIPS {{{
-" let g:UltiSnipsExpandTrigger="<m-e>"   " expand, bruk m-a for eol
-" " let g:UltiSnipsJumpForwardTrigger="<tab>"
-" " let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-" let g:UltiSnipsJumpForwardTrigger="<M-f>"
-" let g:UltiSnipsJumpBackwardTrigger="<M-b>"
-" let g:UltiSnipsRemoveSelectModeMappings = 0
-nnoremap <m-e> :Snippets<CR>
 "}}}
 "}}}
 
@@ -909,10 +876,106 @@ nnoremap <M-M> zr
 nnoremap <Bar> za
 "}}}
 
-" WORD OBJECTS {{{
-" targets.vim
-let g:targets_quotes = '"d ''q `'
-let g:targets_pairs = '()b {}B []r <>'
+" FUNCTIONS {{{
+let g:highlight_trailing = 0
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+highlight clear ExtraWhitespace
+fun! Highlight_trailing_whitespace()
+    if g:highlight_trailing == 0
+        let g:highlight_trailing = 1
+        highlight ExtraWhitespace ctermbg=red guibg=red
+        echom "Highlight trailing enabled"
+    else
+        let g:highlight_trailing = 0
+        highlight clear ExtraWhitespace
+        echom "Highlight trailing disabled"
+    endif
+endf
+map <silent> <F2> :call Highlight_trailing_whitespace()<CR>
+
+fun! Scratch()
+    if bufnr('Scratch') == -1
+        e Scratch
+        setlocal filetype=text nobuflisted bufhidden=hide buftype=nofile noswapfile
+        call SetColors()
+    elseif bufnr('%') == bufnr('Scratch')
+        b #
+    else
+        execute "b " . bufnr('Scratch')
+    endif
+endf
+
+fun! JustOneSpace()
+    s/\s\+/ /
+    normal ==
+endf
+command! JustOneSpace call JustOneSpace()
+nnoremap <silent> <M-Space> :JustOneSpace<CR>
+
+command! -nargs=? Filter let @x='' | execute 'g/<args>/y X' | enew | setlocal bt=nofile | put! x
+
+fun! Redir(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "No output"
+  else
+    enew | setlocal bt=nofile
+    silent put=message
+  endif
+endf
+command! -nargs=+ -complete=command Redir call Redir(<q-args>)
+
+command! BufOnly silent! execute "up|%bd|e#|bd#"
+
+fun! ToggleWorkingDir()
+    if !exists("g:project_dir")
+        let g:project_dir=getcwd()
+        cd %:p:h
+        pwd
+    else
+        execute "cd " . g:project_dir
+        unlet g:project_dir
+        pwd
+    endif
+endf
+
+fun! StripTrailingWhitespace()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endf
+
+" Run current file as script with optional arguments to pass to the script
+" TODO: add appropriate shebang for language, chmod +x, save and run
+" Separate command to shebang and make executable
+" A file will not be run with right interpreter, even with .py extension,
+" without shebang. Note: this should be used for files intended to be run as
+" executable scripts, and has the advantage that it is filetype agnostic. However, many
+" programs should not be executables, so there should be a different function
+" for running a file with the right interpreter
+command! -nargs=* R up|!% <args>
+nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
+" nnoremap <leader>r :w <CR>:!python %<CR>
+
+" Save, compile with gcc, and run binary
+map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
+" Save and run python interpreter on file
+map <F10> :w <CR>:!python %<CR>
+" Send selection to python interpreter
+xnoremap <leader>r :w !python<CR>
+
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+
+" Copy a register to the clipboard
+command! -nargs=1 Clip let @+=@<args>
+"}}}
 
 " SANDWICH {{{
 let g:sandwich_no_default_key_mappings = 1
@@ -947,113 +1010,8 @@ let g:sandwich#recipes += [
             \ {'buns': ['(', ')'], 'match_syntax': 1, 'nesting': 1, 'input': ['b']},
             \]
 "}}}
-"}}}
 
-" FUNCTIONS {{{
-let g:highlight_trailing = 0
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-highlight clear ExtraWhitespace
-function! Highlight_trailing_whitespace()
-    if g:highlight_trailing == 0
-        let g:highlight_trailing = 1
-        highlight ExtraWhitespace ctermbg=red guibg=red
-        echom "Highlight trailing enabled"
-    else
-        let g:highlight_trailing = 0
-        highlight clear ExtraWhitespace
-        echom "Highlight trailing disabled"
-    endif
-endfunction
-map <silent> <F2> :call Highlight_trailing_whitespace()<CR>
-
-function! Scratch()
-    if bufnr('Scratch') == -1
-        e Scratch
-        setlocal filetype=text nobuflisted bufhidden=hide buftype=nofile noswapfile
-        call SetColors()
-    elseif bufnr('%') == bufnr('Scratch')
-        b #
-    else
-        execute "b " . bufnr('Scratch')
-    endif
-endfunction
-
-function! JustOneSpace()
-    s/\s\+/ /
-    normal ==
-endfunction
-command! JustOneSpace call JustOneSpace()
-nnoremap <silent> <M-Space> :JustOneSpace<CR>
-
-command! -nargs=? Filter let @x='' | execute 'g/<args>/y X' | enew | setlocal bt=nofile | put! x
-
-function! Redir(cmd)
-  redir => message
-  silent execute a:cmd
-  redir END
-  if empty(message)
-    echoerr "No output"
-  else
-    enew | setlocal bt=nofile
-    silent put=message
-  endif
-endfunction
-command! -nargs=+ -complete=command Redir call Redir(<q-args>)
-
-command! BufOnly silent! execute "up|%bd|e#|bd#"
-
-function! ToggleWorkingDir()
-    if !exists("g:project_dir")
-        let g:project_dir=getcwd()
-        cd %:p:h
-        pwd
-    else
-        execute "cd " . g:project_dir
-        unlet g:project_dir
-        pwd
-    endif
-endfunction
-
-function! StripTrailingWhitespace()
-    " save last search & cursor position
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-" Run current file as script with optional arguments to pass to the script
-" TODO: add appropriate shebang for language, chmod +x, save and run
-" Separate command to shebang and make executable
-" A file will not be run with right interpreter, even with .py extension,
-" without shebang. Note: this should be used for files intended to be run as
-" executable scripts, and has the advantage that it is filetype agnostic. However, many
-" programs should not be executables, so there should be a different function
-" for running a file with the right interpreter
-command! -nargs=* R up|!% <args>
-nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
-" nnoremap <leader>r :w <CR>:!python %<CR>
-
-" Save, compile with gcc, and run binary
-map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
-" Save and run python interpreter on file
-map <F10> :w <CR>:!python %<CR>
-" Send selection to python interpreter
-xnoremap <leader>r :w !python<CR>
-
-" Copy a register to the clipboard
-command! -nargs=1 Clip let @+=@<args>
-"}}}
-
-" MACROS {{{
-" Insert plugin
-let @p="\"+pi'kDA'IPlug 0"
-"}}}
-
-"{{{ FZF
+" FZF {{{
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_nvim_statusline = 0
 let g:fzf_buffers_jump = 1
@@ -1117,60 +1075,26 @@ let g:netrw_winsize = 25
 "   " make expression mapping to bd when last window in help buffer
 " endif
 
-"inc/decrement number
-nnoremap ± <C-A>
-nnoremap ¿ <C-X>
-
-let g:session_dir = '~/.vim/sessions'
-
-" exec 'nnoremap mk :mks! ' . g:session_dir . '/'
-" exec 'nnoremap mo :so ' . g:session_dir. '/<C-D>'
-
-"INFO: vim session dir, fzf to resume
-"autosave session when opened with -S, from v:this_session or SessionLoadPost autocmd
-"autosave session on vim exit
-"or map to update current session, taken from variable, or show mksession if
-"there is no current session
-" :nmap <F2> :wa<Bar>exe "mksession! " . v:this_session<CR>:so ~/sessions/
-" if exists("v:this_session")
-"     echom v:this_session
-" endif
-" Kan ikke bare sjekke variabelen, fordi den ikke er satt fÃ¸r vimrc kjÃ¸rer
-" virker det som
-" Må bruke autocommand for å sette en autocommand som lagrer ved VimLeave
-" eller VimLeavePre
-" En mapping til en kommando som lagrer en ny session med et navn OG sÃ¸rger
-" for at den autosaves i den samme instansen av vim (evt. bare umiddelbart
-" source sessionen for Ã¥ trigge autocmden)
-" https://vim.fandom.com/wiki/Go_away_and_come_back
-" https://stackoverflow.com/questions/5142099/how-to-auto-save-vim-session-on-quit-and-auto-reload-on-start-including-split-wi
-
-" Shortcuts som egentlig ikke sparer deg for å mye, men som kan være nice,
-" med mindre du finner noe bedre å bruke dem til
 nmap cv civ
 nmap dv div
 " clone paragraph: yapP
 " change paragraph: cip
 " delete paragraph: dap
 
-nnoremap vo <C-W>o
+" nnoremap vo <C-W>o
 
 " nnoremap vp vip
-nnoremap vd "vd
-nnoremap vD "vD
-nnoremap vdp "vdap
-nnoremap vp "vp
-nnoremap vP "vP
-nnoremap vy "vy
-nnoremap vY "vY
+" nnoremap vd "vd
+" nnoremap vD "vD
+" nnoremap vdp "vdap
+" nnoremap vp "vp
+" nnoremap vP "vP
+" nnoremap vy "vy
+" nnoremap vY "vY
 
 " Zappend/Zelect
-nnoremap zd "Zdd
-nnoremap zp "zp:let @z=''<CR>
-
-nnoremap <leader>p "+p
-nnoremap cp "1p
-nnoremap cP "1P
+" nnoremap zd "Zdd
+" nnoremap zp "zp:let @z=''<CR>
 
 " Fetch lines, probably not very useful
 " nnoremap + :<C-u>+m.<left><left>
@@ -1179,31 +1103,15 @@ nnoremap cP "1P
 inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
 nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
 
-nnoremap zx :pclose<CR>
+" nnoremap zx :pclose<CR>
 
 " highlight last inserted text
 nnoremap gV `[v`]
-
-inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 
 inoremap <M-2> @
 inoremap <M-3> #
 inoremap <M-4> $
 inoremap <M-5> %
-
-" Insert space (hva gjÃ¸r du nÃ¥r du skal paste noe pÃ¥ slutten av en linje hvor
-" det ikke er mellomrom fra fÃ¸r?
-" nnoremap <m-s> a<Space><Esc>
-
-" Alternate header/source using ctags --extras=+f
-" nnoremap <silent> gh :<c-u>tjump /^<c-r>=expand("%:t:r")<CR>\.\(<c-r>=join(get(
-"             \ {
-"             \ 'c':   ['h'],
-"             \ 'cpp': ['h','hpp'],
-"             \ 'h':   ['c','cpp'],
-"             \ 'hpp': ['cpp']
-"             \ },
-"             \  expand("%:e"), ['UNKNOWN EXTENSION']), '\\\|')<CR>\)$<CR>
 
 " Does not use tags, only finds files in same directory, does not check if
 " file exists
@@ -1224,7 +1132,7 @@ function Header()
     else
         echo "Not a c or h file"
     endif
-endfunction
+endf
 command! Header call Header()
 nnoremap <silent> gh :Header<CR>
 
@@ -1234,7 +1142,7 @@ nnoremap <silent> <leader>2 :2tabnext<CR>
 nnoremap <silent> <leader>3 :3tabnext<CR>
 nnoremap <silent> <leader>4 :4tabnext<CR>
 
-function! MoveOrCreateWindow(key) abort
+fun! MoveOrCreateWindow(key) abort
     let t:curwin = winnr()
     exec "wincmd ".a:key
     if (t:curwin == winnr())
@@ -1245,7 +1153,7 @@ function! MoveOrCreateWindow(key) abort
         endif
         exec "wincmd ".a:key
     endif
-endfunction
+endf
 
 nnoremap <silent> <M-Left> :call MoveOrCreateWindow('h')<CR>
 nnoremap <silent> <M-Down> :call MoveOrCreateWindow('j')<CR>
@@ -1258,36 +1166,20 @@ nnoremap <silent> <S-Down> 10<C-w>-
 nnoremap <silent> <S-Left> 10<C-w><
 nnoremap <silent> <S-Right> 10<C-w>>
 
-
-nnoremap <C-W><C-I> <C-W>}
-
-nnoremap <silent> t :Tags<CR>
-nnoremap <silent> <M-l> :Lines<CR>
-nnoremap <silent> gl :Lines<CR>
-nnoremap <silent> S :Lines<CR>
-
 "}}}
 
 " COC TESTING {{{
-" nmap <silent> [g <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" kan vÃ¦re alegotodefinition er bedre
+" Compare: ALENext
+" diagnostic.displayByAle": true,
+" nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
+" nmap <silent> Ã <Plug>(coc-diagnostic-prev)
+
+" Compare: ALEGoToDefinition
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
-" gjÃ¸r det samme som gd pÃ¥ en definisjon (gjorde hvertfall det for scala)
 " nmap <silent> <leader>r <Plug>(coc-references)
-
-" Documentation DWIM
-nnoremap <silent> <m-h> :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
 
 " nmap <m-cr>  <Plug>(coc-codeaction)
 nmap <c-space> <Plug>(coc-fix-current)
@@ -1300,24 +1192,17 @@ omap af <Plug>(coc-funcobj-a)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
-" set fdm=manual
-" Use `:Fold` to fold current buffer
 " Fold comment, imports, region
+" set fdm=manual
 " command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" use `:OR` for organize import of current buffer
+" Organize imports
 " command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-
 
 nnoremap <silent> <leader>ll  :<C-u>CocList<CR>
 nnoremap <silent> <leader>lc  :<C-u>CocCommand<CR>
 nnoremap <silent> <leader>lo  :<C-u>CocList outline<CR>
 nnoremap <silent> <leader>ls  :<C-u>CocList -I symbols<CR>
 " nnoremap <silent> <leader>o  :<C-u>CocList diagnostics<CR>
-
-" nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
-" coc uses ALE so coc-diagnostic-next and alenext have the same effect
-    " diagnostic.displayByAle": true,
-" nmap <silent> Ã <Plug>(coc-diagnostic-prev)
 
 " <Plug>(coc-diagnostic-info)
 " <Plug>(coc-diagnostic-next)
