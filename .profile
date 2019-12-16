@@ -16,20 +16,19 @@
 # su - creates a login shell which inherits nothing (but .zshrc )
 # neither sudo nor su -c 'command' are interactive, and so do not get any aliases or functions from .zshrc
 
-# duplicates? maybe because zsh is used to run the profile on login?
-# pathadd() {
-#     if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-#         PATH="${PATH:+$PATH:}$1"
-#     fi
-# }
-
-# pathadd "${HOME}/.local/bin"
-# pathadd "${HOME}/.npm-global/bin"
-# pathadd "${HOME}/.gem/ruby/2.5.0/bin"
-# pathadd "${HOME}/.cargo/bin"
-# pathadd "${HOME}/bin"
-
-# unset pathadd
+# duplicates are not from here...
+# stuff in /etc/profile.d...
+pathadd() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="${PATH:+$PATH:}$1"
+    fi
+}
+pathadd "${HOME}/.local/bin"
+pathadd "${HOME}/.npm-global/bin"
+pathadd "${HOME}/.gem/ruby/2.5.0/bin"
+pathadd "${HOME}/.cargo/bin"
+pathadd "${HOME}/bin"
+unset pathadd
 
 export EDITOR=nvim
 export VISUAL=nvim
@@ -39,4 +38,4 @@ export SYSTEMD_EDITOR=nvim
 export JAVA_HOME=/usr/lib/jvm/default # Scala metals
 export MOOD=dark; echo dark > /tmp/mood
 export VIM_BG='dark'
-export VIM_COLORS='material-theme'
+# export VIM_COLORS='material-theme'
