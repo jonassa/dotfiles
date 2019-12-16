@@ -140,6 +140,7 @@ Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
+" TODO: problem with backspace consuming the next newline on comments
 Plug 'https://github.com/jiangmiao/auto-pairs'
 let g:AutoPairsShortcutToggle = ''
 let g:AutoPairsShortcutBackInsert = ''
@@ -147,10 +148,6 @@ let g:AutoPairsMapCh = 0
 let g:AutoPairsMoveCharacter = ''
 let g:AutoPairsShortcutJump = ''
 let g:AutoPairsShortcutFastWrap = ''
-
-" Bedre? Nei fucker med parantes pÃ¥ ny linje Edit: kan ha vÃ¦rt pga.
-" nocindent/autoindent
-" Plug 'https://github.com/Raimondi/delimitMate'
 
 Plug 'https://github.com/AndrewRadev/sideways.vim'
 " disse funker bare for lister/argumenter?
@@ -411,7 +408,7 @@ fun! SetColors()
         set background=light
     elseif !empty($VIM_COLORS)
         let g:theme=$VIM_COLORS
-        execute 'set background= ' . $VIM_BG
+        execute 'set background=' . $VIM_BG
     else
         if $MOOD == "light"
             let g:theme=g:light
@@ -505,7 +502,7 @@ au FileType text let b:textfile = 1
 au BufEnter * call SetColors()
 
 " Override formatoptions, which are set by ftplugins
-au vimrc BufEnter * set formatoptions=jncrqlo
+au vimrc BufEnter * set formatoptions=jncrql
 
 aug END
 "}}}
@@ -573,8 +570,8 @@ xnoremap <silent> J :<C-u>keepjumps normal! gv}<CR>
 xnoremap <silent> K :<C-u>keepjumps normal! gv{<CR>
 onoremap J }
 onoremap K {
-nnoremap <M-j> 4gjzz
-nnoremap <M-k> 4gkzz
+nnoremap <M-j> 4gj
+nnoremap <M-k> 4gk
 nmap gj ]]
 nmap gk [[
 nnoremap <C-F> <C-F>zz
@@ -646,9 +643,9 @@ cnoremap <M-:> <Down>
 
 " Searching
 nnoremap s /
-nnoremap S ?
+" nnoremap S ?
 xnoremap s /
-xnoremap S ?
+" xnoremap S ?
 nnoremap <M-n> *
 nnoremap <M-N> #
 xnoremap <M-n> *
@@ -718,7 +715,9 @@ xnoremap gr y:%s/\<<c-r>"\>/
 " remove empty lines
 xnoremap R :g/^$/d<CR>
 " make one empty line between each paragraph
-xnoremap Q :s/\n\{3,\}/\r\r<CR>
+" xnoremap Q :s/\n\{3,\}/\r\r<CR>
+" Apply macro linewise
+xnoremap <silent> Q :norm @q<cr>
 
 " page up down
 nnoremap <C-F> <C-F>zz
@@ -761,6 +760,13 @@ nmap <M-c> gcc
 xmap <M-c> gc
 nmap <M-C> :t-1<CR>gccj
 
+" yank to end of line
+map Y y$
+"d/c/y to start of line
+nnoremap dh d^
+nnoremap ch c^
+nnoremap yh y^
+
 call yankstack#setup()
 nmap <M-p> <Plug>yankstack_substitute_older_paste
 nmap <M-P> <Plug>yankstack_substitute_newer_paste
@@ -782,17 +788,12 @@ nnoremap yP "0P
 inoremap <C-v> <C-R>"
 
 " duplicate lines
-" nnoremap <M-D> :t-1<CR>
+nnoremap dP :t-1<CR>
 nnoremap + :t-1<CR>
 xnoremap P :t-1<CR>
-xnoremap + :t-1<CR>
 
-" yank to end of line
-map Y y$
-"d/c/y to start of line
-nnoremap dh d^
-nnoremap ch c^
-nnoremap yh y^
+" delete line
+nnoremap <M-D> dd
 
 " insert blank lines
 fun! s:blankup(count) abort
@@ -834,6 +835,7 @@ nnoremap <m-y> ^y$
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
+" Preview tag under cursor
 nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
@@ -843,10 +845,9 @@ nnoremap <C-Y> zb
 nnoremap g<Space> a<Space><Esc>
 " nnoremap <m-s> a<Space><Esc>
 " nnoremap <silent> <M-Bar> :call Scratch()<CR>
-noremap gh H
-noremap gl L
-noremap gm M
-" cmap w!! w !sudo tee > /dev/null %
+" noremap gh H
+" noremap gl L
+" noremap gm M
 cmap w!! SudoWrite
 nnoremap g/ :g//<CR>
 " nnoremap cd /\d\+<CR>gnc
@@ -854,6 +855,12 @@ nnoremap g/ :g//<CR>
 "inc/decrement number
 nnoremap ± <C-A>
 nnoremap ¿ <C-X>
+
+inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
+nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
+
+nnoremap <M-n> *Ncgn
+nnoremap gl ^yg_
 
 "}}}
 "}}}
@@ -960,8 +967,9 @@ endf
 " executable scripts, and has the advantage that it is filetype agnostic. However, many
 " programs should not be executables, so there should be a different function
 " for running a file with the right interpreter
-command! -nargs=* R up|!% <args>
-nnoremap <leader>r :R<CR> " Requires shebang and executable (run file as script)
+command! -nargs=* R up|!%:p <args>
+" Requires shebang and executable (run file as script)
+nnoremap <leader>r :R<CR>
 " nnoremap <leader>r :w <CR>:!python %<CR>
 
 " Save, compile with gcc, and run binary
@@ -1070,43 +1078,98 @@ let g:netrw_winsize = 25
 
 " TESTING AREA {{{
 
-" if winnr('$') == 1
-"   " only one window
-"   " make expression mapping to bd when last window in help buffer
-" endif
+" FREE KEYS {{{
 
-nmap cv civ
-nmap dv div
-" clone paragraph: yapP
-" change paragraph: cip
-" delete paragraph: dap
+" nnoremap <C-<>
+" nnoremap <C-E>
+" nnoremap <C-E>
+" nnoremap <C-Y>
+" nnoremap <M-0>
+" nnoremap <M-S>
+" nnoremap <M-Z>
 
-" nnoremap vo <C-W>o
+" inoremap <C-H> 
+" inoremap <C-J>
 
-" nnoremap vp vip
-" nnoremap vd "vd
-" nnoremap vD "vD
-" nnoremap vdp "vdap
-" nnoremap vp "vp
-" nnoremap vP "vP
-" nnoremap vy "vy
-" nnoremap vY "vY
+" nnoremap +
+" nnoremap -
+" nnoremap \
+" nnoremap ^ 
+" nnoremap _
+" nnoremap |
+" nnoremap }
+" nnoremap ¨ 
+" nnoremap cd
+" nnoremap cm
+" nnoremap co
+" nnoremap cp
+" nnoremap cq
+" nnoremap cr
+" nnoremap cs
+" nnoremap cu
+" nnoremap cv
+" nnoremap cx
+" nnoremap cy
+" nnoremap cz
+" nnoremap dc
+" nnoremap dm
+" nnoremap do
+" nnoremap dp
+" nnoremap dq
+" nnoremap dr
+" nnoremap ds
+" nnoremap du
+" nnoremap dv
+" nnoremap dx
+" nnoremap dy
+" nnoremap dz
+" nnoremap gH
+" nnoremap gI
+" nnoremap gm
+" nnoremap go
+" nnoremap gt
+" nnoremap gV
+" nnoremap gw
+" nnoremap gz
+" nnoremap M
+" nnoremap mv
+" nnoremap vc
+" nnoremap vd
+" nnoremap vm
+" nnoremap vo
+" nnoremap vp
+nnoremap vp yapP
+" nnoremap vq
+" nnoremap vr
+" nnoremap vx
+" nnoremap vy
+" nnoremap yc
+" nnoremap yd
+" nnoremap ym
+" nnoremap yo
+" nnoremap yp
+" nnoremap yq
+" nnoremap yr
+" nnoremap yu
+" nnoremap yv
+" nnoremap yx
+" nnoremap yz
+" nnoremap Z
+" nnoremap zd
+" nnoremap zp
+" nnoremap zs
+" nnoremap zx :pclose<CR>
+
+"}}}
+
 
 " Zappend/Zelect
 " nnoremap zd "Zdd
 " nnoremap zp "zp:let @z=''<CR>
 
-" Fetch lines, probably not very useful
+" Fetch lines
 " nnoremap + :<C-u>+m.<left><left>
 " nnoremap - :<C-u>-m.<left><left>
-
-inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
-nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
-
-" nnoremap zx :pclose<CR>
-
-" highlight last inserted text
-nnoremap gV `[v`]
 
 inoremap <M-2> @
 inoremap <M-3> #
@@ -1165,6 +1228,14 @@ nnoremap <silent> <S-Up> 10<C-w>+
 nnoremap <silent> <S-Down> 10<C-w>-
 nnoremap <silent> <S-Left> 10<C-w><
 nnoremap <silent> <S-Right> 10<C-w>>
+
+" if winnr('$') == 1
+"   " only one window
+"   " make expression mapping to bd when last window in help buffer
+" endif
+
+
+noremap <m-e> g_
 
 "}}}
 
