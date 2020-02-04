@@ -7,7 +7,7 @@ line=$(nmcli -colors yes -f IN-USE,BSSID,SSID,CHAN,RATE,SIGNAL,BARS,SECURITY dev
 # fi
 
 if grep '^\*' <<< $line; then
-    nmcli device disconnect wlp2s0 &
+    nmcli device disconnect wlan0 &
     exit 0
 fi
 
