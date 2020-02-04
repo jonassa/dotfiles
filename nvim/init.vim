@@ -35,12 +35,20 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
 Plug 'https://github.com/relastle/bluewery.vim'
-" Plug 'trevordmiller/nova-vim'
-" Plug 'https://github.com/nightsense/snow'
 " Plug 'crusoexia/vim-monokai'
-" Plug 'https://github.com/NLKNguyen/papercolor-theme'
 " Plug 'https://github.com/jlesquembre/base16-neovim'
 Plug 'https://github.com/flrnd/plastic.vim'
+Plug 'srcery-colors/srcery-vim'
+Plug 'https://github.com/sainnhe/gruvbox-material'
+Plug 'https://github.com/sainnhe/edge'
+let g:edge_disable_italic_comment = 1
+Plug 'https://github.com/sainnhe/neon'
+let g:neon_disable_italic_comment = 1
+Plug 'https://github.com/sainnhe/gruvbox-material'
+let g:gruvbox_material_disable_italic_comment = 1
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_enable_bold = 1
+Plug 'https://github.com/lifepillar/vim-solarized8'
 "}}}
 
 Plug 'junegunn/fzf'
@@ -82,9 +90,9 @@ let g:vista_stay_on_open = 0
 let g:vista_icon_indent = [" » ", "\t"]
 let g:vista_default_executive = 'ctags'
 let g:vista_executive_for = {
-  \ 'scala': 'coc',
-  \ 'vim': 'ctags',
-  \ }
+            \ 'scala': 'coc',
+            \ 'vim': 'ctags',
+            \ }
 let g:vista_fzf_preview = ['right:50%']
 let g:vista#renderer#enable_icon = 0
 
@@ -396,7 +404,7 @@ if has('termguicolors')
     endif
 endif
 
-let g:dark='palenight'
+let g:dark='neon'
 let g:light='tempus_dawn'
 let g:fallback='gruvbox'
 
@@ -537,6 +545,9 @@ nnoremap <silent> t :Tags<CR>
 " nnoremap <silent> <leader>l :Lines<CR>
 nnoremap <silent> S :Lines<CR>
 nnoremap <silent> <M-l> :Lines<CR>
+nnoremap <silent> <leader>ii :PlugInstall<CR>
+nnoremap <silent> <leader>iu :PlugUpdate<CR>
+nnoremap <silent> <leader>ic :PlugClean!<CR>
 
 " Escape
 noremap  <M-q> <Esc>
@@ -742,8 +753,6 @@ xnoremap > >gv
 xnoremap < <gv
 xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv
-xnoremap <M-h> <gv
-xnoremap <M-l> >gv
 xnoremap <M-i> >gv
 xnoremap <M-I> <gv
 
@@ -983,6 +992,15 @@ inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype
 
 " Copy a register to the clipboard
 command! -nargs=1 Clip let @+=@<args>
+
+" Paste whatever is in the clipboard as a new line
+fun! PutLine()
+let @+ = substitute(@+, '\n*$', '\n', 'g')
+normal "+p
+endf
+command! -nargs=0 PutLine call PutLine()
+nnoremap <leader>p :PutLine<CR>
+
 "}}}
 
 " SANDWICH {{{
@@ -1076,169 +1094,6 @@ let g:netrw_liststyle = 3
 let g:netrw_winsize = 25
 "}}}
 
-" TESTING AREA {{{
-
-" FREE KEYS {{{
-
-" nnoremap <C-<>
-" nnoremap <C-E>
-" nnoremap <C-E>
-" nnoremap <C-Y>
-" nnoremap <M-0>
-" nnoremap <M-S>
-" nnoremap <M-Z>
-
-" inoremap <C-H> 
-" inoremap <C-J>
-
-" nnoremap +
-" nnoremap -
-" nnoremap \
-" nnoremap ^ 
-" nnoremap _
-" nnoremap |
-" nnoremap }
-" nnoremap ¨ 
-" nnoremap cd
-" nnoremap cm
-" nnoremap co
-" nnoremap cp
-" nnoremap cq
-" nnoremap cr
-" nnoremap cs
-" nnoremap cu
-" nnoremap cv
-" nnoremap cx
-" nnoremap cy
-" nnoremap cz
-" nnoremap dc
-" nnoremap dm
-" nnoremap do
-" nnoremap dp
-" nnoremap dq
-" nnoremap dr
-" nnoremap ds
-" nnoremap du
-" nnoremap dv
-" nnoremap dx
-" nnoremap dy
-" nnoremap dz
-" nnoremap gH
-" nnoremap gI
-" nnoremap gm
-" nnoremap go
-" nnoremap gt
-" nnoremap gV
-" nnoremap gw
-" nnoremap gz
-" nnoremap M
-" nnoremap mv
-" nnoremap vc
-" nnoremap vd
-" nnoremap vm
-" nnoremap vo
-" nnoremap vp
-nnoremap vp yapP
-" nnoremap vq
-" nnoremap vr
-" nnoremap vx
-" nnoremap vy
-" nnoremap yc
-" nnoremap yd
-" nnoremap ym
-" nnoremap yo
-" nnoremap yp
-" nnoremap yq
-" nnoremap yr
-" nnoremap yu
-" nnoremap yv
-" nnoremap yx
-" nnoremap yz
-" nnoremap Z
-" nnoremap zd
-" nnoremap zp
-" nnoremap zs
-" nnoremap zx :pclose<CR>
-
-"}}}
-
-
-" Zappend/Zelect
-" nnoremap zd "Zdd
-" nnoremap zp "zp:let @z=''<CR>
-
-" Fetch lines
-" nnoremap + :<C-u>+m.<left><left>
-" nnoremap - :<C-u>-m.<left><left>
-
-inoremap <M-2> @
-inoremap <M-3> #
-inoremap <M-4> $
-inoremap <M-5> %
-
-" Does not use tags, only finds files in same directory, does not check if
-" file exists
-function Header()
-    let l:ext = expand('%:e') 
-    if l:ext == 'c'
-        if filereadable(expand('%:r') . '.h')
-            :e %:r.h
-        else
-            echo "No corresponding header"
-        endif
-    elseif l:ext == 'h'
-        if filereadable(expand('%:r') . '.c')
-            :e %:r.c
-        else
-            echo "No corresponding source"
-        endif
-    else
-        echo "Not a c or h file"
-    endif
-endf
-command! Header call Header()
-nnoremap <silent> gh :Header<CR>
-
-" TODO: make new tab if error
-nnoremap <silent> <leader>1 :1tabnext<CR>
-nnoremap <silent> <leader>2 :2tabnext<CR>
-nnoremap <silent> <leader>3 :3tabnext<CR>
-nnoremap <silent> <leader>4 :4tabnext<CR>
-
-fun! MoveOrCreateWindow(key) abort
-    let t:curwin = winnr()
-    exec "wincmd ".a:key
-    if (t:curwin == winnr())
-        if (match(a:key,'[jk]'))
-            wincmd v
-        else
-            wincmd s
-        endif
-        exec "wincmd ".a:key
-    endif
-endf
-
-nnoremap <silent> <M-Left> :call MoveOrCreateWindow('h')<CR>
-nnoremap <silent> <M-Down> :call MoveOrCreateWindow('j')<CR>
-nnoremap <silent> <M-Up> :call MoveOrCreateWindow('k')<CR>
-nnoremap <silent> <M-Right> :call MoveOrCreateWindow('l')<CR>
-
-" Resize window
-nnoremap <silent> <S-Up> 10<C-w>+
-nnoremap <silent> <S-Down> 10<C-w>-
-nnoremap <silent> <S-Left> 10<C-w><
-nnoremap <silent> <S-Right> 10<C-w>>
-
-" if winnr('$') == 1
-"   " only one window
-"   " make expression mapping to bd when last window in help buffer
-" endif
-
-
-noremap <m-e> g_
-
-"}}}
-
 " COC TESTING {{{
 
 " Compare: ALENext
@@ -1301,5 +1156,147 @@ nnoremap <leader>lr <Plug>(coc-rename)
 " <Plug>(coc-range-select-backward)
 " <Plug>(coc-funcobj-i)
 " <Plug>(coc-funcobj-a)
+"}}}
+
+" TESTING AREA {{{
+
+" FREE KEYS {{{
+
+" nnoremap <C-<>
+" nnoremap <C-E>
+" nnoremap <C-E>
+" nnoremap <C-Y>
+" nnoremap <M-0>
+" nnoremap <M-S>
+" nnoremap <M-Z>
+
+" inoremap <C-H> 
+" inoremap <C-J>
+
+" nnoremap +
+" nnoremap -
+" nnoremap \
+" nnoremap ^ 
+" nnoremap _
+" nnoremap |
+" nnoremap }
+" nnoremap ¨ 
+" nnoremap cd
+" nnoremap cm
+" nnoremap co
+" nnoremap cq
+" nnoremap cr
+" nnoremap cs
+" nnoremap cu
+" nnoremap cv
+" nnoremap cx
+" nnoremap cy
+" nnoremap cz
+" nnoremap dc
+" nnoremap dm
+" nnoremap do
+" nnoremap dp
+" nnoremap dq
+" nnoremap dr
+" nnoremap ds
+" nnoremap du
+" nnoremap dv
+" nnoremap dx
+" nnoremap dy
+" nnoremap dz
+" nnoremap gH
+" nnoremap gI
+" nnoremap gm
+" nnoremap go
+" nnoremap gt
+" nnoremap gV
+" nnoremap gw
+" nnoremap gz
+" nnoremap M
+" nnoremap mv
+" nnoremap vc
+" nnoremap vd
+" nnoremap vm
+" nnoremap vo
+nnoremap vp yapP
+" nnoremap vq
+" nnoremap vr
+" nnoremap vx
+" nnoremap vy
+" nnoremap yc
+" nnoremap yd
+" nnoremap ym
+" nnoremap yo
+" nnoremap yp
+" nnoremap yq
+" nnoremap yr
+" nnoremap yu
+" nnoremap yv
+" nnoremap yx
+" nnoremap yz
+" nnoremap Z
+" nnoremap zd
+" nnoremap zp
+" nnoremap zs
+" nnoremap zx :pclose<CR>
+
+"}}}
+
+
+" Zappend/Zelect
+" nnoremap zd "Zdd
+" nnoremap zp "zp:let @z=''<CR>
+
+" Fetch lines
+" nnoremap + :<C-u>+m.<left><left>
+" nnoremap - :<C-u>-m.<left><left>
+
+inoremap <M-2> @
+inoremap <M-3> #
+inoremap <M-4> $
+inoremap <M-5> %
+
+" Does not use tags, only finds files in same directory, does not check if
+" file exists
+" Edit: chooses c or cpp globally per session
+function Header()
+    let l:ext = expand('%:e') 
+    if &filetype =~ "c|cpp"
+        let g:c_ext = &filetype
+    endif
+    if l:ext == g:c_ext
+        if filereadable(expand('%:r') . '.h')
+            :e %:r.h
+        else
+            echo "No corresponding header"
+        endif
+    elseif l:ext == 'h'
+        if filereadable(expand('%:r') . '.' . g:c_ext)
+            execute ":e %:r." . g:c_ext
+        else
+            echo "No corresponding source"
+        endif
+    else
+        echo "Not a c, cpp or h file"
+    endif
+endf
+command! Header call Header()
+nnoremap <silent> gh :Header<CR>
+
+" TODO: make new tab if error
+nnoremap <silent> <leader>1 :1tabnext<CR>
+nnoremap <silent> <leader>2 :2tabnext<CR>
+nnoremap <silent> <leader>3 :3tabnext<CR>
+nnoremap <silent> <leader>4 :4tabnext<CR>
+
+" if winnr('$') == 1
+"   " only one window
+"   " make expression mapping to bd when last window in help buffer
+" endif
+
+
+noremap <m-e> g_
+xnoremap x "_x
+
 "}}}
 

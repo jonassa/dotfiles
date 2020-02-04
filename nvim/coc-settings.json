@@ -26,6 +26,6 @@
         "<C-C>": "do:exit",
         "<C-v>": "eval:@@"
     },
-    // Use Microsoft LS without jedi, could try Palantir with jedi (custom languageserver), or just jedi (set to true)
+    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
     // "python.jediEnabled": false
 }

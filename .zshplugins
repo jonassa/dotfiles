@@ -4,7 +4,6 @@ mafredri/zsh-async
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 
-# Disse må være sist
 # sindresorhus/pure
 # BrandonRoehl/zsh-clean
 # romkatv/powerlevel10k
@@ -12,6 +11,5 @@ zsh-users/zsh-autosuggestions
 # jackharrisonsherlock/common
 
 zsh-users/zsh-syntax-highlighting
-# Denne må være etter syntax-hl
 # zsh-users/zsh-history-substring-search
 

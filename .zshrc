@@ -267,8 +267,8 @@ alias exa='exa --group-directories-first'
 alias lll='exa -lauUhmiHS --git'
 alias lt='exa -lT'
 alias ltt='exa -laT'
-t() { exa -T --color always $@ | less --quit-if-one-screen }
-tt() { exa -aT --color always $@ | less --quit-if-one-screen }
+t() { exa -T --color always $@ | less -F}
+tt() { exa -aT --color always $@ | less -F}
 alias tree='tree -Chal --dirsfirst'
 
 e() {
@@ -530,6 +530,7 @@ dec(){
 hex(){
   echo "obase=16; $@"|bc
 }
+alias randpass='openssl rand -base64 12'
 
 ## Functions
 
@@ -981,6 +982,10 @@ ff() {
     xdg-open "$target" &
 }
 
+rn() {
+    mv "$1" "${1:P:h}/$2"
+}
+
 ## Keybindings
 
 # bindkey '^[[A' history-search-backward
@@ -1175,4 +1180,4 @@ bindkey -s 'o' 'lfcd\n'
 
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
-
+eval "$(~/anaconda3/bin/conda shell.zsh hook)"
