@@ -49,6 +49,9 @@ let g:gruvbox_material_disable_italic_comment = 1
 let g:gruvbox_material_background = 'hard'
 let g:gruvbox_material_enable_bold = 1
 Plug 'https://github.com/lifepillar/vim-solarized8'
+Plug 'https://github.com/YorickPeterse/happy_hacking.vim'
+
+
 "}}}
 
 Plug 'junegunn/fzf'
@@ -157,10 +160,11 @@ let g:AutoPairsMoveCharacter = ''
 let g:AutoPairsShortcutJump = ''
 let g:AutoPairsShortcutFastWrap = ''
 
-Plug 'https://github.com/AndrewRadev/sideways.vim'
-" disse funker bare for lister/argumenter?
-nnoremap <silent> <c-m-b> :SidewaysLeft<CR>
-nnoremap <silent> <c-m-f> :SidewaysRight<CR>
+" Plug 'https://github.com/AndrewRadev/sideways.vim'
+" " disse funker bare for lister/argumenter?
+" nnoremap <silent> <c-m-b> :SidewaysLeft<CR>
+" nnoremap <silent> <c-m-f> :SidewaysRight<CR>
+" TODO:
 " funker dÃ¥rlig nÃ¥r:
 " ordet er siste pÃ¥ en linje (kopierer med space pÃ¥ starten istedetfor slutten)
 " du flytter ordet til siste pÃ¥ en linje (hopper over linja fordi next word
@@ -196,7 +200,7 @@ highlight link Sneak IncSearch
 " LANGUAGE SUPPORT {{{
 Plug 'sheerun/vim-polyglot'
 Plug 'https://github.com/derekwyatt/vim-scala'
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/metakirby5/codi.vim'
 " nnoremap something :Codi!!<CR>
 Plug 'https://github.com/gabrielelana/vim-markdown'
@@ -212,11 +216,12 @@ let g:bullets_enabled_file_types = [
 Plug 'https://github.com/honza/vim-snippets'
 
 " ULTISNIPS {{{
-" Plug 'https://github.com/SirVer/ultisnips'
-" let g:UltiSnipsExpandTrigger="<m-e>"
+Plug 'https://github.com/SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger="<NUL>"
 " let g:UltiSnipsJumpForwardTrigger="<M-f>"
 " let g:UltiSnipsJumpBackwardTrigger="<M-b>"
 " let g:UltiSnipsRemoveSelectModeMappings = 0
+" let g:UltiSnipsMappingsToIgnore = ['<Tab>']
 nnoremap <m-e> :Snippets<CR>
 "}}}
 
@@ -228,6 +233,9 @@ nnoremap <silent> gæ :ALEDetail<CR>
 let g:ale_linters = {
 \   'scala': [''],
 \}
+" TODO: use loclist and find mappings for lnext/lprev
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 "}}}
 
 " LSP {{{
@@ -359,8 +367,8 @@ set splitright
 set splitbelow
 set diffopt+=vertical
 
-" set scrolloff=5
-set scrolloff=999
+set scrolloff=5
+" set scrolloff=999
 set sidescrolloff=3
 
 set nohlsearch
@@ -375,10 +383,10 @@ set sessionoptions-=options,folds,help
 " STATUSLINE {{{
 set noshowmode
 set statusline=
-set statusline^=%{coc#status()}
 set statusline+=%#title#\ %f\ %*
 " Should have a trailing newline
-set statusline+=%2*[%n%M%R%W%q]%*\ 
+set statusline+=%2*[%n%M%R%W%q]\ %*\ 
+set statusline+=%{coc#status()}
 " set statusline+=%#question#%{getcwd()}\ " working directory
 set statusline+=\ %m
 set statusline+=%=
@@ -404,7 +412,8 @@ if has('termguicolors')
     endif
 endif
 
-let g:dark='neon'
+" let g:dark='gruvbox-material'
+let g:dark='base16-tomorrow-night'
 let g:light='tempus_dawn'
 let g:fallback='gruvbox'
 
@@ -449,25 +458,25 @@ let g:favorite_colors = [
             \ "seoul256-light",
             \ ]
 
-fun! CRotate()
-    let len_shortlist = len(g:favorite_colors)
-    let current_scheme_idx = index(g:favorite_colors, g:colors_name)
-    let next_scheme_idx = (current_scheme_idx - 1)
-    if next_scheme_idx == -1
-        let next_scheme_idx = (len_shortlist - 1)
+fun! CRotate(direction)
+    let idx = index(g:favorite_colors, g:theme)
+    if a:direction == 0
+        let idx = (idx + 1) % len(g:favorite_colors)
+    else
+        let idx = (idx - 1 % len(g:favorite_colors) + len(g:favorite_colors)) % len(g:favorite_colors)
     endif
-    let next_scheme = g:favorite_colors[next_scheme_idx]
-    exec 'colorscheme '.next_scheme
-    echo g:colors_name
+    let g:theme = g:favorite_colors[idx]
+    execute 'colorscheme ' . g:theme
+    echo g:theme
 endf
-command! CRotate call CRotate()
 
-nnoremap <F3> :CRotate<CR>
+nnoremap <F3> :call CRotate(0)<CR>
+nnoremap <F4> :call CRotate(1)<CR>
 
 fun! s:BG()
     let &background = ( &background == "dark" ? "light" : "dark" )
-    if exists("g:colors_name")
-        exe "colorscheme " . g:colors_name
+    if exists("g:theme")
+        exe "colorscheme " . g:theme
     endif
 endf
 command! BG call s:BG()
@@ -501,7 +510,9 @@ au WinLeave * set nocursorline
 
 " Bind q to close help and quickfix windows
 au FileType qf nnoremap <silent> <buffer> q :close<CR>
-au FileType help nnoremap <silent> <buffer> q :close<CR>
+" au FileType help nnoremap <silent> <buffer> q :close<CR>
+" If help is last window, delete buffer, else close window
+au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':close<CR>'
 " Open help in a new tab
 au FileType help wincmd T
 
@@ -540,7 +551,8 @@ nnoremap <silent> <leader>' :Marks<CR>
 nnoremap <leader>a :Ag<Space>
 nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>r :History<CR>
-nnoremap <silent> <leader><leader> :Vista finder<CR>
+" TODO: ':Vista finder' uses ctags even when coc is available (sometimes)
+nnoremap <silent> <leader><leader> :Vista finder coc<CR>
 nnoremap <silent> t :Tags<CR>
 " nnoremap <silent> <leader>l :Lines<CR>
 nnoremap <silent> S :Lines<CR>
@@ -581,8 +593,8 @@ xnoremap <silent> J :<C-u>keepjumps normal! gv}<CR>
 xnoremap <silent> K :<C-u>keepjumps normal! gv{<CR>
 onoremap J }
 onoremap K {
-nnoremap <M-j> 4gj
-nnoremap <M-k> 4gk
+nnoremap <M-j> 5gjzz
+nnoremap <M-k> 5gkzz
 nmap gj ]]
 nmap gk [[
 nnoremap <C-F> <C-F>zz
@@ -642,6 +654,7 @@ cnoremap <C-e> <End>
 cnoremap <M-d> <C-Right><C-W>
 cnoremap <M-n> <C-n>
 cnoremap <M-p> <C-p>
+cnoremap <M-u> <C-U>
 
 " Go to next/prev search match while searching
 cnoremap <M-j> <C-G>
@@ -860,6 +873,7 @@ nnoremap g<Space> a<Space><Esc>
 cmap w!! SudoWrite
 nnoremap g/ :g//<CR>
 " nnoremap cd /\d\+<CR>gnc
+nnoremap vd /\d\+<CR>gn
 
 "inc/decrement number
 nnoremap ± <C-A>
@@ -924,10 +938,9 @@ endf
 
 fun! JustOneSpace()
     s/\s\+/ /
-    normal ==
+    " normal ==
 endf
-command! JustOneSpace call JustOneSpace()
-nnoremap <silent> <M-Space> :JustOneSpace<CR>
+nnoremap <silent> <M-Space> :call JustOneSpace()<CR>
 
 command! -nargs=? Filter let @x='' | execute 'g/<args>/y X' | enew | setlocal bt=nofile | put! x
 
@@ -968,7 +981,6 @@ fun! StripTrailingWhitespace()
     call cursor(l, c)
 endf
 
-" Run current file as script with optional arguments to pass to the script
 " TODO: add appropriate shebang for language, chmod +x, save and run
 " Separate command to shebang and make executable
 " A file will not be run with right interpreter, even with .py extension,
@@ -976,17 +988,59 @@ endf
 " executable scripts, and has the advantage that it is filetype agnostic. However, many
 " programs should not be executables, so there should be a different function
 " for running a file with the right interpreter
-command! -nargs=* R up|!%:p <args>
-" Requires shebang and executable (run file as script)
-nnoremap <leader>r :R<CR>
-" nnoremap <leader>r :w <CR>:!python %<CR>
 
-" Save, compile with gcc, and run binary
-map <F12> :w <CR>:!gcc -g % -o %< && ./%< <CR>
-" Save and run python interpreter on file
-map <F10> :w <CR>:!python %<CR>
+" TODO: different commands/functions/keybinds
+" - ensure shebang (from filetype), save file, ensure chmod +x, run file as a script
+" - ensure chmod +x and run file as script IF it has a shebang (not every
+"   shell type file is an executable), ELSE source the file (your shell must
+"   be the same as the type of the file) OR apply interpreter to file (run it
+"   in a subshell) (sourcing might make sense if it could update vim's parent
+"   shell (reloading zshrc)) (subshelling the file might not make sense
+"   compared to running it as a script)
+" - save file, then either:
+"   - compile the file and run the output executable
+"   - run make and run the main output executable (or the one corresponding to
+"   this file if there are several entrypoints to the program)
+" - apply the right interpreter to the current file
+
+" Run file as script (requires shebang and executable) with optional arguments
+" TODO: fun RunScript()
+command! -nargs=* R up|!%:p <args>
+
 " Send selection to python interpreter
 xnoremap <leader>r :w !python<CR>
+
+fun! Run()
+    if &ft =~ '\v(sh|bash|zsh)'
+        " AND has a shebang 
+        " call RunScript()
+        R
+    elseif &ft =~ 'vim'
+        source %
+    elseif &ft =~ '\v(python|ruby)'
+        call RunInterpreter()
+    elseif &ft =~ '\v(c|cpp)'
+        call RunCompiler()
+    else
+        R
+    endif
+endf
+nnoremap <leader>r :call Run()<CR>
+
+fun! RunInterpreter()
+    update
+    let l:interpreter = trim(system('command -v ' . &ft))
+    execute '!' . l:interpreter . ' ' . expand('%')
+endf
+" :up<CR>:!python %<CR>
+
+fun! RunCompiler()
+    update
+    !gcc -g % -o %< && ./%<
+endf
+
+" Save, compile with gcc, and run binary
+map <F12> :up<CR>:!gcc -g % -o %< && ./%< <CR>
 
 inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 
@@ -995,8 +1049,9 @@ command! -nargs=1 Clip let @+=@<args>
 
 " Paste whatever is in the clipboard as a new line
 fun! PutLine()
-let @+ = substitute(@+, '\n*$', '\n', 'g')
-normal "+p
+    let @+ = substitute(@+, '\n*$', '\n', 'g')
+    normal "+p
+    normal ==
 endf
 command! -nargs=0 PutLine call PutLine()
 nnoremap <leader>p :PutLine<CR>
@@ -1096,16 +1151,20 @@ let g:netrw_winsize = 25
 
 " COC TESTING {{{
 
-" Compare: ALENext
+" Compare: ALENext, ALEDetail
 " diagnostic.displayByAle": true,
-" nmap <silent> <Bar> <Plug>(coc-diagnostic-next)
-" nmap <silent> Ã <Plug>(coc-diagnostic-prev)
+" <Plug>(coc-diagnostic-info)
+" <Plug>(coc-diagnostic-next)
+" <Plug>(coc-diagnostic-prev)
+" <Plug>(coc-diagnostic-next-error)
+" <Plug>(coc-diagnostic-prev-error)
 
 " Compare: ALEGoToDefinition
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> <leader>r <Plug>(coc-references)
+" <Plug>(coc-declaration)
+" <Plug>(coc-references)
 
 " nmap <m-cr>  <Plug>(coc-codeaction)
 nmap <c-space> <Plug>(coc-fix-current)
@@ -1118,44 +1177,17 @@ omap af <Plug>(coc-funcobj-a)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
-" Fold comment, imports, region
-" set fdm=manual
-" command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" Organize imports
-" command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+" nnoremap <F5> :Format<CR>
+" <Plug>(coc-format)
 
 nnoremap <silent> <leader>ll  :<C-u>CocList<CR>
 nnoremap <silent> <leader>lc  :<C-u>CocCommand<CR>
 nnoremap <silent> <leader>lo  :<C-u>CocList outline<CR>
 nnoremap <silent> <leader>ls  :<C-u>CocList -I symbols<CR>
-" nnoremap <silent> <leader>o  :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<CR>
 
-" <Plug>(coc-diagnostic-info)
-" <Plug>(coc-diagnostic-next)
-" <Plug>(coc-diagnostic-prev)
-" <Plug>(coc-diagnostic-next-error)
-" <Plug>(coc-diagnostic-prev-error)
-" <Plug>(coc-definition)
-" <Plug>(coc-declaration)
-" <Plug>(coc-implementation)
-" <Plug>(coc-type-definition)
-" <Plug>(coc-references)
-" <Plug>(coc-format-selected)
- " <Plug>(coc-format)
-nnoremap <leader>lr <Plug>(coc-rename)
-" <Plug>(coc-codeaction)
-" <Plug>(coc-codeaction-selected)
-" <Plug>(coc-openlink)
-" <Plug>(coc-codelens-action)
-" <Plug>(coc-fix-current)
-" <Plug>(coc-float-hide)
-" <Plug>(coc-float-jump)
-" <Plug>(coc-refactor)
-" <Plug>(coc-range-select)
-" <Plug>(coc-range-select)
-" <Plug>(coc-range-select-backward)
-" <Plug>(coc-funcobj-i)
-" <Plug>(coc-funcobj-a)
+nnoremap cr <Plug>(coc-rename)
+nnoremap vr <Plug>(coc-refactor)
 "}}}
 
 " TESTING AREA {{{
@@ -1170,7 +1202,7 @@ nnoremap <leader>lr <Plug>(coc-rename)
 " nnoremap <M-S>
 " nnoremap <M-Z>
 
-" inoremap <C-H> 
+" inoremap <C-H>
 " inoremap <C-J>
 
 " nnoremap +
@@ -1186,7 +1218,6 @@ nnoremap <leader>lr <Plug>(coc-rename)
 " nnoremap co
 " nnoremap cq
 " nnoremap cr
-" nnoremap cs
 " nnoremap cu
 " nnoremap cv
 " nnoremap cx
@@ -1198,9 +1229,13 @@ nnoremap <leader>lr <Plug>(coc-rename)
 " nnoremap dp
 " nnoremap dq
 " nnoremap dr
-" nnoremap ds
 " nnoremap du
-" nnoremap dv
+
+" nnoremap dv diw
+" nmap dv dgn
+nmap dv dav
+nmap cv civ
+
 " nnoremap dx
 " nnoremap dy
 " nnoremap dz
@@ -1256,6 +1291,7 @@ inoremap <M-3> #
 inoremap <M-4> $
 inoremap <M-5> %
 
+
 " Does not use tags, only finds files in same directory, does not check if
 " file exists
 " Edit: chooses c or cpp globally per session
@@ -1296,7 +1332,16 @@ nnoremap <silent> <leader>4 :4tabnext<CR>
 
 
 noremap <m-e> g_
+nnoremap <m-E> vg_
 xnoremap x "_x
+nnoremap <m-w> ciW
+xnoremap + <C-A>gv
+xnoremap - <C-X>gv
+xmap <silent> <C-A> <C-A>/\d\+<CR>Ngn
+xmap <silent> <C-X> <C-X>/\d\+<CR>Ngn
+nnoremap <m-l> cc
+nnoremap <silent> <M-Space> i<space><right><space><esc>mz:call JustOneSpace()<CR>`z
+nnoremap <c-e> :Snippets<CR>
 
 "}}}
 
