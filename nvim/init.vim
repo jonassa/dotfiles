@@ -1,5 +1,4 @@
-runtime! archlinux.vim
-filetype plugin indent on
+runtime! archlinux.vimfiletype plugin indent on
 
 "{{{ PLUGINS
 call plug#begin('~/.vim/plugged')
@@ -35,19 +34,22 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
 Plug 'https://github.com/relastle/bluewery.vim'
-" Plug 'crusoexia/vim-monokai'
-" Plug 'https://github.com/jlesquembre/base16-neovim'
 Plug 'https://github.com/flrnd/plastic.vim'
 Plug 'srcery-colors/srcery-vim'
-Plug 'https://github.com/sainnhe/gruvbox-material'
 Plug 'https://github.com/sainnhe/edge'
 let g:edge_disable_italic_comment = 1
-Plug 'https://github.com/sainnhe/neon'
-let g:neon_disable_italic_comment = 1
+" default, proton or neon
+let g:edge_style = 'proton'
+let g:edge_transparent_background = 1
 Plug 'https://github.com/sainnhe/gruvbox-material'
 let g:gruvbox_material_disable_italic_comment = 1
-let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_background = 'medium'
 let g:gruvbox_material_enable_bold = 1
+let g:gruvbox_material_transparent_background = 1
+Plug 'https://github.com/sainnhe/sonokai'
+" shusia, andromeda, atlantis or maia
+let g:sonokai_style = 'atlantis'
+let g:sonokai_disable_italic_comment = 1
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/YorickPeterse/happy_hacking.vim'
 
@@ -244,11 +246,9 @@ Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Extensions: json, snippets, tag, python
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
-" Plug 'neoclide/coc-tag', {'do': 'yarn install --frozen-lockfile'}
-" let g:coc_global_extensions = ['coc-json', 'coc-snippets', 'coc-tag']
-" call coc#add_extension('coc-json', 'coc-snippets', 'coc-tag')
 
 " Highlight comments in CocConfig
 au FileType json syntax match Comment +\/\/.\+$+
@@ -413,7 +413,7 @@ if has('termguicolors')
 endif
 
 " let g:dark='gruvbox-material'
-let g:dark='base16-tomorrow-night'
+let g:dark='edge'
 let g:light='tempus_dawn'
 let g:fallback='gruvbox'
 
@@ -456,6 +456,7 @@ let g:favorite_colors = [
             \ "palenight",
             \ "seoul256",
             \ "seoul256-light",
+            \ "edge",
             \ ]
 
 fun! CRotate(direction)
@@ -548,7 +549,7 @@ nnoremap <silent> <leader>F :Files ~<CR>
 nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>c :Colors<CR>
 nnoremap <silent> <leader>' :Marks<CR>
-nnoremap <leader>a :Ag<Space>
+nnoremap <leader>/ :Ag<Space>
 nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>r :History<CR>
 " TODO: ':Vista finder' uses ctags even when coc is available (sometimes)
@@ -632,12 +633,12 @@ inoremap <M-f> <Esc><C-Right>
 inoremap <M-b> <Esc><C-Left>
 nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
+xnoremap <M-f> <C-Right>
+xnoremap <M-b> <C-Left>
 inoremap <M-d> <C-\><C-O>de
 nnoremap <M-d> dW
 inoremap <M-i> <Esc>I
 inoremap <M-a> <Esc>A
-" TODO: finne noe bedre for change line fra insert mode og normal mode
-" inoremap <C-Q> <Esc>S
 
 " Insert mode completion
 inoremap <M-n> <C-N>
@@ -707,7 +708,7 @@ inoremap <silent> <M-s> <Esc>:up<CR>
 " Quickfix
 if executable('ag') | set grepprg=ag\ --vimgrep\ --silent | endif
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
-" nmap <silent> <leader>k :Grep "\b<cword>\b"<CR>
+nmap <silent> <leader>* :Grep "\b<cword>\b"<CR>
 " nmap <silent> gw :Grep "\b<cword>\b"<CR>
 nnoremap <silent> <left>  :cpf<CR>zvzz
 nnoremap <silent> <right> :cnf<CR>zvzz
@@ -853,7 +854,11 @@ nnoremap vm :Marks<CR>
 nnoremap vv viw
 nnoremap VV viW
 nnoremap <m-v> ^vg_
+" yank line without indent
 nnoremap <m-y> ^y$
+" yank line with indent
+nnoremap gl 0y$
+nnoremap dl 0d$
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
@@ -873,17 +878,17 @@ nnoremap g<Space> a<Space><Esc>
 cmap w!! SudoWrite
 nnoremap g/ :g//<CR>
 " nnoremap cd /\d\+<CR>gnc
+" TODO: don't skip number under cursor, or use number textobj
 nnoremap vd /\d\+<CR>gn
 
 "inc/decrement number
 nnoremap ± <C-A>
 nnoremap ¿ <C-X>
 
-inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
-nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>j
+inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
+nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
 
 nnoremap <M-n> *Ncgn
-nnoremap gl ^yg_
 
 "}}}
 "}}}
@@ -1008,7 +1013,8 @@ endf
 command! -nargs=* R up|!%:p <args>
 
 " Send selection to python interpreter
-xnoremap <leader>r :w !python<CR>
+" xnoremap <leader>r :w !python<CR>
+xnoremap R :w !python<CR>
 
 fun! Run()
     if &ft =~ '\v(sh|bash|zsh)'
@@ -1137,7 +1143,7 @@ command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
 imap <C-X><C-F> <plug>(fzf-complete-path)
 imap <C-X><C-L> <plug>(fzf-complete-line)
 nmap <leader>? <plug>(fzf-maps-n)
-xmap <leader>? <plug>(fzf-maps-x)
+" xmap <leader>? <plug>(fzf-maps-x)
 omap <leader>? <plug>(fzf-maps-o)
 imap <c-x>? <plug>(fzf-maps-i)
 
@@ -1164,7 +1170,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 " <Plug>(coc-declaration)
-" <Plug>(coc-references)
+nmap <silent> gr <Plug>(coc-references)
 
 " nmap <m-cr>  <Plug>(coc-codeaction)
 nmap <c-space> <Plug>(coc-fix-current)
@@ -1342,6 +1348,12 @@ xmap <silent> <C-X> <C-X>/\d\+<CR>Ngn
 nnoremap <m-l> cc
 nnoremap <silent> <M-Space> i<space><right><space><esc>mz:call JustOneSpace()<CR>`z
 nnoremap <c-e> :Snippets<CR>
+" TODO: finne noe bedre for change line fra insert mode og normal mode
+inoremap <M-c> <Esc>S
+nnoremap Z za
+nnoremap \R :Rename<Space>
+xmap <Space> <M-r><Space>
+
 
 "}}}
 
