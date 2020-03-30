@@ -1,4 +1,42 @@
 bindkey -e
+ttyctl -f
+
+export TERM=xterm-256color
+
+# Use color names rather than escape codes
+autoload -U colors && colors
+
+# Sett LS_COLORS
+# eval $(dircolors)
+eval $(dircolors /home/jonas/.nord_dircolors)
+export EXA_COLORS="di=1;34:ln=1;36:uu=0:gu=0:ur=0:uw=0:ux=0:ue=0:gr=0:gw=0:gx=0:tr=0:tw=0:tx=0:su=0:sf=0:xa=0:da=0:sn=0:sb=0"
+
+autoload -U select-word-style && select-word-style bash
+
+autoload -Uz compinit && compinit
+autoload -Uz promptinit && promptinit
+
+autoload -Uz bracketed-paste-url-magic
+zle -N bracketed-paste bracketed-paste-url-magic
+
+autoload -U zmv
+
+# Command-not-found
+source /usr/share/doc/pkgfile/command-not-found.zsh
+
+autoload -Uz run-help
+alias help=run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-ip
+autoload -Uz run-help-openssl
+autoload -Uz run-help-p4
+autoload -Uz run-help-sudo
+autoload -Uz run-help-svk
+autoload -Uz run-help-svn
+
+# cdr: change to recent dir
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
 
 MOOD=$(</tmp/mood)
 
@@ -32,45 +70,15 @@ manopt() {
   man "$cmd" | col -b | awk -v opt="$opt" -v RS= '$0 ~ "(^|,)[[:blank:]]+" opt "([[:punct:][:space:]]|$)"'
 }
 
-mg() {
-    man $1 | less +"/$2"
+flag() {
+    for f in "${@:2}"; do
+        eval "$1 --help | grep '^\s*\-$f'"
+    done
 }
 
-# Lar deg bruke navn på farger istedetfor escape codes
-autoload -U colors && colors
-
-# Sett LS_COLORS
-# eval $(dircolors)
-eval $(dircolors /home/jonas/.nord_dircolors)
-export EXA_COLORS="di=1;34:ln=1;36:uu=0:gu=0:ur=0:uw=0:ux=0:ue=0:gr=0:gw=0:gx=0:tr=0:tw=0:tx=0:su=0:sf=0:xa=0:da=0:sn=0:sb=0"
-
-
-# Burde ikke være i zshrc, men i profile
-# export EDITOR=nvim
-# export VISUAL=nvim
-
-
-# For at termite skal kunne vite hvilken mappe du er i og starte en ny terminal derfra
-if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
-  __vte_osc7
-fi
-
-export TERM=xterm-256color
-
-autoload -U select-word-style
-select-word-style bash
-
-autoload -Uz compinit promptinit
-compinit
-promptinit
-
-autoload -Uz bracketed-paste-url-magic
-zle -N bracketed-paste bracketed-paste-url-magic
-
-autoload -U zmv
-
-
+mg() {
+    man $1 | less +"/\b$2\b"
+}
 
 
 ## COMPLETION START
@@ -132,12 +140,17 @@ zstyle ':completion:*:*:kill:*' insert-ids single
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
-# Menu-select completion # Added 27 Jul 2018
+# Hvis du vil rehashe completions automatisk (når nye pakker har blitt installert)
+#zstyle ':completion:*' rehash true
+
+# Menu-select completion
 zstyle ':completion:*' menu select
 # Nødvendig for å kunne binde til menuselect keymap
 zmodload zsh/complist
 # For å slippe to ganger enter
 bindkey -M menuselect '^M' .accept-line
+# shift-tab
+bindkey '^[[Z' reverse-menu-complete
 
 ## COMPLETION END
 
@@ -183,6 +196,7 @@ setopt MULTIOS              # Write to multiple descriptors.
 
 #for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
+# TODO: What is this for?
 switch-to-dir () {
     [[ ${#dirstack} -eq 0 ]] && return
 
@@ -195,49 +209,6 @@ switch-to-dir () {
     done
 }
 
-cycledleft () {
-    emulate -L zsh
-    setopt nopushdminus
-
-    switch-to-dir +1
-    zle reset-prompt
-}
-zle -N cycledleft
-
-cycledright () {
-    emulate -L zsh
-    setopt nopushdminus
-
-    switch-to-dir -0
-    zle reset-prompt
-}
-zle -N cycledright
-
-# Command-not-found
-source /usr/share/doc/pkgfile/command-not-found.zsh
-
-# alias for run-help og helper functions
-# kan brukes istedetfor man, bruker man for eksterne og run-help for interne
-autoload -Uz run-help
-alias help=run-help
-autoload -Uz run-help-git
-autoload -Uz run-help-ip
-autoload -Uz run-help-openssl
-autoload -Uz run-help-p4
-autoload -Uz run-help-sudo
-autoload -Uz run-help-svk
-autoload -Uz run-help-svn
-
-# To avoid the need to manually reset the terminal
-ttyctl -f
-
-# Nødvendig for å bruke cdr for recent directories
-# Også nødvendig for fzf recent dirs
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-add-zsh-hook chpwd chpwd_recent_dirs
-
-# Hvis du vil rehashe completions automatisk (når nye pakker har blitt installert)
-#zstyle ':completion:*' rehash true
 
 
 ## Aliases
@@ -248,27 +219,25 @@ alias ls='ls -h --color=auto --group-directories-first --no-group'
 alias l='ls -l'
 alias ll='ls -la'
 alias lh='ls -ld .?*'
-
 alias ..='cd ..'
-
 alias md='mkdir -p'
+alias rd='rmdir'
 mkcd() {
     mkdir $1 && cd $1
 }
-alias rd='rmdir'
-function take() {
+take() {
   mkdir -p $@ && cd ${@:$#}
 }
 
-
 alias exa='exa --group-directories-first'
-# alias l='exa -l'
-# alias ll='exa -la'
 alias lll='exa -lauUhmiHS --git'
 alias lt='exa -lT'
 alias ltt='exa -laT'
-t() { exa -T --color always $@ | less -F}
-tt() { exa -aT --color always $@ | less -F}
+t() { exa -T --color always $@ | less}
+t1() { exa -T -L1 --color always $@ | less}
+t2() { exa -T -L2 --color always $@ | less}
+t3() { exa -T -L3 --color always $@ | less}
+tt() { exa -aT --color always $@ | less}
 alias tree='tree -Chal --dirsfirst'
 
 e() {
@@ -282,20 +251,20 @@ e() {
 }
 compdef _vars e
 
-alias wh='which'
+# alias wh='which'
 alias p='print -l'
 alias o='xdg-open'
 alias x='atool -x'
 alias h='history -nd -50'
+alias hgrep='history -nd -10000|grep'
 alias d='dirs -v'
 alias lo='locate'
 # alias u='cd ..'
 siblings() {
-    local target=$(command fd -d1 -td . .. --color=always | tail +2 | fzf --ansi )
+    local target=$(command fd -d1 -td . .. --color=always | ag -v ${PWD:t} | fzf -1 -0 --ansi )
     [[ -n $target ]] && [[ -d $target ]] && cd "${target}"
 }
-alias s='siblings' // siblings
-alias u='siblings' // up
+alias s='siblings'
 
 alias ax='chmod a+x'
 alias bat='bat --theme ansi-dark'
@@ -315,18 +284,15 @@ vsh(){
 }
 
 alias path='echo $PATH | tr ":" "\n"'
-export LESS='-iRk /home/jonas/.less'
-export LESSOPEN='| /usr/bin/src-hilite-lesspipe.sh %s'
-export NMON='MMMm1'
 # function diff() {
 #     diff -u "$1" "$2" | diffr
 # }
 alias grep='grep -i --color=auto'
-alias fd='fd -H'
-alias ag='ag --hidden --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
+alias fd='fd -H' # hidden
+alias ag='ag --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
 # alias ag='ag --hidden --ignore .git'
 agl() {ag $@ --pager less 2> /dev/null}
-gg() {if [[ -n $@ ]]; then ag $@ ~/Dropbox/Data; fi}
+gg() {[[ -n $@ ]] && ag $@ ~/Dropbox/Data}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 rgl() {rg $@ 2> /dev/null | less}
 alias udb='sudo updatedb'
@@ -355,8 +321,13 @@ alias conf='nvim $CONFIG_FILES'
 alias bspconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
 alias cmd='nvim ~/Dropbox/Data/cmd/*'
 
-alias tm='tmux'
-alias tn='tmux new -s'
+tm() {
+    if [[ -n $1 ]]; then
+        tmux new -As $1
+    else
+        tmux
+    fi
+}
 alias tl='tmux ls'
 alias tk='tmux kill-session -t $(tmux list-sessions|fzf|cut -f1 -d:)'
 alias tq='tmux kill-server'
@@ -369,10 +340,11 @@ ta() {
     fi
 }
 
-alias pm='sudo pacman'
+alias pm='pacman'
 alias pa='yay'
 alias pu='sudo pacman -Syu --noconfirm'
 alias puu='yay'
+# upgrade(){tmux new -s upgrade -c "sudo yay"}
 # alias pd='pacman -Qqdt && sudo pacman -Rns $(pacman -Qqdt) || echo "There are no orphans to remove"'
 alias pd='yay -c'
 alias pls='yay -Ql'
@@ -421,14 +393,13 @@ alias cdu='cdu -is -dh &> /dev/null'
 #     smem -kt $@) | command less
 #     }
 alias smem='sudo smem -kt' # -k abbreviate, -t show totals
-alias pgrep='sudo pgrep -li' # show name, case insensitive
-
+alias pgrep='pgrep -ai' # show command, case insensitive
 alias tldr='tldr -t ocean'
-
 alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
+
 srv() {
     local ip="$(ip -br -4 addr show wlan0 | awk '{print $3}' | cut -d/ -f1):8000"
     echo $ip
@@ -441,12 +412,23 @@ srv() {
     fi
 }
 
+alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
+fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
+alias fs='kitty @set-font-size'
 
+dec(){
+  echo "ibase=16; $@"|bc
+}
 
+hex(){
+  echo "obase=16; $@"|bc
+}
+
+alias randpass='openssl rand -base64 12'
 alias fkprint='lp -d fkprint -h printhost.samfundet.no'
 alias webcam='mpv av://v4l2:/dev/video0'
-
 alias li='light -S'
+
 cl() {
     if [[ -n $@ ]]; then
         echo -n "$@" | xsel -b 
@@ -458,10 +440,10 @@ alias sel='fzf | xsel -ib'
 alias hsel='history -n 0 |fzf --tac --no-sort|tr -d \\n|xsel -ib'
 
 
-# alias clone='git clone'
+# Git
 clone() {git clone $1 && cd $(basename $1 .git)}
 alias g='git status'
-# alias gs='git status -sb'
+alias gs='git status -sb'
 alias ga='git add'
 alias gb='git branch -av'
 alias gc='git checkout'
@@ -473,7 +455,7 @@ alias gds='git diff --stat'
 alias gdds='git diff --staged --stat'
 alias gdt='git difftoo'
 alias gdw='git diff --word-diff'
-alias gs='git checkout'
+# alias gs='git checkout'
 alias gf='git fetch'
 alias gfp='git fetch --prune'
 alias gfa='git fetch --all --prune'
@@ -498,10 +480,7 @@ alias gst='git stash'
 alias gsp='git stash pop'
 alias gsl='git shortlog -n --no-merges'
 function gi() { curl -sLw n https://www.gitignore.io/api/$@ ;}
-
-alias origmacs='env HOME=$HOME/emacs/orig emacs'
-alias bootmacs='env HOME=$HOME/emacs/bootstrap emacs'
-alias winmacs='env HOME=$HOME/emacs/windows emacs'
+alias redit='vim $(git ls-tree --full-tree -r --name-only HEAD | fzf)'
 
 alias perm='stat -c "%a %U"'
 
@@ -512,25 +491,14 @@ alias -g C='|wc -l'
 alias -g DN='2> /dev/null'
 alias -g H='--help'
 alias -g F='|field'
-field() {
-    awk "{print \$$1}"
-}
-# alias f='field'
-for n in {1..9}; alias f$n="field $n"
 alias -g R='; echo $?'
 alias -g IMG='*.(jpg|jpeg|png|gif)'
 
-alias winelist='find .wine -name "*exe"|grep -v -e system32 -e syswow64 -e microsoft -e windows'
-fontlist() {fc-list | awk -F: '{print $2,$3}' | sort -u}
-alias fs='kitty @set-font-size'
+field() {
+    awk "{print \$$1}"
+}
+for n in {1..9}; alias f$n="field $n"
 
-dec(){
-  echo "ibase=16; $@"|bc
-}
-hex(){
-  echo "obase=16; $@"|bc
-}
-alias randpass='openssl rand -base64 12'
 
 ## Functions
 
@@ -544,7 +512,7 @@ executable() {
 }
 
 installed() {
-    pacman -Q $1 &> /dev/null
+    pacman -Q $@ &> /dev/null
 }
 
 in_git(){ git rev-parse --is-inside-work-tree >/dev/null; }
@@ -564,6 +532,10 @@ mykeys() {
     ag '^bindkey' --nocolor --nonumbers ~/.zshrc --color;
 }
 
+bspkeys() {
+    cat ~/.config/sxhkd/sxhkdrc | awk '/^[a-z]/ && last {print $0,"\t",last} {last=""} /^#/{last=$0}' | column -t -s $'\t' | fzf
+}
+
 # pi() {
 #     if [[ -n $@ ]]
 #     then
@@ -575,10 +547,12 @@ mykeys() {
 #     sudo pacman -S $result
 # }
 
+
+# TODO: update pr, pg, pq to use xargs like this
 pi() {
     if [[ -n $@ ]]; then
         # result=$(comm -23 <(pacaur -Ssq $@|sort) <(pacman -Qq|sort) | fzf --preview 'pacaur -Si {}')
-        result=$@
+        yay -S $@
     else
         # result=$(comm -23 \
         # <((
@@ -587,12 +561,11 @@ pi() {
         #     )|sort) \
         # <(pacman -Qq|sort) \
         # | fzf --preview 'yay -Si {}')
-        result=$(yay -Pc | field 1 | fzf --preview 'yay -Si {}')
+        yay -Pc | field 1 | fzf --preview 'yay -Si {}' | xargs -ro yay -S
     fi
-
-    if [[ -n $result ]]; then
-        yay -S $result
-    fi
+    # if [[ -n $result ]]; then
+    #     yay -S $result
+    # fi
 }
 
 pg() {
@@ -606,7 +579,6 @@ pg() {
         #     ) | sort | fzf --preview 'yay -Si {}')
         result=$( yay -Pc | field 1 | sort | fzf --preview 'yay -Si {}')
     fi
-
     yay -Si $result
 }
 
@@ -684,22 +656,40 @@ ap() {
 
 }
 
-# bookmark() {
-#     entry="\"$(basename $PWD)=$PWD\""
-#     if [[ -f "$HOME/.zshdirs" ]]; then
-# }
-
-
-flag() {
-    for f in "${@:2}"; do
-        eval "$1 --help | grep '^\s*\-$f'"
-    done
+wh() {
+    type=$(type $1)
+    case $type in
+        *alias*)
+            command -v $1
+            ;;
+        *function*)
+            echo -n $fg_bold[green]
+            type $1
+            echo $reset_color
+            which $1
+            ;;
+        *builtin*)
+            type $1
+            man $1 || apropos -e $1
+            ;;
+        *reserved*)
+            type $1
+            ;;
+        *not\ found*)
+            type $1
+            ;;
+        *)
+            echo -n $fg_bold[green]
+            command -v $1
+            echo -n $reset_color
+            file $(command -v $1)
+            pacman -Qo $1
+            if [[ $? == 0 ]]; then
+                pactree -d1 $(pacman -Qqo $1)
+                whereis $1
+            fi
+    esac
 }
-
-bspkeys() {
-    cat ~/.config/sxhkd/sxhkdrc | awk '/^[a-z]/ && last {print $0,"\t",last} {last=""} /^#/{last=$0}' | column -t -s $'\t' | fzf
-}
-
 
 
 ## PLUGIN LOAD
@@ -719,25 +709,10 @@ ZSH_HIGHLIGHT_STYLES[path]=none
 
 ## WIDGETS
 
-# # Hindre tab på tom linje
-# expand-or-complete-or-list-files() {
-#     if [[ $#BUFFER == 0 ]]; then
-#         BUFFER="ls "
-#         CURSOR=3
-#         zle list-choices
-#         zle backward-kill-word
-#     else
-#         zle expand-or-complete
-#     fi
-# }
-# zle -N expand-or-complete-or-list-files
-# bindkey '^I' expand-or-complete-or-list-files
-
-# Hindre tab på tom linje
+# Don't insert tab on an empty line
 expand-or-complete-or-list-files() {
     if [[ $#BUFFER == 0 ]]; then
         ls -l
-        zle kill-buffer
         zle accept-line
     else
         zle expand-or-complete
@@ -747,25 +722,15 @@ zle -N expand-or-complete-or-list-files
 bindkey '^I' expand-or-complete-or-list-files
 
 fancy-ctrl-z() {
-  if [[ $#BUFFER -eq 0 ]]; then
-    BUFFER="fg"
+    fg
     zle accept-line
-  else
-    zle push-input
-    zle clear-screen
-  fi
+    # zle push-input
+    # zle clear-screen
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-parent-directory-widget() {
-    zle kill-buffer
-    cd ..
-    zle reset-prompt
-}
-zle -N parent-directory-widget
-
-sc-widget() {
+_systemd_units() {
     zle kill-buffer
     local service=$(systemctl list-unit-files --no-pager| cut -d' ' -f1| tail -n +2 | head -n -2| sed '/^-/d' | rg -v @ | fzf --preview="systemctl status -n0 {}");
     if [[ -n $service ]]; then
@@ -784,9 +749,9 @@ sc-widget() {
         zle reset-prompt
     fi
 }
-zle -N sc-widget
+zle -N _systemd_units
 
-global-cd-widget() {
+_global_dirs() {
     zle kill-buffer
     local dir="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
     if [[ -n $dir ]]; then
@@ -799,14 +764,13 @@ global-cd-widget() {
         zle redisplay
     fi
     # Last two lines dont show in multiline prompts
-    printf '\n'
-    printf '\n'
+    printf '\n\n'
     zle fzf-redraw-prompt
     zle reset-prompt
 }
-zle -N global-cd-widget
+zle -N _global_dirs
 
-insert-widget() {
+_locate_insert() {
     local target="$(locate -0 / | grep -z -vE '~$' | fzf --read0 -0 -1 --preview 'tree -C {} | head -200')"
     if [[ -n $target ]]; then
         LBUFFER+="\"$target\" "
@@ -815,14 +779,15 @@ insert-widget() {
         zle redisplay
     fi
 }
-zle -N insert-widget
+zle -N _locate_insert
 
-edit-local-widget() {
+_local_files() {
     zle kill-buffer
     # rg is faster at listing files than fd
     # print **/* (zsh native) is almost as fast?
     # print **/*(.) (for bare filer) er mye tregere enn qualifier
     # bør bruke rg --files -uu og fallback til find -type f
+    # EDIT: find -type f er raskere enn rg
 
     # file=$(fd -H -tf -c never . ~ | rg -v '~$' | fzf --preview="head {}")
     # file=$(print -l **/* | sed '/~$/d' | fzf --prompt='./' --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}')
@@ -848,26 +813,58 @@ edit-local-widget() {
         zle reset-prompt
     fi
 }
-zle -N edit-local-widget
+zle -N _local_files
 
 # locate -0 -r ^/etc -r ^/usr/lib -r ^/usr/local -r ^/usr/share -r /home/jonas
-edit-global-widget() {
-    zle kill-buffer
-    find_cmd="sudo rg --files -uu --no-messages"
-    local file=$(
-    (eval ${find_cmd} /etc
-    eval ${find_cmd} ~/
-    eval ${find_cmd} /usr/lib
-    eval ${find_cmd} /usr/local
-    eval ${find_cmd} /usr/share
-    eval ${find_cmd} /var/log
-    eval ${find_cmd} /var/tmp
-    eval ${find_cmd} /tmp) | grep -v '~$'| fzf)
-        # rg -v '~$'| fzf --preview='[[ $(file --mime {}) =~ binary ]] &&
-        # echo {} is a binary file ||
-        # (highlight -O ansi -l {} ||
-        # cat {}) 2> /dev/null | head -500';)
+# TODO: doesn't work
+# _system_files() {
+#     zle kill-buffer
+#     find_cmd="rg --files -uu --no-messages"
+#     # find_cmd="find -type f" 
+#     local file=$(
+#     (eval $find_cmd /etc
+#     eval $find_cmd ~/
+#     eval $find_cmd /usr/lib
+#     eval $find_cmd /usr/local
+#     eval $find_cmd /usr/share
+#     eval $find_cmd /var/log
+#     eval $find_cmd /var/tmp
+#     eval $find_cmd /tmp) | grep -v '~$'| fzf)
+#         # rg -v '~$'| fzf --preview='[[ $(file --mime {}) =~ binary ]] &&
+#         # echo {} is a binary file ||
+#         # (highlight -O ansi -l {} ||
+#         # cat {}) 2> /dev/null | head -500';)
 
+#     if [[ -n $file && (! $(file --mime $file) =~ 'binary') ]]; then
+#         zle redisplay
+#         if [[ -w $file ]]; then
+#             BUFFER="nvim '${file}'"
+#             zle accept-line
+#         else 
+#             BUFFER="sudo nvim '${file}'"
+#             zle accept-line
+#         fi
+#     else
+#         zle reset-prompt
+#     fi
+# }
+# zle -N _system_files
+
+
+GLOBAL_DIRS=(
+    "/etc"
+    "/usr/lib"
+    "/usr/local"
+    "/usr/share"
+    "/var/log"
+    "/var/tmp"
+    "/tmp"
+)
+
+_system_files() {
+    zle kill-buffer
+    # local file=$(find $GLOBAL_DIRS -type f  2> /dev/null | grep -v '~$' | fzf)
+    local file=$(rg --files --no-messages $GLOBAL_DIRS | grep -v '~$' | fzf)
     if [[ -n $file && (! $(file --mime $file) =~ 'binary') ]]; then
         zle redisplay
         if [[ -w $file ]]; then
@@ -881,24 +878,34 @@ edit-global-widget() {
         zle reset-prompt
     fi
 }
-zle -N edit-global-widget
+zle -N _system_files
 
-kill-processes-widget() {
+
+gp() {
+    local project=$(
+    locate -r "\.git$" | grep -v -e '\.cache' -e '\.vim' -e '\.tmux' -e '\.cargo' \
+    | while read -r proj; do
+        realpath --relative-to=$HOME $(dirname $proj)
+    done | fzf)
+    [[ -n $project ]] && cd ~/$project
+}
+
+_kill_process() {
     zle kill-buffer
     local process=$(ps hc --ppid 2 -p 2 --deselect -o pid,user,args|fzf|awk '{print $1}')
     if [[ -n $process ]]; then
         echo $process
         zle redisplay
-        BUFFER="sudo kill $process"
+        kill $process 2> /dev/null || sudo kill $process
         zle accept-line
     else
         zle reset-prompt
     fi
 }
-zle -N kill-processes-widget
+zle -N _kill_process
 
 
-sudo-widget() {
+_resudo() {
     zle kill-buffer
     LBUFFER='!!'
     zle expand-or-complete
@@ -910,9 +917,9 @@ sudo-widget() {
         zle accept-line
     fi
 }
-zle -N sudo-widget
+zle -N _resudo
 
-man-widget() {
+_manpages() {
     zle kill-buffer
     local manpage=$(fd -tf -e gz . /usr/share/man/ | sed 's/.*\///' | sed 's/\..*//' | sort -u |fzf --preview="whatis {}" --preview-window up:1)
     if [[ -n $manpage ]]; then
@@ -923,9 +930,9 @@ man-widget() {
         zle reset-prompt
     fi
 }
-zle -N man-widget
+zle -N _manpages
 
-ssh-widget() {
+_ssh_targets() {
     zle kill-buffer
     local login=$(cat ~/.ssh/logins | fzf)
     if [[ -n $login ]]; then
@@ -936,9 +943,9 @@ ssh-widget() {
         zle reset-prompt
     fi
 }
-zle -N ssh-widget
+zle -N _ssh_targets
 
-where-widget() {
+_where() {
     zle kill-buffer
     local name=$(
     (
@@ -949,38 +956,34 @@ where-widget() {
     ) | fzf --preview="whatis {} 2> /dev/null && echo; where {} 2> /dev/null")
     if [[ -n $name ]]; then
         zle redisplay
-        where $name && whatis $name 2> /dev/null && pacman -Qo $(whereis -b $name|cut -d' ' -f2)
+        type -as $name && whatis $name 2> /dev/null && pacman -Qo $(whereis -b $name|cut -d' ' -f2)
         zle accept-line
     else
         zle reset-prompt
     fi
 }
-zle -N where-widget
+zle -N _where
 
-bookmarks-widget() {
-    zle kill-buffer
-    local dir=$(hash -d | grep -v -E "OLDPWD|PWD" | fzf --preview 'tree -C $(echo {} | cut -d= -f2)')
-    if [[ -n $dir ]]; then
-        dir=$(echo $dir | cut -d= -f2)
-        cd $dir
-        zle redisplay
-    else
-        zle reset-prompt
-    fi
-}
-zle -N bookmarks-widget
-
-ls-widget() {
-    ls -l
+_parent_dir() {
+    cd ..
     zle kill-buffer
     zle accept-line
 }
-zle -N ls-widget
+zle -N _parent_dir
 
-ff() {
-    local target=$(fd "$@" | fzf)
-    xdg-open "$target" &
+_oldcd() {
+    cd -
+    zle kill-buffer
+    zle accept-line
 }
+zle -N _oldcd
+
+_popd() {
+    popd
+    zle kill-buffer
+    zle accept-line
+}
+zle -N _popd
 
 rn() {
     mv "$1" "${1:P:h}/$2"
@@ -988,88 +991,73 @@ rn() {
 
 ## Keybindings
 
+# Up, Down
 # bindkey '^[[A' history-search-backward
 # bindkey '^[[B' history-search-forward
-
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
-# Alt-n/p samme som ctrl-n/p, fjerne for å gå tilbake til substring search
-bindkey '^[p' up-history
-bindkey '^[n' down-history
-
-
-# Undo
-bindkey '^[u' undo
-bindkey '^[U' redo
-bindkey ' ' magic-space
-# shift-tab
-bindkey '^[[Z' reverse-menu-complete
-
-# file rename magick
-bindkey "^[m" copy-prev-shell-word
-
-bindkey "^[w" backward-kill-word
-
-bindkey '^[s' sc-widget
-bindkey '^[S' ssh-widget
-bindkey '^[e' edit-local-widget
-bindkey '^[E' edit-global-widget
-bindkey '^[g' global-cd-widget
-bindkey '^[k' kill-processes-widget
-bindkey '^[i' insert-widget
-bindkey '^[r' sudo-widget
-bindkey '^[H' man-widget
-bindkey '^U' parent-directory-widget
-bindkey '^[W' where-widget
-bindkey '^[|' bookmarks-widget
-
-# requires fzf-widgets
-# bindkey '^[R' fzf-change-recent-directory
-
-# Cycle dirstack, må være etter plugins
-bindkey '^[P' cycledleft
-bindkey '^[N' cycledright
-
-# Alt-left, alt-right
+# Alt-left, Alt-right
 bindkey '^[[1;3C' forward-word
 bindkey '^[[1;3D' backward-word
 
-# Ctrl-left, ctrl-right
+# Ctrl-left, Ctrl-right
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
-# escape codes er riktige, men undefined-key gjør ikke det du vil
+# Alt-n/p to Ctrl-n/p
+bindkey '^[p' up-history
+bindkey '^[n' down-history
+
+# riktige er riktige, men undefined-key gjør ikke det du vil
 # Ctrl-up,down, Alt-up,down
-bindkey '^[[1;3A' parent-directory-widget
+bindkey '^[[1;3A' _parent_dir
 bindkey '^[[1;3B' undefined-key
 bindkey '^[[1;5A' undefined-key
 bindkey '^[[1;5B' undefined-key
 
-# Taken by tmux prefix
-bindkey '^S' undefined-key
-
-# bindkey '^[L' undefined-key
-# bindkey '^[l' undefined-key
-# bindkey '^[l' ls-widget
-# bindkey '^[L' clear-screen
-bindkey '^[l' clear-screen
-# Push hele bufferen til stack og hent den igjen etter du har gjort noe annet
-bindkey '^Q' push-line-or-edit
 bindkey '^[q' kill-buffer
+bindkey '^Q' push-line-or-edit
+bindkey '^[l' clear-screen
+bindkey '^[u' undo
+bindkey '^[U' redo
+bindkey ' ' magic-space
+# Alt-¨: insert ~/
+bindkey -s ']' '~/'
+# Ctrl-space 
+bindkey '^@' autosuggest-accept
+bindkey "^[m" copy-prev-shell-word
+# bindkey "^[w" backward-kill-word
+
+bindkey '^[e' _local_files
+bindkey '^[E' _system_files
+bindkey '^[g' _global_dirs
+bindkey '^[i' _locate_insert
+bindkey '^[k' _kill_process
+bindkey '^[s' _systemd_units
+bindkey '^[S' _ssh_targets
+bindkey '^[H' _manpages
+bindkey '^[W' _where
+
+bindkey '^[r' _resudo
+bindkey '^U'  _parent_dir
+bindkey '^[-' _oldcd
+bindkey 'o' _popd
+# bindkey -s 'o' 'popd\r'
 
 
 # FZF
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
-export FZF_DEFAULT_COMMAND='rg --files -uu'
+export FZF_DEFAULT_COMMAND='find -type f'
 export FZF_ALT_C_COMMAND="fd -H -td -tl"
+# Find is faster, but sorts depth first
+# export FZF_ALT_C_COMMAND="find -type d -or -type l"
 export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_OPTS="
---height=35% --reverse
---bind "tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up"
---color fg:-1,bg:-1,bg+:-1
- --inline-info
+    --height=35% --reverse --inline-info
+    --bind 'tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up'
+    --color fg:-1,bg:-1,bg+:-1
 "
 # Using bat instead of highlight for file preview
 # --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}'
@@ -1079,33 +1067,9 @@ bindkey '^T' fzf-completion
 bindkey '^[t' fzf-completion
 bindkey '^I' $fzf_default_completion
 
-# fzf-marks
-# mark: save
-# fzm: goto
-export FZF_MARKS_NO_COLORS=1
-# export FZF_MARKS_JUMP='^[|'
-
-# autonamedirs
 setopt autonamedirs
-source ~/.zshdirs
-
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-# POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
-
-# SPACESHIP_PROMPT_ORDER=(
-#   time          # Time stamps section
-#   user          # Username section
-#   dir           # Current directory section
-#   host          # Hostname section
-#   git           # Git section (git_branch + git_status)
-#   exec_time     # Execution time
-#   line_sep      # Line break
-#   exit_code     # Exit code section
-#   char          # Prompt character
-# )
-
+dotfiles="/home/jonas/Dropbox/Backup/dotfiles"
+Fag="/home/jonas/Dropbox/Fag"
 
 # FASD
 eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
@@ -1125,7 +1089,7 @@ c() {
         local dir=$(fasd -d $@)
         [[ -n $dir ]] && cd "${dir}"
     else
-        local dir=$(fasd -dltR | fzf --no-sort)
+        local dir=$(fasd -dtlR | fzf --no-sort)
         [[ -n $dir ]] && cd "${dir}"
     fi
 }
@@ -1142,7 +1106,8 @@ c() {
 #     fi
 # }
 
-# Bedre versjon av vg
+# Bedre versjon av vg (bruker highlight og ikke bat til preview)
+# TODO: skriv om til å bruke bat, og go to line (to søk eller inkludert i fzf input)
 va() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
   local file=$(rg -l --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}")
@@ -1151,13 +1116,16 @@ va() {
 
 vf() {
     local file=$(fd -tf "$@" | fzf --preview "echo {} | rg --color=always \"$@\"" --preview-window up:1);
-    if [[ -n $file ]]; then
-        vim "${file}"
-    fi
+    [[ -n $file ]] && vim "${file}"
 }
 
-## COMPLETION FUNCTIONS
+ff() {
+    local target=$(fd "$@" | fzf)
+    xdg-open "$target" &
+}
 
+
+# COMPLETION PROVIDERS
 _pacman_installed_packages() {
 	local -a cmd packages packages_long
 	packages_long=(/var/lib/pacman/local/*(/))
@@ -1165,19 +1133,15 @@ _pacman_installed_packages() {
 	compadd "$@" -a packages
 }
 
-
-# Use lf to switch directories
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-bindkey -s 'o' 'lfcd\n'
-
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
 eval "$(~/anaconda3/bin/conda shell.zsh hook)"
+
+# TODO: m-j (jump? down?), m-k (C-K?), m-v
+# TODO: m-w to kill a word!
+# TODO: bind something to run previous command (m-r is with sudo)
+# TODO: something to git switch fzf? or just make g take an argument with completion
+# TODO: <m-m> is copy last word, rarely useful
+# TODO: is copy last word, rarely useful
+# TODO: something easier than c-a; m-a (accept and hold) is kind of nice
+# TODO: <c-x> should be something other than fasd complete (but is used by tmux)

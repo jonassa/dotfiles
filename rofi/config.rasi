@@ -1,3 +1,4 @@
+// vim: ft=css
 configuration {
     width: 50;
     lines: 12;

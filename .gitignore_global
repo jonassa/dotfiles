@@ -1,0 +1,4 @@
+.vim/
+.direnv/
+.envrc
+.DS_Store

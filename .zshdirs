@@ -1,9 +1,0 @@
-# Named directories lagres i hash
-# hash lagrer utility locations, inkludert named directories
-# hash viser alt som er lagret
-# hash -d viser dirs som er lagret
-# hash -d navn=path legger til en static named directory
-# autonamedirs gjør at variabler hvis innhold begynner på /, legges til i hash automatisk som named directories
-
-dotfiles="/home/jonas/Dropbox/Backup/dotfiles"
-Fag="/home/jonas/Dropbox/Fag"

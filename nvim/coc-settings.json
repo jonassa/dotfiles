@@ -1,14 +1,11 @@
 {
-    "languageserver": {
-        "metals": {
-            "command": "metals-vim",
-            "rootPatterns": ["build.sbt"],
-            "filetypes": ["scala", "sbt"]
-        }
-    },
     "diagnostic.displayByAle": true,
+    // "codeLens.enable": false,
     "suggest.minTriggerInputLength": 2,
     "diagnostic.warningSign":"--",
+    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
+    "python.jediEnabled": false,
+
     "list.insertMappings": {
         "<C-r>": "do:refresh",
         "<C-f>": "feedkeys:\\<C-f>",
@@ -17,7 +14,7 @@
         "<C-p>": "normal:k",
         "<A-j>": "normal:j",
         "<A-k>": "normal:k",
-        "<A-n>": "prompt:next", // does not work
+        "<A-n>": "prompt:next",     // does not work
         "<A-p>": "prompt:previous", // does not work
         "<Tab>": "normal:j",
         "<S-Tab>": "normal:k",
@@ -26,6 +23,22 @@
         "<C-C>": "do:exit",
         "<C-v>": "eval:@@"
     },
-    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
-    // "python.jediEnabled": false
+
+    "languageserver": {
+        "metals": {
+            "command": "metals-vim",
+            "rootPatterns": ["build.sbt"],
+            "filetypes": ["scala", "sbt"]
+        },
+        "ccls": {
+          "command": "ccls",
+          "filetypes": ["c", "cpp", "objc", "objcpp"],
+          "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
+          "initializationOptions": {
+             "cache": {
+               "directory": "/tmp/ccls"
+             }
+           }
+        }
+    }
 }

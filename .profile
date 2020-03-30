@@ -35,7 +35,15 @@ export VISUAL=nvim
 export BROWSER=chromium
 export SYSTEMD_PAGER=less
 export SYSTEMD_EDITOR=nvim
-export JAVA_HOME=/usr/lib/jvm/default # Scala metals
+export JAVA_HOME=/usr/lib/jvm/default # Scala metals (og andre ting som IntelliJ)
+
 export MOOD=dark; echo dark > /tmp/mood
 export VIM_BG='dark'
 # export VIM_COLORS='material-theme'
+
+# Prettify python traceback (must install tbvaccine in virtualenv)
+export TBVACCINE=1
+
+# export LESS='-iRk /home/jonas/.less'
+export LESS='-iRF -k /home/jonas/.less'
+export NMON='MMMm1'

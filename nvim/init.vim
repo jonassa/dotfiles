@@ -6,7 +6,6 @@ call plug#begin('~/.vim/plugged')
 " COLORSCHEMES {{{
 Plug 'https://github.com/vim-scripts/ScrollColors'
 Plug 'arcticicestudio/nord-vim'
-let g:nord_comment_brightness = 20
 Plug 'https://github.com/morhetz/gruvbox'
 let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_improved_strings = 1
@@ -38,17 +37,18 @@ Plug 'https://github.com/flrnd/plastic.vim'
 Plug 'srcery-colors/srcery-vim'
 Plug 'https://github.com/sainnhe/edge'
 let g:edge_disable_italic_comment = 1
+let g:edge_menu_selection_background = 'purple'
 " default, proton or neon
 let g:edge_style = 'proton'
-let g:edge_transparent_background = 1
+let g:edge_transparent_background = 0
 Plug 'https://github.com/sainnhe/gruvbox-material'
 let g:gruvbox_material_disable_italic_comment = 1
 let g:gruvbox_material_background = 'medium'
 let g:gruvbox_material_enable_bold = 1
-let g:gruvbox_material_transparent_background = 1
+let g:gruvbox_material_transparent_background = 0
 Plug 'https://github.com/sainnhe/sonokai'
 " shusia, andromeda, atlantis or maia
-let g:sonokai_style = 'atlantis'
+let g:sonokai_style = 'andromeda'
 let g:sonokai_disable_italic_comment = 1
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/YorickPeterse/happy_hacking.vim'
@@ -178,6 +178,9 @@ let g:AutoPairsShortcutFastWrap = ''
 nnoremap <m-F> daWWPB
 nnoremap <m-B> daWBPB
 
+" Plug 'https://github.com/terryma/vim-expand-region'
+" map vo <Plug>(expand_region_expand)
+" map J <Plug>(expand_region_shrink)
 "}}}
 
 Plug 'christoomey/vim-tmux-navigator'
@@ -238,6 +241,11 @@ let g:ale_linters = {
 " TODO: use loclist and find mappings for lnext/lprev
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
+
+let g:ale_pattern_options = {
+\   '': {'ale_enabled': 0},
+\}
+
 "}}}
 
 " LSP {{{
@@ -271,7 +279,7 @@ fun! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endf
 
-imap <M-e> <Plug>(coc-snippets-expand)
+imap <M-s> <Plug>(coc-snippets-expand)
 let g:coc_snippet_next = '<m-f>'
 let g:coc_snippet_prev = '<m-b>'
 
@@ -299,7 +307,8 @@ call plug#end()
 " OPTIONS {{{
 set mouse=a
 set winaltkeys=no
-set backspace=indent,eol,start
+" set backspace=indent,eol,start
+set backspace=indent,start
 
 set hidden
 set switchbuf=usetab
@@ -332,7 +341,7 @@ set undodir=/var/tmp/nvim
 call CocOptions()
 
 set number
-set relativenumber
+" set relativenumber
 set title
 set cursorline
 set listchars=tab:\ \ ,nbsp:␣,trail:·,extends:›,precedes:‹
@@ -413,7 +422,8 @@ if has('termguicolors')
 endif
 
 " let g:dark='gruvbox-material'
-let g:dark='edge'
+" let g:dark='edge'
+let g:dark='sonokai'
 let g:light='tempus_dawn'
 let g:fallback='gruvbox'
 
@@ -544,7 +554,9 @@ nnoremap <silent> <leader><Tab> :Buffers<CR>
 nnoremap <silent> <C-R> :History:<CR>
 nnoremap <silent> <leader>: :Commands<CR>
 nnoremap <silent> <leader>h :Helptags<CR>
-nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>fe :Files<CR>
+nnoremap <silent> <leader>fh :Files ~<CR>
+nnoremap <silent> <leader>fr :History<CR>
 nnoremap <silent> <leader>F :Files ~<CR>
 nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>c :Colors<CR>
@@ -552,7 +564,7 @@ nnoremap <silent> <leader>' :Marks<CR>
 nnoremap <leader>/ :Ag<Space>
 nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>r :History<CR>
-" TODO: ':Vista finder' uses ctags even when coc is available (sometimes)
+" Use coc if available, else use ctags
 nnoremap <silent> <leader><leader> :Vista finder coc<CR>
 nnoremap <silent> t :Tags<CR>
 " nnoremap <silent> <leader>l :Lines<CR>
@@ -606,6 +618,8 @@ nnoremap G Gzz
 map gb %
 xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
 xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
+nnoremap n nzz
+nnoremap N Nzz
 
 " Redo
 nnoremap U <C-R>
@@ -629,14 +643,15 @@ noremap! <C-B> <Left>
 noremap! <C-D> <Del>
 
 " Insert mode editing
-inoremap <M-f> <Esc><C-Right>
-inoremap <M-b> <Esc><C-Left>
+inoremap <M-f> <Esc>l<C-Right>
+inoremap <M-b> <Esc>l<C-Left>
 nnoremap <M-f> <C-Right>
 nnoremap <M-b> <C-Left>
 xnoremap <M-f> <C-Right>
 xnoremap <M-b> <C-Left>
 inoremap <M-d> <C-\><C-O>de
-nnoremap <M-d> dW
+" nnoremap <M-d> dW
+nnoremap <M-d> daW
 inoremap <M-i> <Esc>I
 inoremap <M-a> <Esc>A
 
@@ -671,13 +686,15 @@ nnoremap s /
 " nnoremap S ?
 xnoremap s /
 " xnoremap S ?
-nnoremap <M-n> *
+" nnoremap <M-n> *
+nnoremap <M-n> *Ncgn
 nnoremap <M-N> #
 xnoremap <M-n> *
 xnoremap <M-N> #
+nmap ø *
 
 " Navigate changelist
-noremap , g;zvzz
+noremap , g;
 noremap ; g,zvzz
 
 " Alternating
@@ -703,7 +720,6 @@ nnoremap <silent> <C-L> :TmuxNavigateRight<CR>
 nnoremap <silent> <C-S> :up<CR>
 inoremap <silent> <C-s> <Esc>:up<CR>
 nnoremap <silent> <M-s> :up<CR>
-inoremap <silent> <M-s> <Esc>:up<CR>
 
 " Quickfix
 if executable('ag') | set grepprg=ag\ --vimgrep\ --silent | endif
@@ -728,7 +744,7 @@ nnoremap <silent> <expr> <down>  &diff ? ']c' : ':cnext<CR>zvzz'
 nnoremap <silent> <expr> <left>  &diff ? 'do' : ':cpf<CR>zvzz'
 nnoremap <silent> <expr> <right> &diff ? 'dp' : ':cnf<CR>zvzz'
 nnoremap <silent> <expr> dp &diff ? 'dp' : ':t.<CR>'
-nnoremap <silent> <expr> do &diff ? 'do' : ':Explore<CR>'
+" nnoremap <silent> <expr> do &diff ? 'do' : ':Explore<CR>'
 nnoremap <silent> <expr> <leader>d &diff ? ':diffoff!<CR>:q<CR>' : ':Gdiffsplit<CR>'
 
 " substsitute
@@ -737,8 +753,8 @@ xnoremap gs :s/
 " replace word/visual
 nnoremap gr :%s/\<<c-r><c-w>\>/
 xnoremap gr y:%s/\<<c-r>"\>/
-" remove empty lines
-xnoremap R :g/^$/d<CR>
+" remove empty lines (rare enough to just use g)
+" xnoremap R :g/^$/d<CR>
 " make one empty line between each paragraph
 " xnoremap Q :s/\n\{3,\}/\r\r<CR>
 " Apply macro linewise
@@ -783,36 +799,8 @@ nmap <M-c> gcc
 xmap <M-c> gc
 nmap <M-C> :t-1<CR>gccj
 
-" yank to end of line
-map Y y$
-"d/c/y to start of line
-nnoremap dh d^
-nnoremap ch c^
-nnoremap yh y^
-
-call yankstack#setup()
-nmap <M-p> <Plug>yankstack_substitute_older_paste
-nmap <M-P> <Plug>yankstack_substitute_newer_paste
-
-" yank to clipboard
-xnoremap <C-C> "+y
-nnoremap <C-C> "+yy
-" paste from clipboard
-nnoremap <leader>p "+p
-" nnoremap cp <esc>"+p
-" nnoremap cP <esc>"+P
-" paste from numreg
-nnoremap cp "1p
-nnoremap cP "1P
-" paste from yank register
-nnoremap yp "0p
-nnoremap yP "0P
-" paste unnamed reg in insert mode (use C-Q to insert literal)
-inoremap <C-v> <C-R>"
-
-" duplicate lines
-nnoremap dP :t-1<CR>
-nnoremap + :t-1<CR>
+" duplicate lines (dp in diff expr binding)
+nmap dP :t-1<CR>gccj
 xnoremap P :t-1<CR>
 
 " delete line
@@ -839,11 +827,40 @@ nnoremap <silent> <C-M-k> mz:m-2<CR>`z
 xnoremap <M-j> :m'>+<CR>`<my`>mzgv`yo`z
 xnoremap <M-k> :m'<-2<CR>`>my`<mzgv`yo`z
 
+
+" yank to end of line
+map Y y$
+"d/c/y to start of line
+nnoremap dh d^
+nnoremap ch c^
+nnoremap yh y^
+
+call yankstack#setup()
+nmap <M-p> <Plug>yankstack_substitute_older_paste
+nmap <M-P> <Plug>yankstack_substitute_newer_paste
+
+" yank to clipboard
+xnoremap <C-C> "+y
+nnoremap <C-C> "+yy
+" paste from clipboard
+" nnoremap <leader>p "+p
+nnoremap <leader>p :PutLine<CR>
+" nnoremap cp <esc>"+p
+" nnoremap cP <esc>"+P
+" paste from numreg
+nnoremap cp "1p
+nnoremap cP "1P
+" paste from yank register
+nnoremap yp "0p
+nnoremap yP "0P
+" paste unnamed reg in insert mode (use C-Q to insert literal)
+inoremap <C-v> <C-R>"
+
 " Toggling panels
 nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 " nnoremap <silent> <M-2> :TagbarToggle<CR>
 nnoremap <silent> <M-2> :Vista!!<CR>
-nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
+" nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
 nnoremap cd :Directories<CR>
 nnoremap mv :Rename<Space>
@@ -862,14 +879,13 @@ nnoremap dl 0d$
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
-" Preview tag under cursor
+" Preview tag under cursor (:ptag)
 nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
 nnoremap M zz
 nnoremap <C-E> zt
 nnoremap <C-Y> zb
-nnoremap g<Space> a<Space><Esc>
 " nnoremap <m-s> a<Space><Esc>
 " nnoremap <silent> <M-Bar> :call Scratch()<CR>
 " noremap gh H
@@ -888,17 +904,18 @@ nnoremap ¿ <C-X>
 inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
 nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
 
-nnoremap <M-n> *Ncgn
 
 "}}}
 "}}}
 
 " FOLDING {{{
+" TODO: why is foldmethod=manual and not indent (except vimrc; fdm=marker)
 setglobal fdm=indent
 setglobal nofoldenable
+" TODO: does not zv when jumping to tag using :Tags or :Vista finder
 set foldopen+=jump
-" au vimrc BufEnter $MYVIMRC setlocal fdm=marker | norm zv
 au vimrc BufEnter $MYVIMRC norm zv
+" au vimrc BufEnter $MYVIMRC setlocal fdm=marker | norm zv
 au vimrc FileType vim setlocal fdm=marker | norm zv
 " if expand("%:t") != 'init.vim'
 "     set nofoldenable
@@ -908,7 +925,15 @@ au vimrc FileType vim setlocal fdm=marker | norm zv
 nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
 nnoremap <M-m> zm
 nnoremap <M-M> zr
-nnoremap <Bar> za
+nnoremap Z za
+
+" FOLD_TESTING {{{
+set fdm=indent
+" m-m only decrements to 98 and so on; <f1> must be used first
+" also, this breaks vimrc being folded initially
+set foldlevelstart=99 " open buffer with no folding, but with foldenable set
+" }}}
+
 "}}}
 
 " FUNCTIONS {{{
@@ -1014,6 +1039,8 @@ command! -nargs=* R up|!%:p <args>
 
 " Send selection to python interpreter
 " xnoremap <leader>r :w !python<CR>
+" Should be used for generic interpreter
+" Space is used in visual mode for surround space
 xnoremap R :w !python<CR>
 
 fun! Run()
@@ -1060,7 +1087,6 @@ fun! PutLine()
     normal ==
 endf
 command! -nargs=0 PutLine call PutLine()
-nnoremap <leader>p :PutLine<CR>
 
 "}}}
 
@@ -1099,7 +1125,7 @@ let g:sandwich#recipes += [
 "}}}
 
 " FZF {{{
-let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'down': '~20%' }
 let g:fzf_nvim_statusline = 0
 let g:fzf_buffers_jump = 1
 let g:fzf_history_dir = '~/.local/share/fzf-history'
@@ -1144,7 +1170,6 @@ imap <C-X><C-F> <plug>(fzf-complete-path)
 imap <C-X><C-L> <plug>(fzf-complete-line)
 nmap <leader>? <plug>(fzf-maps-n)
 " xmap <leader>? <plug>(fzf-maps-x)
-omap <leader>? <plug>(fzf-maps-o)
 imap <c-x>? <plug>(fzf-maps-i)
 
 "}}}
@@ -1164,6 +1189,19 @@ let g:netrw_winsize = 25
 " <Plug>(coc-diagnostic-prev)
 " <Plug>(coc-diagnostic-next-error)
 " <Plug>(coc-diagnostic-prev-error)
+
+"   <Plug>(ale_previous) - ALEPrevious
+"   <Plug>(ale_previous_wrap) - ALEPreviousWrap
+"   <Plug>(ale_previous_error) - ALEPrevious -error
+"   <Plug>(ale_previous_wrap_error) - ALEPrevious -wrap -error
+"   <Plug>(ale_previous_warning) - ALEPrevious -warning
+"   <Plug>(ale_previous_wrap_warning) - ALEPrevious -wrap -warning
+"   <Plug>(ale_next) - ALENext
+"   <Plug>(ale_next_wrap) - ALENextWrap
+"   <Plug>(ale_next_error) - ALENext -error
+"   <Plug>(ale_next_wrap_error) - ALENext -wrap -error
+"   <Plug>(ale_next_warning) - ALENext -warning
+"   <Plug>(ale_next_wrap_warning) - ALENext -wrap -warning
 
 " Compare: ALEGoToDefinition
 nmap <silent> gd <Plug>(coc-definition)
@@ -1210,6 +1248,7 @@ nnoremap vr <Plug>(coc-refactor)
 
 " inoremap <C-H>
 " inoremap <C-J>
+" inoremap <C-K> if you don't need digraphs
 
 " nnoremap +
 " nnoremap -
@@ -1255,7 +1294,7 @@ nmap cv civ
 " nnoremap gz
 " nnoremap M
 " nnoremap mv
-" nnoremap vc
+" nmap vc gcap
 " nnoremap vd
 " nnoremap vm
 " nnoremap vo
@@ -1263,6 +1302,7 @@ nnoremap vp yapP
 " nnoremap vq
 " nnoremap vr
 " nnoremap vx
+" nnoremap vz
 " nnoremap vy
 " nnoremap yc
 " nnoremap yd
@@ -1275,7 +1315,6 @@ nnoremap vp yapP
 " nnoremap yv
 " nnoremap yx
 " nnoremap yz
-" nnoremap Z
 " nnoremap zd
 " nnoremap zp
 " nnoremap zs
@@ -1346,14 +1385,41 @@ xnoremap - <C-X>gv
 xmap <silent> <C-A> <C-A>/\d\+<CR>Ngn
 xmap <silent> <C-X> <C-X>/\d\+<CR>Ngn
 nnoremap <m-l> cc
-nnoremap <silent> <M-Space> i<space><right><space><esc>mz:call JustOneSpace()<CR>`z
 nnoremap <c-e> :Snippets<CR>
 " TODO: finne noe bedre for change line fra insert mode og normal mode
 inoremap <M-c> <Esc>S
-nnoremap Z za
 nnoremap \R :Rename<Space>
+nnoremap <silent> \r :reg<CR>
+nnoremap \b :ls!<CR>:b<Space>
+nnoremap <silent> \s :!stat %<CR>
+nnoremap \d :pwd<CR>
 xmap <Space> <M-r><Space>
+nnoremap \f :Filetypes<CR>
+inoremap <m-e> <Esc>A
+" Select the last inserted text (works poorly for multiple lines inserted)
+nnoremap g. `[v`]
+inoremap <LeftMouse> <Esc>
+xmap S <Plug>(operator-sandwich-add)
+imap ¨ {
+nmap <m-s> <m-r>iW
+nnoremap \o :!pacman -Qo %<CR>
 
+fun! s:fasd_update() abort
+  if empty(&buftype) || &filetype ==# 'dirvish'
+    call jobstart(['fasd', '-A', expand('%:p')])
+  endif
+endf
+
+aug fasd
+  au!
+  au BufWinEnter,BufFilePost * call s:fasd_update()
+aug END
+" command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
+
+nnoremap <c-m-s> :up<cr>
+nnoremap <Space><Esc> <Nop>
+nnoremap <m-j> J
+nnoremap <silent> <m-k> :<C-u>call BreakHere()<CR>
 
 "}}}
 

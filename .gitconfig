@@ -2,6 +2,7 @@
     name = Jonas Sandberg
     email = jonas.sandb@gmail.com
 [core]
+	excludesfile = /home/jonas/.gitignore_global
 [pager]
     log  = /usr/bin/diffr | less -RFX
     show = /usr/bin/diffr | less -RFX
@@ -23,6 +24,7 @@
 [mergetool "vimdiff"]
     cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [mergetool "nvim"]
+    ; doesn't work
     cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
 [color]
     ui = auto

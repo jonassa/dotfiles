@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+nmcli -t  c show --active | grep NTNU && nmcli c down NTNU || nmcli c up NTNU
