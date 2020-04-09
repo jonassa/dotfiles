@@ -228,6 +228,9 @@ mkcd() {
 take() {
   mkdir -p $@ && cd ${@:$#}
 }
+rn() {
+    mv "$1" "${1:P:h}/$2"
+}
 
 alias exa='exa --group-directories-first'
 alias lll='exa -lauUhmiHS --git'
@@ -445,7 +448,7 @@ clone() {git clone $1 && cd $(basename $1 .git)}
 alias g='git status'
 alias gs='git status -sb'
 alias ga='git add'
-alias gb='git branch -av'
+alias gb='git branch -avv'
 alias gc='git checkout'
 alias gcm='git commit'
 alias gca='git commit -av'
@@ -481,6 +484,7 @@ alias gsp='git stash pop'
 alias gsl='git shortlog -n --no-merges'
 function gi() { curl -sLw n https://www.gitignore.io/api/$@ ;}
 alias redit='vim $(git ls-tree --full-tree -r --name-only HEAD | fzf)'
+alias grm='git remote -v'
 
 alias perm='stat -c "%a %U"'
 
@@ -985,10 +989,6 @@ _popd() {
 }
 zle -N _popd
 
-rn() {
-    mv "$1" "${1:P:h}/$2"
-}
-
 ## Keybindings
 
 # Up, Down
@@ -1015,6 +1015,10 @@ bindkey '^[[1;3A' _parent_dir
 bindkey '^[[1;3B' undefined-key
 bindkey '^[[1;5A' undefined-key
 bindkey '^[[1;5B' undefined-key
+
+# Home, End
+bindkey '[H' beginning-of-line
+bindkey '[F' end-of-line
 
 bindkey '^[q' kill-buffer
 bindkey '^Q' push-line-or-edit
@@ -1050,6 +1054,7 @@ bindkey 'o' _popd
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='find -type f'
+# export FZF_DEFAULT_COMMAND='rg --files -uu'
 export FZF_ALT_C_COMMAND="fd -H -td -tl"
 # Find is faster, but sorts depth first
 # export FZF_ALT_C_COMMAND="find -type d -or -type l"
