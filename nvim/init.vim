@@ -218,6 +218,8 @@ let g:bullets_enabled_file_types = [
             \ 'Scratch'
             \]
 
+Plug 'tridactyl/vim-tridactyl'
+
 Plug 'https://github.com/honza/vim-snippets'
 
 " ULTISNIPS {{{
@@ -1420,6 +1422,9 @@ nnoremap <c-m-s> :up<cr>
 nnoremap <Space><Esc> <Nop>
 nnoremap <m-j> J
 nnoremap <silent> <m-k> :<C-u>call BreakHere()<CR>
+nnoremap <PageUp> <PageUp>zz
+nnoremap <PageDown> <PageDown>zz
+nnoremap <BS> <C-O>
 
 "}}}
 
