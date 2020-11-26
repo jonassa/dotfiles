@@ -17,6 +17,14 @@ fontlist=(
     'FuraMono Nerd Font Regular 11'
     'Source Code Pro 11'
     'Hasklig Medium 11'
+    'Inconsolata Medium 13'
+    'Inconsolata Semibold 13'
+    'Pragmata Pro Mono Bold 11'
+    'Pragmata Pro Mono 11'
+    'Pragmata Pro Mono 12'
+    'Jetbrains Mono Medium 10.5'
+    'Jetbrains Mono Bold 10.5'
+    'Jetbrains Mono Medium 11'
 )
 
 printf "Current font is %s\n" "$(awk -F= '/FontName/{print $2}' "$terminalrc")"
@@ -27,6 +35,11 @@ for f in "${fontlist[@]}"; do
 done | fzf)
 
 if [[ -n $selection ]]; then
+    if [[ $selection =~ "Pragmata" ]]; then
+        sed -i "s/CellHeightScale=.*/CellHeightScale=1.150000/" "$terminalrc"
+    else
+        sed -i "s/CellHeightScale=.*/CellHeightScale=1.000000/" "$terminalrc"
+    fi
     sed -i "s/FontName=.*/FontName=$selection/" "$terminalrc"
 fi
 

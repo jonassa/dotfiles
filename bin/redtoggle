@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -n $(pgrep redshift) ]]; then
+if pgrep redshift; then
     pkill redshift
 else
     redshift -r&

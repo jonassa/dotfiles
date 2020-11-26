@@ -44,11 +44,10 @@
     "workbench.iconTheme": "simple-icons",
     "workbench.activityBar.visible": false,
     "window.titleBarStyle": "custom",
-    "editor.fontSize": 14.5,
     "editor.minimap.renderCharacters": false,
     "workbench.sideBar.location": "left",
     "update.mode": "none",
-    "workbench.colorTheme": "Mariana Pro (Cool)",
+    "workbench.colorTheme": "Mayukai Mono",
     "sync.gist": "0cf9ce3b42fa4ccc88d4f15c1eae55e1",
     "vim.neovimPath": "/usr/bin/nvim",
     "window.customMenuBarAltFocus": false,
@@ -115,5 +114,19 @@
             "value": "#42b883"
         }
     ],
-    "editor.multiCursorModifier": "ctrlCmd",
+    "files.watcherExclude": {
+        "**/.bloop": true,
+        "**/.metals": true,
+        "**/.ammonite": true
+    },
+    "editor.selectionClipboard": false,
+    "gruvboxMaterial.italicComments": false,
+    "editor.cursorBlinking": "phase",
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "gruvboxMaterial.colorfulSyntax": true,
+    "gruvboxMaterial.darkWorkbench": "flat",
+    "editor.minimap.enabled": false,
+    "editor.fontSize": 14.5,
+    "editor.tabCompletion": "on",
+    "editor.acceptSuggestionOnEnter": "smart",
 }

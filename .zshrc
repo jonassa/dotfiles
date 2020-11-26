@@ -37,6 +37,10 @@ autoload -Uz run-help-svn
 # cdr: change to recent dir
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
+chpwd() {
+    emulate -L zsh
+    ls -l
+}
 
 MOOD=$(</tmp/mood)
 
@@ -149,8 +153,15 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 # For å slippe to ganger enter
 bindkey -M menuselect '^M' .accept-line
+# For å gå inn i en mappe (accept completion)
+bindkey -M menuselect '^[a' accept-search
 # shift-tab
 bindkey '^[[Z' reverse-menu-complete
+
+# Instantly insert first completion (can be too aggressive)
+setopt menucomplete
+# This is default
+setopt autolist
 
 ## COMPLETION END
 
@@ -220,10 +231,10 @@ alias l='ls -l'
 alias ll='ls -la'
 alias lh='ls -ld .?*'
 alias ..='cd ..'
-alias md='mkdir -p'
 alias rd='rmdir'
-mkcd() {
-    mkdir $1 && cd $1
+alias mkd='md'
+md() {
+    mkdir -pv $1 && cd $1
 }
 take() {
   mkdir -p $@ && cd ${@:$#}
@@ -267,9 +278,9 @@ siblings() {
     local target=$(command fd -d1 -td . .. --color=always | ag -v ${PWD:t} | fzf -1 -0 --ansi )
     [[ -n $target ]] && [[ -d $target ]] && cd "${target}"
 }
-alias s='siblings'
+# alias s='siblings'
 
-alias ax='chmod a+x'
+alias ax='chmod +x'
 alias bat='bat --theme ansi-dark'
 alias cat='bat'
 vsh(){
@@ -292,33 +303,35 @@ alias path='echo $PATH | tr ":" "\n"'
 # }
 alias grep='grep -i --color=auto'
 alias fd='fd -H' # hidden
-alias ag='ag --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
+# alias ag='ag --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
 # alias ag='ag --hidden --ignore .git'
 agl() {ag $@ --pager less 2> /dev/null}
-gg() {[[ -n $@ ]] && ag $@ ~/Dropbox/Data}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 rgl() {rg $@ 2> /dev/null | less}
+q() {[[ -n $@ ]] && ag $@ ~/Dropbox/Data}
 alias udb='sudo updatedb'
 
 alias term='xfce4-terminal'
 alias vim='nvim'
+alias vi='nvim'
 alias vimdiff='nvim -d'
 alias svim='sudo nvim'
+alias sv='sudo nvim'
 alias em='emacsclient -c -a=""'
 # alias tmp='vim $(mktemp -t scratchXXX)'
 alias tmp='vim /tmp/scratch'
 vimgrep() { vim -c "silent grep $@" }
 alias vr='nvim ~/.config/nvim/init.vim'
 alias z='nvim ~/.zshrc'
-alias m='nvim ~/Dropbox/main.txt +"color tempus_past"'
+alias main='nvim ~/Dropbox/main.txt +"color tempus_past"'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 CONFIG_FILES=(
     "$HOME/.zshrc"
     "$HOME/.profile"
     "$HOME/.config/nvim/init.vim"
-    "$HOME/.xprofile"
     "$HOME/.config/xfce4/terminal/terminalrc"
     "$HOME/.config/kitty/kitty.conf"
+    "$HOME/.config/alacritty/alacritty.yml"
 )
 alias conf='nvim $CONFIG_FILES'
 alias bspconf='vim ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc'
@@ -372,7 +385,10 @@ pl() {
 
 alias sc='sudo systemctl'
 alias st='systemctl status'
-alias se='service'
+alias se='sudo systemctl enable'
+alias sd='sudo systemctl disable'
+# alias sa 'sudo systemctl start'
+# alias so 'sudo systemctl stop'
 alias dmesg='dmesg -e --color=always' # human, no-pager, farger kan være problem men funker med grep og less
 alias jc='journalctl'
 alias pstree='pstree -hT' # highlight current process, hide threads
@@ -397,11 +413,12 @@ alias cdu='cdu -is -dh &> /dev/null'
 #     }
 alias smem='sudo smem -kt' # -k abbreviate, -t show totals
 alias pgrep='pgrep -ai' # show command, case insensitive
-alias tldr='tldr -t ocean'
+# alias pgrep='pgrep -li'  # show name, case insensitive
 alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
+alias rsync='rsync -hP'
 
 srv() {
     local ip="$(ip -br -4 addr show wlan0 | awk '{print $3}' | cut -d/ -f1):8000"
@@ -445,20 +462,21 @@ alias hsel='history -n 0 |fzf --tac --no-sort|tr -d \\n|xsel -ib'
 
 # Git
 clone() {git clone $1 && cd $(basename $1 .git)}
-alias g='git status'
-alias gs='git status -sb'
+alias g='git status -sb'
+alias gg='git status'
 alias ga='git add'
 alias gb='git branch -avv'
+alias grm='git remote -v'
 alias gc='git checkout'
-alias gcm='git commit'
-alias gca='git commit -av'
+alias co='git checkout'
+alias cm='git commit -v'
+alias ca='git commit -av'
 alias gd='git diff'
 alias gdd='git diff --staged'
 alias gds='git diff --stat'
 alias gdds='git diff --staged --stat'
-alias gdt='git difftoo'
+alias gdt='git difftool'
 alias gdw='git diff --word-diff'
-# alias gs='git checkout'
 alias gf='git fetch'
 alias gfp='git fetch --prune'
 alias gfa='git fetch --all --prune'
@@ -466,25 +484,26 @@ alias gm='git merge'
 alias gpl='git pull'
 alias gpu='git push'
 alias gsh='git show'
-alias gl='git log --all --oneline'
-alias gll='git log --all'
+alias gl='git log --oneline'
+alias gll='git log --oneline --all'
 alias glg='git log --graph --oneline --all'
 alias gls='git log --stat'
 alias glp='git log -p'
 alias gwh='git whatchanged -p --abbrev-commit' 
 alias gsb='git show-branch'
-alias gsw='git switch'
-alias gr='git restore'
-alias grs='git reset'
+alias sw='git switch'
+alias gr='git reset'
 alias grh='git reset --hard'
+alias grs='git restore'
 alias grb='git rebase'
 # alias gg='git pull --ff-only'
 alias gst='git stash'
 alias gsp='git stash pop'
 alias gsl='git shortlog -n --no-merges'
 function gi() { curl -sLw n https://www.gitignore.io/api/$@ ;}
+#todo: git extras has ignore command?
 alias redit='vim $(git ls-tree --full-tree -r --name-only HEAD | fzf)'
-alias grm='git remote -v'
+alias gignore='vim $(git rev-parse --show-toplevel)/.gitignore'
 
 alias perm='stat -c "%a %U"'
 
@@ -497,6 +516,8 @@ alias -g H='--help'
 alias -g F='|field'
 alias -g R='; echo $?'
 alias -g IMG='*.(jpg|jpeg|png|gif)'
+
+alias nb='tmux new-session -d -s jupyter "jupyter lab"'
 
 field() {
     awk "{print \$$1}"
@@ -521,16 +542,7 @@ installed() {
 
 in_git(){ git rev-parse --is-inside-work-tree >/dev/null; }
 
-# Auto-ls
-chpwd() {
-    emulate -L zsh
-    ls -l
-}
-
-# zman for å finne dokumentasjon
-zman() {
- PAGER="less -g -s '+/^       "$1"'" man zshall
-}
+m() {PAGER="less -gs '+/^       "$2"'" man $1}
 
 mykeys() {
     ag '^bindkey' --nocolor --nonumbers ~/.zshrc --color;
@@ -819,6 +831,43 @@ _local_files() {
 }
 zle -N _local_files
 
+_dotfiles() {
+    local file=$(rg --files -uu --no-messages --no-follow $dotfiles | sed '/~$/d' | grep -v "\.git" |\
+        while read -r line; do
+            realpath --relative-to=$dotfiles $line
+        done |\
+        fzf --prompt='dotfiles/' --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}')
+    if [[ -n $file ]]; then
+        file="$dotfiles/$file"
+        zle redisplay
+        BUFFER="vim \"${file}\""
+        zle accept-line
+    else
+        zle reset-prompt
+    fi
+}
+zle -N _dotfiles
+
+_wiki_files() {
+    local file=$(\
+        rg --files -g '*.txt' -g '*.md' --no-messages --no-follow ~/Dropbox |\
+        sed '/~$/d' | grep -v -e "\.git" -e "reaper" |\
+        while read -r line; do
+            realpath --relative-to="$HOME/Dropbox" $line
+        done |\
+        fzf --prompt='Dropbox/' --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}')
+    if [[ -n $file ]]; then
+        file="$HOME/Dropbox/$file"
+        zle redisplay
+        BUFFER="vim \"${file}\""
+        zle accept-line
+    else
+        zle reset-prompt
+    fi
+}
+zle -N _wiki_files
+
+
 # locate -0 -r ^/etc -r ^/usr/lib -r ^/usr/local -r ^/usr/share -r /home/jonas
 # TODO: doesn't work
 # _system_files() {
@@ -894,9 +943,14 @@ gp() {
     [[ -n $project ]] && cd ~/$project
 }
 
+pe() {
+    pfile=$(find .password-store/ -type f | while read -r line; do realpath --relative-to=".password-store" $line ;done | fzf)
+    [[ -n $pfile ]] && pass edit $pfile:r
+}
+
 _kill_process() {
     zle kill-buffer
-    local process=$(ps hc --ppid 2 -p 2 --deselect -o pid,user,args|fzf|awk '{print $1}')
+    local process=$(ps -N --ppid 2 -p 2 -o s,user,pid,pcpu,pmem,comm --sort -pcpu,-pmem | fzf --header-lines=1 | awk '{print $3}')
     if [[ -n $process ]]; then
         echo $process
         zle redisplay
@@ -922,6 +976,14 @@ _resudo() {
     fi
 }
 zle -N _resudo
+
+_repeat() {
+    zle kill-buffer
+    BUFFER='!!'
+    zle expand-or-complete
+    zle accept-line
+}
+zle -N _repeat
 
 _manpages() {
     zle kill-buffer
@@ -989,6 +1051,17 @@ _popd() {
 }
 zle -N _popd
 
+_run() {
+    local file=$(fd -tx -d1 | fzf -0 -1)
+    if [[ -n $file ]]; then
+        LBUFFER="./$file "
+        zle redisplay
+    else
+        zle redisplay
+    fi
+}
+zle -N _run
+
 ## Keybindings
 
 # Up, Down
@@ -1034,6 +1107,8 @@ bindkey "^[m" copy-prev-shell-word
 # bindkey "^[w" backward-kill-word
 
 bindkey '^[e' _local_files
+bindkey '^[D' _dotfiles
+bindkey '^[W' _wiki_files
 bindkey '^[E' _system_files
 bindkey '^[g' _global_dirs
 bindkey '^[i' _locate_insert
@@ -1041,13 +1116,20 @@ bindkey '^[k' _kill_process
 bindkey '^[s' _systemd_units
 bindkey '^[S' _ssh_targets
 bindkey '^[H' _manpages
-bindkey '^[W' _where
+# bindkey '^[W' _where
 
 bindkey '^[r' _resudo
+bindkey '^[a' _repeat
 bindkey '^U'  _parent_dir
 bindkey '^[-' _oldcd
 bindkey 'o' _popd
 # bindkey -s 'o' 'popd\r'
+bindkey 'w' _run
+
+bindkey -s ß /
+bindkey -s ð ~/
+bindkey -s π ../
+bindkey -s œ 'xdg-open .\r'
 
 
 # FZF
@@ -1085,7 +1167,7 @@ v() {
         local file=$(fasd -f $@)
         [[ -n $file ]] && vim "${file}"
     else
-        local file=$(fasd -ftlR | fzf --no-sort)
+        local file=$(fasd -ftlR | fzf --no-sort --tiebreak=index)
         [[ -n $file ]] && vim "${file}"
     fi
 }
@@ -1094,7 +1176,7 @@ c() {
         local dir=$(fasd -d $@)
         [[ -n $dir ]] && cd "${dir}"
     else
-        local dir=$(fasd -dtlR | fzf --no-sort)
+        local dir=$(fasd -dtlR | fzf --no-sort --tiebreak=index)
         [[ -n $dir ]] && cd "${dir}"
     fi
 }
@@ -1140,13 +1222,25 @@ _pacman_installed_packages() {
 
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
-eval "$(~/anaconda3/bin/conda shell.zsh hook)"
+# eval "$(/home/jonas/anaconda3/bin/conda shell.zsh hook)"
+eval "$(/opt/miniconda3/bin/conda shell.zsh hook)"
 
+# quickfix: gnome does not add this path, though .profile is sourced
+# export PATH="${PATH:+$PATH:}$HOME/bin"
+
+
+# TODO: m-r to repeat command, m-R to sudo repeat
 # TODO: m-j (jump? down?), m-k (C-K?), m-v
 # TODO: m-w to kill a word!
-# TODO: bind something to run previous command (m-r is with sudo)
 # TODO: something to git switch fzf? or just make g take an argument with completion
 # TODO: <m-m> is copy last word, rarely useful
-# TODO: is copy last word, rarely useful
 # TODO: something easier than c-a; m-a (accept and hold) is kind of nice
 # TODO: <c-x> should be something other than fasd complete (but is used by tmux)
+# TODO: something to grep last command
+# TODO: ./ og ../
+# TODO!!: widget for å kopiere BUFFER til clipboard (cl "")
+# TODO: edit dotfile under Dotfiles
+# ting som er dritt å skrive:
+    # ~/
+    # ./
+    # ../

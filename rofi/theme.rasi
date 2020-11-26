@@ -1,15 +1,14 @@
 * {
-    font: "Roboto 11";
     background-color: #2E3440;
     text-color: #D8DEE9;
+    width: 38.2%;
 }
 
 #window {
     anchor:     center;
     location:   center;
-    width:      50%;
     padding:    10px;
-    border: 1px;
+    border: 2px;
     border-color: #4C566A;
 }
 

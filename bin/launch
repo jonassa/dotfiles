@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-if [[ $(pgrep $1) ]]; then
+if pgrep -i $1; then
     wmctrl -xR $1
 else
     eval $1

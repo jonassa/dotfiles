@@ -1,4 +1,0 @@
-/proc/cpuinfo
-/proc/asound/pcm
-/proc/cmdline
-/proc/modules

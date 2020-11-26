@@ -33,4 +33,8 @@
 [color "status"]
     added = green
     untracked = cyan
-    unmergerd = magenta
+    unmerged = magenta
+[push]
+	default = current
+[pull]
+	rebase = false

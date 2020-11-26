@@ -37,6 +37,8 @@ export SYSTEMD_PAGER=less
 export SYSTEMD_EDITOR=nvim
 export JAVA_HOME=/usr/lib/jvm/default # Scala metals (og andre ting som IntelliJ)
 
+export XDG_CONFIG_HOME="$HOME/.config/"
+
 export MOOD=dark; echo dark > /tmp/mood
 export VIM_BG='dark'
 # export VIM_COLORS='material-theme'

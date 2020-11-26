@@ -4,13 +4,13 @@ runtime! archlinux.vimfiletype plugin indent on
 call plug#begin('~/.vim/plugged')
 
 " COLORSCHEMES {{{
-Plug 'https://github.com/vim-scripts/ScrollColors'
 Plug 'arcticicestudio/nord-vim'
 Plug 'https://github.com/morhetz/gruvbox'
 let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_improved_strings = 1
 let g:gruvbox_improved_warnings = 1
 Plug 'https://github.com/joshdick/onedark.vim'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'https://github.com/jdkanani/vim-material-theme'
 Plug 'https://github.com/ajmwagar/vim-deus'
 Plug 'Rigellute/rigel'
@@ -32,29 +32,35 @@ Plug 'https://github.com/Nequo/vim-allomancer'
 Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
+let g:forest_night_enable_italic = 1
+let g:forest_night_disable_italic_comment = 1
+let g:forest_night_diagnostic_line_highlight = 1
+let g:forest_night_transparent_background = 0
 Plug 'https://github.com/relastle/bluewery.vim'
 Plug 'https://github.com/flrnd/plastic.vim'
 Plug 'srcery-colors/srcery-vim'
 Plug 'https://github.com/sainnhe/edge'
+let g:edge_style = 'neon'
+let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
 let g:edge_menu_selection_background = 'purple'
 " default, proton or neon
-let g:edge_style = 'proton'
 let g:edge_transparent_background = 0
 Plug 'https://github.com/sainnhe/gruvbox-material'
 let g:gruvbox_material_disable_italic_comment = 1
-let g:gruvbox_material_background = 'medium'
+let g:gruvbox_material_background = 'hard'
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_transparent_background = 0
 Plug 'https://github.com/sainnhe/sonokai'
 " shusia, andromeda, atlantis or maia
-let g:sonokai_style = 'andromeda'
+let g:sonokai_style = 'atlantis'
 let g:sonokai_disable_italic_comment = 1
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/YorickPeterse/happy_hacking.vim'
-
-
+Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
 "}}}
+
+" Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -69,7 +75,7 @@ Plug 'https://github.com/tpope/vim-rhubarb'
 Plug 'https://github.com/mhinz/vim-signify'
 
 " UNIX helpers: Move, Rename, Delete, Chmod, SudoWrite
-" TODO: map something to :Delete! and maybe Rename
+" TODO: map something to :Delete! and maybe Rename (\r)
 Plug 'https://github.com/tpope/vim-eunuch'
 
 " TESTING: Set 'path' dynamically instead of using set path=.,,**
@@ -89,7 +95,6 @@ let g:NERDTreeChDirMode = 2
 let g:NERDTreeAutoDeleteBuffer = 1
 au StdinReadPre * let s:std_in=1
 
-" Plug 'https://github.com/majutsushi/tagbar'
 Plug 'liuchengxu/vista.vim'
 let g:vista_stay_on_open = 0
 let g:vista_icon_indent = [" » ", "\t"]
@@ -98,7 +103,7 @@ let g:vista_executive_for = {
             \ 'scala': 'coc',
             \ 'vim': 'ctags',
             \ }
-let g:vista_fzf_preview = ['right:50%']
+" let g:vista_fzf_preview = ['right:50%']
 let g:vista#renderer#enable_icon = 0
 
 " Plug 'https://github.com/thaerkh/vim-indentguides'
@@ -110,24 +115,82 @@ Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
 let g:filebeagle_suppress_keymaps = 1
 nnoremap <silent> - :FileBeagleBufferDir<CR>
 
+Plug 'RRethy/vim-illuminate'
 "}}}
 
 " EDITING {{{
 Plug 'wellle/targets.vim'
-let g:targets_quotes = '"d ''q `'
-let g:targets_pairs = '()b {}B []r <>'
+" Prefer multiline targets around cursor over distant targets within cursor
+" line. This is sometimes problematic when trying to select something in front
+" of the cursor, as it selects something larger that is around the cursor.
+" let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
 
-Plug 'https://github.com/tpope/vim-commentary'
-Plug 'https://github.com/machakann/vim-sandwich/'
+" defaults: q any quote, b any block, a argument, t tag, B {}
+" use: s any quote, d any delimiter (separator), b (), r [], o any block
+" others: i indent, e entire, f function, t tag, p paragraph
+
+aug targets
+autocmd User targets#mappings#user call targets#mappings#extend({
+    \ 'b': { 'pair': [{'o':'(', 'c':')'}] },
+    \ 'r': { 'pair': [{'o':'[', 'c':']'}] },
+    \ 's': { 'quote': [{'d':"'"}, {'d':'"'}, {'d':'`'}] },
+    \ 'o': { 'pair': [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'}, {'o':'<', 'c':'>'}] },
+    \ 'd': { 'separator': [{'d':','}, {'d':'.'}, {'d':';'}, {'d':':'}, {'d':'+'}, {'d':'-'},
+    \                      {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
+    \                      {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}] },
+    \ })
+aug END
+
+nmap vs vis
+nmap vd vid
+nmap cd cid
+nmap co cio
+nmap do dao
+nmap vo vio
+nmap go yao
+" Also useful: daa, cia
+
 
 Plug 'https://github.com/kana/vim-textobj-user'
 Plug 'https://github.com/kana/vim-textobj-entire'
 Plug 'https://github.com/kana/vim-textobj-indent'
-" Plug 'https://github.com/kana/vim-textobj-function'
+" Most useful: vii
 Plug 'https://github.com/Julian/vim-textobj-variable-segment'
+nmap dv dav
+nmap cv civ
+Plug 'https://github.com/glts/vim-textobj-comment'
+" Useful: cic
+nmap dc daC
+Plug 'https://github.com/tkhren/vim-textobj-numeral'
+let g:textobj_numeral_no_default_key_mappings = 2
+omap an <Plug>(textobj-numeral-float-a)
+omap in <Plug>(textobj-numeral-float-i)
+xmap an <Plug>(textobj-numeral-float-a)
+xmap in <Plug>(textobj-numeral-float-i)
+nmap vn v<Plug>(textobj-numeral-float-a)
+xmap <C-A> <C-A>vn
+xmap <C-X> <C-X>vn
+
+Plug 'junegunn/vim-slash'
+noremap <plug>(slash-after) zz
+nnoremap dn dgn
+nnoremap cn cgn
+
+" Plug 'unblevable/quick-scope'
+Plug 'justinmk/vim-sneak'
+let g:sneak#s_next = 1
+let g:sneak#use_ic_scs = 1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+highlight link Sneak IncSearch
+
+
+Plug 'https://github.com/tpope/vim-commentary'
+Plug 'https://github.com/machakann/vim-sandwich/'
 
 Plug 'maxbrunsfeld/vim-yankstack'
-let g:yankstack_map_keys = 0
 let g:yankstack_yank_keys = ['y', 'Y', 'd', 'D']
 
 Plug 'https://github.com/tommcdo/vim-exchange'
@@ -154,7 +217,7 @@ nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 " TODO: problem with backspace consuming the next newline on comments
-Plug 'https://github.com/jiangmiao/auto-pairs'
+" Plug 'https://github.com/jiangmiao/auto-pairs'
 let g:AutoPairsShortcutToggle = ''
 let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMapCh = 0
@@ -178,9 +241,6 @@ let g:AutoPairsShortcutFastWrap = ''
 nnoremap <m-F> daWWPB
 nnoremap <m-B> daWBPB
 
-" Plug 'https://github.com/terryma/vim-expand-region'
-" map vo <Plug>(expand_region_expand)
-" map J <Plug>(expand_region_shrink)
 "}}}
 
 Plug 'christoomey/vim-tmux-navigator'
@@ -189,18 +249,6 @@ let g:tmux_navigator_no_mappings = 1
 Plug 'https://github.com/romainl/vim-qf'
 let g:qf_mapping_ack_style = 1
 let g:qf_max_height = 15
-
-Plug 'junegunn/vim-slash'
-" Plug 'unblevable/quick-scope'
-Plug 'justinmk/vim-sneak'
-let g:sneak#s_next = 1
-let g:sneak#use_ic_scs = 1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-highlight link Sneak IncSearch
-
 
 " LANGUAGE SUPPORT {{{
 Plug 'sheerun/vim-polyglot'
@@ -220,45 +268,72 @@ let g:bullets_enabled_file_types = [
 
 Plug 'tridactyl/vim-tridactyl'
 
-Plug 'https://github.com/honza/vim-snippets'
+" Plug 'https://github.com/honza/vim-snippets'
+
+" Treesitter {{{
+" Plug 'nvim-treesitter/nvim-treesitter'
+packadd nvim-treesitter
+
+lua << EOF
+  require'nvim-treesitter.configs'.setup {
+    highlight = {
+      enable = true,
+      use_languagetree = false,
+    },
+    indent = {
+      enable = true
+    },
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "<m-w>",
+        node_incremental = "<m-w>",
+        node_decremental = "<m-W>",
+      },
+    },
+  }
+EOF
+
+"}}}
 
 " ULTISNIPS {{{
-Plug 'https://github.com/SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<NUL>"
+" Plug 'https://github.com/SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger="<NUL>"
 " let g:UltiSnipsJumpForwardTrigger="<M-f>"
 " let g:UltiSnipsJumpBackwardTrigger="<M-b>"
 " let g:UltiSnipsRemoveSelectModeMappings = 0
 " let g:UltiSnipsMappingsToIgnore = ['<Tab>']
-nnoremap <m-e> :Snippets<CR>
+" nnoremap <leader>u :Snippets<CR>
 "}}}
 
-Plug 'dense-analysis/ale'
-nnoremap <silent> æ :ALENextWrap<CR>
-nnoremap <silent> Æ :ALEPreviousWrap<CR>
-nnoremap <silent> gæ :ALEDetail<CR>
+" Plug 'dense-analysis/ale'
+" let g:ale_disable_lsp = 1
 " Disable ALE for certain languages and use coc instead
-let g:ale_linters = {
-\   'scala': [''],
-\}
+" let g:ale_linters = {
+" \   'scala': [''],
+" \}
 " TODO: use loclist and find mappings for lnext/lprev
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+" let g:ale_set_loclist = 0
+" let g:ale_set_quickfix = 1
 
-let g:ale_pattern_options = {
-\   '': {'ale_enabled': 0},
-\}
+" Disabled due to python import-errors
+" let g:ale_pattern_options = {
+" \   '': {'ale_enabled': 0},
+" \}
 
 "}}}
 
 " LSP {{{
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Extensions: json, snippets, tag, python
+" Extensions: json, snippets, tag, python, pairs, sh
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+" This makes everything slow, at least in certain filetypes
+" Plug 'tjdevries/coc-zsh'
 
 " Highlight comments in CocConfig
 au FileType json syntax match Comment +\/\/.\+$+
@@ -272,7 +347,7 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-" STAB: previous or backspace
+" STAB: previous or backspace (why backspace?)
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Check whether cursor at word end
@@ -301,7 +376,12 @@ fun! s:show_documentation()
   endif
 endf
 
+" Get help (manpages and such)
+nnoremap gh K
+
+
 "}}}
+
 
 call plug#end()
 "}}}
@@ -309,8 +389,8 @@ call plug#end()
 " OPTIONS {{{
 set mouse=a
 set winaltkeys=no
-" set backspace=indent,eol,start
-set backspace=indent,start
+set backspace=indent,eol,start
+" set backspace=indent,start
 
 set hidden
 set switchbuf=usetab
@@ -362,9 +442,9 @@ set tabstop=4 shiftwidth=4
 set expandtab
 set smarttab
 
-" set autoindent
-" set smartindent
-set cindent    " should override smartindent and autoindent
+set autoindent
+set smartindent
+" set cindent    " should override smartindent and autoindent
 set copyindent " use same type of indentation (spaces/tabs) as previous line
 
 set wrap
@@ -398,6 +478,7 @@ set statusline+=%#title#\ %f\ %*
 " Should have a trailing newline
 set statusline+=%2*[%n%M%R%W%q]\ %*\ 
 set statusline+=%{coc#status()}
+" set statusline+=%{nvim_treesitter#statusline(90)}
 " set statusline+=%#question#%{getcwd()}\ " working directory
 set statusline+=\ %m
 set statusline+=%=
@@ -425,29 +506,37 @@ endif
 
 " let g:dark='gruvbox-material'
 " let g:dark='edge'
-let g:dark='sonokai'
-let g:light='tempus_dawn'
+" let g:dark='sonokai'
+let g:dark='forest-night'
+
+" let g:light='stellarized'
+" let g:light='tempus_dawn'
+" let g:light='tempus_past'
+let g:light='inkstained'
 let g:fallback='gruvbox'
+let g:theme=g:dark
 
 fun! SetColors()
     if &termguicolors == 0
         let g:theme=g:fallback
     elseif exists('b:textfile')
-        let g:theme=g:light
+        " let g:theme=g:light
+        execute 'colorscheme ' . g:light
         set background=light
     elseif !empty($VIM_COLORS)
         let g:theme=$VIM_COLORS
         execute 'set background=' . $VIM_BG
     else
-        if $MOOD == "light"
-            let g:theme=g:light
-            set background=light
-        else
-            let g:theme=g:dark
-            set background=dark
-        endif
+        execute 'colorscheme ' . g:theme
+        " if $MOOD == "light"
+        "     let g:theme=g:light
+        "     set background=light
+        " else
+        "     let g:theme=g:dark
+        "     set background=dark
+        " endif
     endif
-    execute 'colorscheme ' . g:theme
+    " execute 'colorscheme ' . g:theme
 endf
 
 let g:favorite_colors = [
@@ -468,7 +557,7 @@ let g:favorite_colors = [
             \ "palenight",
             \ "seoul256",
             \ "seoul256-light",
-            \ "edge",
+            \ "sonokai",
             \ ]
 
 fun! CRotate(direction)
@@ -536,45 +625,56 @@ au BufEnter * call SetColors()
 " Override formatoptions, which are set by ftplugins
 au vimrc BufEnter * set formatoptions=jncrql
 
+au VimEnter * call CocMapsOveride()
+
+" Disable coc preview window
+" let g:coc_enable_locationlist = 0 autocmd User CocLocationsChange
+" 	CocList --normal location
+
 aug END
 "}}}
 
 " KEYBINDINGS {{{
+call yankstack#setup()
 
 " Leader
-let g:mapleader=" "
+let g:mapleader="\<Space>"
 nnoremap <M-x> :Commands<CR>
+nnoremap <silent> <leader>:  :Commands<CR>
+" Use coc if available, else use ctags
+" nnoremap <silent> <leader><leader> :Vista finder coc<CR>
+nnoremap <silent> <leader><leader> :<C-u>CocList -I symbols<CR>
+" TODO: expr map: other buffer if only 2 buffers (not hidden)
+nnoremap <silent> <leader><Tab> :Buffers<CR> 
 nnoremap <silent> <leader>q :qa!<CR>
 nnoremap <silent> <leader>Q :qa!<CR>
 nnoremap <silent> <leader>w :x!<CR>
 nnoremap <silent> <leader>s :up<CR>
-nnoremap <silent> <leader>e :e!<CR>
+nnoremap <silent> <leader>e :e!<CR>zz
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
-nnoremap <silent> <leader>C :Directories<CR>
+" nnoremap <silent> <leader>cd :Directories<CR>
 nnoremap <silent> <leader>n :enew<CR>
-nnoremap <silent> <leader><Tab> :Buffers<CR>
 nnoremap <silent> <C-R> :History:<CR>
-nnoremap <silent> <leader>: :Commands<CR>
-nnoremap <silent> <leader>h :Helptags<CR>
+nnoremap <silent> <leader>h  :Helptags<CR>
 nnoremap <silent> <leader>fe :Files<CR>
 nnoremap <silent> <leader>fh :Files ~<CR>
+nnoremap <silent> <leader>F  :Files ~<CR>
 nnoremap <silent> <leader>fr :History<CR>
-nnoremap <silent> <leader>F :Files ~<CR>
-nnoremap <silent> <leader>g :GFiles<CR>
-nnoremap <silent> <leader>c :Colors<CR>
-nnoremap <silent> <leader>' :Marks<CR>
+nnoremap <silent> <leader>gg :GFiles<CR>
+nnoremap <silent> <leader>C  :Colors<CR>
+nnoremap <silent> <leader>'  :Marks<CR>
 nnoremap <leader>/ :Ag<Space>
+nnoremap <C-G> :Ag<CR><Space>
 nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>r :History<CR>
-" Use coc if available, else use ctags
-nnoremap <silent> <leader><leader> :Vista finder coc<CR>
 nnoremap <silent> t :Tags<CR>
-" nnoremap <silent> <leader>l :Lines<CR>
-nnoremap <silent> S :Lines<CR>
-nnoremap <silent> <M-l> :Lines<CR>
+nnoremap <silent> <leader>l :BLines<CR>
+nnoremap <silent> S :BLines<CR>
+nnoremap <silent> <M-l> :BLines<CR>
 nnoremap <silent> <leader>ii :PlugInstall<CR>
 nnoremap <silent> <leader>iu :PlugUpdate<CR>
 nnoremap <silent> <leader>ic :PlugClean!<CR>
+nnoremap <silent> <leader>gc :Commits<CR>
 
 " Escape
 noremap  <M-q> <Esc>
@@ -593,14 +693,14 @@ nnoremap <M-Q> <Nop>
 noremap Ã¸ :
 
 " Repeat last command
-noremap \ @:
+nnoremap \\ @:
 
 " Moving around
+nnoremap <ScrollWheelUp> <ScrollWheelUp> <ScrollWheelUp> <ScrollWheelUp> <ScrollWheelUp> <ScrollWheelUp>
+nnoremap <ScrollWheelDown> <ScrollWheelDown> <ScrollWheelDown> <ScrollWheelDown> <ScrollWheelDown> <ScrollWheelDown>
 noremap <silent> j gj
 noremap <silent> k gk
 noremap L $
-noremap Ã¸ $
-noremap } $
 noremap H ^
 nnoremap <silent> J :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 nnoremap <silent> K :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
@@ -608,8 +708,8 @@ xnoremap <silent> J :<C-u>keepjumps normal! gv}<CR>
 xnoremap <silent> K :<C-u>keepjumps normal! gv{<CR>
 onoremap J }
 onoremap K {
-nnoremap <M-j> 5gjzz
-nnoremap <M-k> 5gkzz
+nnoremap <M-j> 10gjzz
+nnoremap <M-k> 10gkzz
 nmap gj ]]
 nmap gk [[
 nnoremap <C-F> <C-F>zz
@@ -620,8 +720,6 @@ nnoremap G Gzz
 map gb %
 xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
 xnoremap <expr> k mode() ==# 'v' ? 'gk' : 'k'
-nnoremap n nzz
-nnoremap N Nzz
 
 " Redo
 nnoremap U <C-R>
@@ -640,29 +738,37 @@ inoremap <M-O> <Esc>O
 
 " Command/insert mode
 noremap! <M-BS> <C-W>
+noremap! <M-w> <C-W>
 noremap! <C-F> <Right>
 noremap! <C-B> <Left>
 noremap! <C-D> <Del>
 
+" Normal, visual, opeator mode
+noremap <M-f> <C-Right>
+noremap <M-b> <C-Left>
+noremap <M-f> <C-Right>
+noremap <M-b> <C-Left>
+noremap <M-e> g_
+
+" Visual, operator mode
+xnoremap <M-w> aW
+onoremap <M-w> aW
+
 " Insert mode editing
 inoremap <M-f> <Esc>l<C-Right>
 inoremap <M-b> <Esc>l<C-Left>
-nnoremap <M-f> <C-Right>
-nnoremap <M-b> <C-Left>
-xnoremap <M-f> <C-Right>
-xnoremap <M-b> <C-Left>
 inoremap <M-d> <C-\><C-O>de
-" nnoremap <M-d> dW
-nnoremap <M-d> daW
+nnoremap <M-d> dW
 inoremap <M-i> <Esc>I
 inoremap <M-a> <Esc>A
+inoremap <M-e> <Esc>A
 
 " Insert mode completion
 inoremap <M-n> <C-N>
 inoremap <M-p> <C-P>
 imap <C-L> <C-X><C-L>
 imap <M-l> <C-X><C-L>
-imap <M-w> <C-X><C-F>
+imap <M-x> <C-X><C-F>
 
 " Command/search mode editing
 cnoremap <M-f> <C-Right>
@@ -685,15 +791,12 @@ cnoremap <M-:> <Down>
 
 " Searching
 nnoremap s /
-" nnoremap S ?
 xnoremap s /
-" xnoremap S ?
-" nnoremap <M-n> *
-nnoremap <M-n> *Ncgn
-nnoremap <M-N> #
-xnoremap <M-n> *
-xnoremap <M-N> #
-nmap ø *
+" nmap <M-n> *cgn
+nmap <M-n> *
+nmap <M-N> #
+xmap <M-n> *
+xmap <M-N> #
 
 " Navigate changelist
 noremap , g;
@@ -709,8 +812,10 @@ nnoremap <BS> <C-W>p
 nnoremap <M-BS> <C-W>c
 
 " Windows and buffers
-noremap <silent> <C-n> :bn<CR>
-noremap <silent> <C-p> :bp<CR>
+" noremap <silent> <C-n> :bn<CR>
+" noremap <silent> <C-p> :bp<CR>
+nmap <silent> <C-n> <Plug>vem_next_buffer-
+nmap <silent> <C-p> <Plug>vem_prev_buffer-
 nnoremap <silent> <C-Q> :close<CR>
 nnoremap <silent> <C-X> :bp<Bar>bd! #<CR>
 nnoremap <silent> <C-H> :TmuxNavigateLeft<CR>
@@ -732,7 +837,7 @@ nnoremap <silent> <left>  :cpf<CR>zvzz
 nnoremap <silent> <right> :cnf<CR>zvzz
 " nnoremap <silent> <up>    :cprev<CR>zvzz
 " nnoremap <silent> <down>  :cnext<CR>zvzz
-nmap <silent> co <Plug>(qf_qf_toggle)
+" nmap <silent> co <Plug>(qf_qf_toggle)
 aug QuickfixKeys
 au!
 au BufReadPost quickfix nnoremap <buffer> <CR> <CR>
@@ -753,7 +858,7 @@ nnoremap <silent> <expr> <leader>d &diff ? ':diffoff!<CR>:q<CR>' : ':Gdiffsplit<
 nnoremap gs :%s/
 xnoremap gs :s/
 " replace word/visual
-nnoremap gr :%s/\<<c-r><c-w>\>/
+nnoremap <leader>gr :%s/\<<c-r><c-w>\>/
 xnoremap gr y:%s/\<<c-r>"\>/
 " remove empty lines (rare enough to just use g)
 " xnoremap R :g/^$/d<CR>
@@ -771,6 +876,7 @@ nmap ” <C-B>
 " go to tag
 nnoremap <CR> <C-]>zz
 nnoremap <M-g> <C-]>zz
+nnoremap ¨ <C-]>zz
 
 " record macro
 nnoremap <M-Q> q
@@ -799,11 +905,13 @@ nnoremap <M-a> mz=ap`z
 " toggle comment
 nmap <M-c> gcc
 xmap <M-c> gc
+xmap <M-C> :t-1<CR>gvgc
 nmap <M-C> :t-1<CR>gccj
 
 " duplicate lines (dp in diff expr binding)
 nmap dP :t-1<CR>gccj
 xnoremap P :t-1<CR>
+xnoremap <M-d> :t-1<CR>
 
 " delete line
 nnoremap <M-D> dd
@@ -819,8 +927,8 @@ fun! s:blankdown(count) abort
     '[
 endf
 
-nnoremap <silent> <M-o> :<c-u>call <SID>blankdown(v:count1)<CR>
-nnoremap <silent> <M-O> :<c-u>call <SID>blankup(v:count1)<CR>
+nnoremap <silent> <M-o> :<c-u>call <SID>blankdown(v:count1)<CR>k
+nnoremap <silent> <M-O> :<c-u>call <SID>blankup(v:count1)<CR>j
 
 " move lines
 nnoremap <silent> <C-M-j> mz:m+<CR>`z
@@ -836,10 +944,6 @@ map Y y$
 nnoremap dh d^
 nnoremap ch c^
 nnoremap yh y^
-
-call yankstack#setup()
-nmap <M-p> <Plug>yankstack_substitute_older_paste
-nmap <M-P> <Plug>yankstack_substitute_newer_paste
 
 " yank to clipboard
 xnoremap <C-C> "+y
@@ -860,21 +964,17 @@ inoremap <C-v> <C-R>"
 
 " Toggling panels
 nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
-" nnoremap <silent> <M-2> :TagbarToggle<CR>
 nnoremap <silent> <M-2> :Vista!!<CR>
-" nnoremap <silent> <M-3> :Vista!!<Bar>NERDTreeToggle<CR><C-W>p
 
-nnoremap cd :Directories<CR>
+" nnoremap cd :Directories<CR>
 nnoremap mv :Rename<Space>
 nnoremap cu :<C-U>call ToggleWorkingDir()<CR>
 nnoremap gB :ls!<CR>:b<Space>
-nnoremap vm :Marks<CR>
 
 nnoremap vv viw
 nnoremap VV viW
 nnoremap <m-v> ^vg_
-" yank line without indent
-nnoremap <m-y> ^y$
+xnoremap <m-v> <Esc>
 " yank line with indent
 nnoremap gl 0y$
 nnoremap dl 0d$
@@ -886,26 +986,20 @@ nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
 nnoremap M zz
-nnoremap <C-E> zt
-nnoremap <C-Y> zb
-" nnoremap <m-s> a<Space><Esc>
 " nnoremap <silent> <M-Bar> :call Scratch()<CR>
 " noremap gh H
 " noremap gl L
 " noremap gm M
-cmap w!! SudoWrite
 nnoremap g/ :g//<CR>
 " nnoremap cd /\d\+<CR>gnc
-" TODO: don't skip number under cursor, or use number textobj
-nnoremap vd /\d\+<CR>gn
 
-"inc/decrement number
+" inc/decrement number
 nnoremap ± <C-A>
 nnoremap ¿ <C-X>
 
+" complete statement
 inoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
 nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
-
 
 "}}}
 "}}}
@@ -1090,6 +1184,10 @@ fun! PutLine()
 endf
 command! -nargs=0 PutLine call PutLine()
 
+fun! s:delete_swap()
+    call delete(&directory . '/' . expand('%') . '.swp')
+endf
+command! DeleteSwap call s:delete_swap()
 "}}}
 
 " SANDWICH {{{
@@ -1109,25 +1207,25 @@ nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count
 
 onoremap <silent> <SID>line :normal! ^vg_<CR>
 
-nmap <M-w> <M-r>iw
-nmap <M-W> <M-r>iW
+nmap <M-s> <M-r>iw
+nmap <M-S> <m-r>iW
 nmap <M-R> <M-r>g_
-imap <M-R> <Esc>l<M-r>g_
 nmap <M-r><M-r> <M-r><SID>line
 
 let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 let g:sandwich#recipes += [
-            \ {'buns': ['<', '>'], 'expand_range': 0, 'match_syntax': 1, 'input': ['a']},
-            \ {'buns': ['"', '"'], 'quoteescape': 1, 'expand_range': 0, 'linewise': 0, 'nesting': 0, 'input': ['d']},
-            \ {'buns': ['''', ''''], 'quoteescape': 1, 'expand_range': 0, 'linewise': 0, 'nesting': 0, 'input': ['q']},
+            \ {'buns': ['<', '>'], 'expand_range': 0, 'match_syntax': 1, 'input': ['a', 'A']},
+            \ {'buns': ['"', '"'], 'quoteescape': 1, 'expand_range': 0, 'linewise': 0, 'nesting': 0, 'input': ['d', 'D']},
+            \ {'buns': ['''', ''''], 'quoteescape': 1, 'expand_range': 0, 'linewise': 0, 'nesting': 0, 'input': ['q', 'Q', 's', 'S']},
             \ {'buns': ['{', '}'], 'skip_break': 1, 'match_syntax': 1, 'nesting': 1, 'input': ['B']},
-            \ {'buns': ['[', ']'], 'match_syntax': 1, 'nesting': 1, 'input': ['r']},
+            \ {'buns': ['[', ']'], 'match_syntax': 1, 'nesting': 1, 'input': ['r', 'R']},
             \ {'buns': ['(', ')'], 'match_syntax': 1, 'nesting': 1, 'input': ['b']},
             \]
 "}}}
 
 " FZF {{{
-let g:fzf_layout = { 'down': '~20%' }
+" let g:fzf_layout = { 'down': '~20%' }
+let g:fzf_layout = { 'window': { 'width': 0.7, 'height': 0.5 } }
 let g:fzf_nvim_statusline = 0
 let g:fzf_buffers_jump = 1
 let g:fzf_history_dir = '~/.local/share/fzf-history'
@@ -1171,8 +1269,6 @@ command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
 imap <C-X><C-F> <plug>(fzf-complete-path)
 imap <C-X><C-L> <plug>(fzf-complete-line)
 nmap <leader>? <plug>(fzf-maps-n)
-" xmap <leader>? <plug>(fzf-maps-x)
-imap <c-x>? <plug>(fzf-maps-i)
 
 "}}}
 
@@ -1184,36 +1280,32 @@ let g:netrw_winsize = 25
 
 " COC TESTING {{{
 
-" Compare: ALENext, ALEDetail
-" diagnostic.displayByAle": true,
 " <Plug>(coc-diagnostic-info)
-" <Plug>(coc-diagnostic-next)
-" <Plug>(coc-diagnostic-prev)
+nmap gj <Plug>(coc-diagnostic-next)
+nmap gk <Plug>(coc-diagnostic-prev)
 " <Plug>(coc-diagnostic-next-error)
 " <Plug>(coc-diagnostic-prev-error)
 
-"   <Plug>(ale_previous) - ALEPrevious
 "   <Plug>(ale_previous_wrap) - ALEPreviousWrap
-"   <Plug>(ale_previous_error) - ALEPrevious -error
 "   <Plug>(ale_previous_wrap_error) - ALEPrevious -wrap -error
-"   <Plug>(ale_previous_warning) - ALEPrevious -warning
 "   <Plug>(ale_previous_wrap_warning) - ALEPrevious -wrap -warning
-"   <Plug>(ale_next) - ALENext
 "   <Plug>(ale_next_wrap) - ALENextWrap
-"   <Plug>(ale_next_error) - ALENext -error
 "   <Plug>(ale_next_wrap_error) - ALENext -wrap -error
-"   <Plug>(ale_next_warning) - ALENext -warning
 "   <Plug>(ale_next_wrap_warning) - ALENext -wrap -warning
 
 " Compare: ALEGoToDefinition
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" <Plug>(coc-declaration)
-nmap <silent> gr <Plug>(coc-references)
+fun! CocMapsOveride()
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gD <Plug>(coc-declaration)
+    nmap <silent> gt <Plug>(coc-type-definition)
+    " nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+    " nnoremap cr <Plug>(coc-rename)
+    " nnoremap vr <Plug>(coc-refactor)
+endf
 
-" nmap <m-cr>  <Plug>(coc-codeaction)
-nmap <c-space> <Plug>(coc-fix-current)
+nmap <c-space> <Plug>(coc-codeaction)
+nmap <m-cr>  <Plug>(coc-fix-current)
 
 " Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
@@ -1226,101 +1318,35 @@ command! -nargs=0 Format :call CocAction('format')
 " nnoremap <F5> :Format<CR>
 " <Plug>(coc-format)
 
-nnoremap <silent> <leader>ll  :<C-u>CocList<CR>
-nnoremap <silent> <leader>lc  :<C-u>CocCommand<CR>
-nnoremap <silent> <leader>lo  :<C-u>CocList outline<CR>
-nnoremap <silent> <leader>ls  :<C-u>CocList -I symbols<CR>
-nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <leader>cl  :<C-u>CocList<CR>
+nnoremap <silent> <leader>cc  :<C-u>CocCommand<CR>
+nnoremap <silent> <leader>co  :<C-u>CocList outline<CR>
+nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<CR>
+nnoremap <silent> <leader>cd  :<C-u>CocList diagnostics<CR>
+" Load diagnostics to location/quickfix?
+" nnoremap <silent> <leader>cd  :<C-u>CocDiagnostics<CR>
 
-nnoremap cr <Plug>(coc-rename)
-nnoremap vr <Plug>(coc-refactor)
 "}}}
 
 " TESTING AREA {{{
 
 " FREE KEYS {{{
 
-" nnoremap <C-<>
-" nnoremap <C-E>
 " nnoremap <C-E>
 " nnoremap <C-Y>
-" nnoremap <M-0>
-" nnoremap <M-S>
-" nnoremap <M-Z>
 
 " inoremap <C-H>
 " inoremap <C-J>
-" inoremap <C-K> if you don't need digraphs
+" inoremap <C-K>
 
 " nnoremap +
 " nnoremap -
-" nnoremap \
-" nnoremap ^ 
 " nnoremap _
+" nnoremap \
+" nnoremap ^
+" nnoremap ¨
 " nnoremap |
 " nnoremap }
-" nnoremap ¨ 
-" nnoremap cd
-" nnoremap cm
-" nnoremap co
-" nnoremap cq
-" nnoremap cr
-" nnoremap cu
-" nnoremap cv
-" nnoremap cx
-" nnoremap cy
-" nnoremap cz
-" nnoremap dc
-" nnoremap dm
-" nnoremap do
-" nnoremap dp
-" nnoremap dq
-" nnoremap dr
-" nnoremap du
-
-" nnoremap dv diw
-" nmap dv dgn
-nmap dv dav
-nmap cv civ
-
-" nnoremap dx
-" nnoremap dy
-" nnoremap dz
-" nnoremap gH
-" nnoremap gI
-" nnoremap gm
-" nnoremap go
-" nnoremap gt
-" nnoremap gV
-" nnoremap gw
-" nnoremap gz
-" nnoremap M
-" nnoremap mv
-" nmap vc gcap
-" nnoremap vd
-" nnoremap vm
-" nnoremap vo
-nnoremap vp yapP
-" nnoremap vq
-" nnoremap vr
-" nnoremap vx
-" nnoremap vz
-" nnoremap vy
-" nnoremap yc
-" nnoremap yd
-" nnoremap ym
-" nnoremap yo
-" nnoremap yp
-" nnoremap yq
-" nnoremap yr
-" nnoremap yu
-" nnoremap yv
-" nnoremap yx
-" nnoremap yz
-" nnoremap zd
-" nnoremap zp
-" nnoremap zs
-" nnoremap zx :pclose<CR>
 
 "}}}
 
@@ -1333,11 +1359,11 @@ nnoremap vp yapP
 " nnoremap + :<C-u>+m.<left><left>
 " nnoremap - :<C-u>-m.<left><left>
 
+inoremap <M-1> !
 inoremap <M-2> @
 inoremap <M-3> #
 inoremap <M-4> $
 inoremap <M-5> %
-
 
 " Does not use tags, only finds files in same directory, does not check if
 " file exists
@@ -1364,7 +1390,7 @@ function Header()
     endif
 endf
 command! Header call Header()
-nnoremap <silent> gh :Header<CR>
+" nnoremap <silent> gh :Header<CR>
 
 " TODO: make new tab if error
 nnoremap <silent> <leader>1 :1tabnext<CR>
@@ -1377,34 +1403,27 @@ nnoremap <silent> <leader>4 :4tabnext<CR>
 "   " make expression mapping to bd when last window in help buffer
 " endif
 
-
-noremap <m-e> g_
-nnoremap <m-E> vg_
-xnoremap x "_x
-nnoremap <m-w> ciW
-xnoremap + <C-A>gv
-xnoremap - <C-X>gv
-xmap <silent> <C-A> <C-A>/\d\+<CR>Ngn
-xmap <silent> <C-X> <C-X>/\d\+<CR>Ngn
-nnoremap <m-l> cc
-nnoremap <c-e> :Snippets<CR>
-" TODO: finne noe bedre for change line fra insert mode og normal mode
-inoremap <M-c> <Esc>S
 nnoremap \R :Rename<Space>
 nnoremap <silent> \r :reg<CR>
 nnoremap \b :ls!<CR>:b<Space>
 nnoremap <silent> \s :!stat %<CR>
 nnoremap \d :pwd<CR>
-xmap <Space> <M-r><Space>
+nnoremap \o :!pacman -Qo %<CR>
+nnoremap \c :echo g:colors_name<CR>
+nnoremap \j :jumps<CR>
 nnoremap \f :Filetypes<CR>
-inoremap <m-e> <Esc>A
+
+nnoremap <m-E> vg_
+nnoremap VL vg_
+xnoremap x "_x
+nnoremap <m-w> ciW
+nnoremap <m-l> cc
+xmap <Space> <M-r><Space>
 " Select the last inserted text (works poorly for multiple lines inserted)
 nnoremap g. `[v`]
 inoremap <LeftMouse> <Esc>
 xmap S <Plug>(operator-sandwich-add)
 imap ¨ {
-nmap <m-s> <m-r>iW
-nnoremap \o :!pacman -Qo %<CR>
 
 fun! s:fasd_update() abort
   if empty(&buftype) || &filetype ==# 'dirvish'
@@ -1416,15 +1435,37 @@ aug fasd
   au!
   au BufWinEnter,BufFilePost * call s:fasd_update()
 aug END
-" command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
+command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
 
-nnoremap <c-m-s> :up<cr>
 nnoremap <Space><Esc> <Nop>
-nnoremap <m-j> J
-nnoremap <silent> <m-k> :<C-u>call BreakHere()<CR>
 nnoremap <PageUp> <PageUp>zz
 nnoremap <PageDown> <PageDown>zz
 nnoremap <BS> <C-O>
+nnoremap <S-Tab> <C-O>
+
+nnoremap ø <c-d>zz
+nnoremap æ <c-u>zz
+
+nnoremap db bdaw
+nnoremap dB BdaW
+
+inoremap <m-j> <Esc>o<C-A>
+nnoremap > >>
+nnoremap < <<
+nnoremap <m-i> ^
+nmap π oprint(
+
+" Most wanted:
+" save file in tmux
+" skip over parens/expression/argument (autopairs?)
+" m-d to delete word, not Word, same for change
+" go to start of line, easier than H
+" yank word (vv c-c not nice)
+" expand selection (treesitter): alt-w, alt-s, alt-e eller alt-up/down
+
+" number text object, select, change, delete, in/decrement
+" gcap
+" shift arg left right
 
 "}}}
 

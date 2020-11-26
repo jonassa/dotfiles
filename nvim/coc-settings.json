@@ -1,11 +1,20 @@
 {
-    "diagnostic.displayByAle": true,
-    // "codeLens.enable": false,
     "suggest.minTriggerInputLength": 2,
-    "diagnostic.warningSign":"--",
-    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
-    "python.jediEnabled": false,
+    "diagnostic.level": "hint",
+    "codeLens.enable": true,
 
+    "diagnostic.displayByAle": false,
+    "diagnostic.locationlistUpdate": true,
+    "diagnostic.warningSign":"--",
+
+    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
+    "python.jediEnabled": true,
+    //"python.jediPath": "/home/jonas/anaconda3/pkgs/jedi-0.17.2-py38_0/lib/python3.8/site-packages",
+
+    //"python.linting.flake8Args": ["--select 'F'"],
+    "python.autoComplete.addBrackets": true,
+
+    "list.previewSplitRight":true,
     "list.insertMappings": {
         "<C-r>": "do:refresh",
         "<C-f>": "feedkeys:\\<C-f>",
@@ -14,8 +23,8 @@
         "<C-p>": "normal:k",
         "<A-j>": "normal:j",
         "<A-k>": "normal:k",
-        "<A-n>": "prompt:next",     // does not work
-        "<A-p>": "prompt:previous", // does not work
+        "<A-n>": "prompt:next",
+        "<A-p>": "prompt:previous",
         "<Tab>": "normal:j",
         "<S-Tab>": "normal:k",
         "<C-t>": "action:tabe",
