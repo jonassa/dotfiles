@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+sleep 0.2
+if xrandr -q | grep eDP-1 | grep -E '\b[0-9]+x[0-9]+'; then
+    xrandr --output eDP-1 --off
+else
+    xrandr --output eDP-1 --auto
+fi

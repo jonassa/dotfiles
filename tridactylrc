@@ -1,0 +1,159 @@
+" vim: ft=tridactyl
+
+" Move this to $XDG_CONFIG_DIR/tridactyl/tridactylrc (that's
+" ~/.config/tridactyl/tridactylrc to mere mortals) or ~/.tridactylrc and
+" install the native messenger (:installnative in Tridactyl). Run :source to
+" get it in the browser, or just restart.
+
+" NB: If you want "vim-like" behaviour where removing a line from
+" here makes the setting disappear, uncomment the line below.
+
+sanitise tridactyllocal tridactylsync
+
+command fixamo_quiet jsb tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""'))
+command fixamo js tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""').then(tri.excmds.fillcmdline_tmp(3000, "Permissions added to user.js. Please restart Firefox to make them take affect.")))
+
+fixamo_quiet
+
+" EXAMPLE RC STUFF
+"
+" GitHub pull request checkout command to clipboard (only works if you're a collaborator or above)
+bind yp composite js document.getElementById("clone-help-step-1").textContent.replace("git checkout -b", "git checkout -B").replace("git pull ", "git fetch ") + "git reset --hard " + document.getElementById("clone-help-step-1").textContent.split(" ")[3].replace("-","/") | yank
+
+" Git{Hub,Lab} git clone via SSH yank
+bind yg composite js "git clone " + document.location.href.replace(/https?:\/\//,"git@").replace("/",":").replace(/$/,".git") | clipboard yank
+
+" Only hint search results on Google and DDG
+bindurl www.google.com f hint -Jc .rc > .r > a
+bindurl www.google.com F hint -Jbc .rc>.r>a
+
+bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
+bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
+
+" Allow Ctrl-a to select all in the commandline
+unbind --mode=ex <C-a>
+
+" Allow Ctrl-c to copy in the commandline
+unbind --mode=ex <C-c>
+
+" Handy multiwindow/multitasking binds
+bind gd tabdetach
+bind gD composite tabduplicate | tabdetach
+
+" Make yy use canonical / short links on the 5 websites that support them (which ones?, funker ikke på reddit)
+" bind yy clipboard yankshort
+" bind yy clipboard yank
+
+" set profile dir on Windows
+jsb browser.runtime.getPlatformInfo().then(os=>{const profiledir = os.os=="win" ? "C:\\Users\\olie\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\gwm76nmk.default" : "auto"; tri.config.set("profiledir", profiledir)})
+
+" Sane hinting mode
+set hintfiltermode vimperator-reflow
+set hintdelay 100
+
+" Read https://wiki.mozilla.org/Security/CSP#Goals for more information.
+jsb browser.webRequest.onHeadersReceived.addListener(tri.request.clobberCSP,{urls:["<all_urls>"],types:["main_frame"]},["blocking","responseHeaders"])
+
+" Muligens bedre enn å bruke extension
+" Inject Google Translate
+" This (clearly) is remotely hosted code. Google will be sent the whole
+" contents of the page you are on if you run `:translate`
+" From https://github.com/jeremiahlee/page-translator
+command translate js let googleTranslateCallback = document.createElement('script'); googleTranslateCallback.innerHTML = "function googleTranslateElementInit(){ new google.translate.TranslateElement(); }"; document.body.insertBefore(googleTranslateCallback, document.body.firstChild); let googleTranslateScript = document.createElement('script'); googleTranslateScript.charset="UTF-8"; googleTranslateScript.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&tl=&sl=&hl="; document.body.insertBefore(googleTranslateScript, document.body.firstChild);
+
+
+" MY STUFF
+" TIPS ON BINDING AND UNBINDING FOR SITES AND USING IGNORE MODE FOR SITES
+" https://github.com/tridactyl/tridactyl/issues/57#issuecomment-427478606
+
+" Example:
+autocmd DocStart www.overleaf.com mode ignore
+autocmd DocStart localhost:8888 mode ignore
+" unbindurl overleaf.com --mode=ignore I
+" blacklistadd www.overleaf.com
+
+set newtab about:blank
+bind --mode=browser <A-c> escapehatch
+
+
+colourscheme dark
+
+unbind <F1>
+unbind <C-f>
+unbind <C-b>
+unbind ZZ
+unbind --mode=ignore I
+unbind d
+
+
+bind q back
+bind Q forward
+bind w forward
+bind i focusinput
+bind gi focusinput -l
+bind n findnext 1
+bind N findnext -1
+bind ] followpage next
+bind [ followpage prev
+bind a bmark
+bind --mode=ex <A-n> ex.next_history
+bind --mode=ex <A-p> ex.prev_history
+
+bind u urlparent
+bindurl youtube.com u urlparent
+bindurl reddit.com u urlparent 3
+
+
+" bind s fillcmdline open search
+" bind S fillcmdline tabopen search
+bind s scrollpage 0.5
+bind S scrollpage
+bind d scrollpage -0.5
+bind D scrollpage -1
+
+bind <A-x> fillcmdline_notrail
+
+bind b fillcmdline taball
+" bind w fillcmdline tabopen
+
+" bind gd tabdetach
+" tabduplicate
+
+" TODO:
+" y is various yanks, p/P is paste, gg/G, o, t, b are all good
+" Bind z x c v
+" Bind w, e, r (reload), u
+" Bind a, s, d, f, h, l
+" Bind m, ,/;, -/_
+" Bind 1234 (focus or open quickmarks?)
+" w: tabopen?
+" quickmark v? g?
+" n/N to <c-g> not possible
+" 
+
+
+unbindurl youtube.com j
+unbindurl youtube.com k
+unbindurl youtube.com l
+unbindurl youtube.com i
+unbindurl youtube.com f
+unbindurl youtube.com N
+
+" Make quickmarks for the sane Tridactyl issue view
+quickmark f https://www.messenger.com/t
+quickmark m https://mail.google.com/mail/u/0/#inbox
+quickmark r https://www.reddit.com
+quickmark y https://www.youtube.com
+quickmark c https://calendar.google.com/calendar/r
+quickmark k https://keep.google.com/
+" quickmark d chrome://downloads
+" quickmark e chrome://extensions
+" quickmark E chrome://extensions/shortcuts
+" quickmark p chrome://settings/passwords
+
+set searchurls.r   https://old.reddit.com/r/%s
+set searchurls.w   https://en.wikipedia.org/w/index.php?search=%s
+
+
+" Testing options
+set scrollduration 100

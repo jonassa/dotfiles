@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+rofi  -show drun -theme ~/.config/rofi/kde_krunner.rasi

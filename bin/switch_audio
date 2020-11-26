@@ -1,0 +1,14 @@
+#!/bin/bash
+
+active_sink_index=`pacmd list-sinks | sed -n -e 's/\*[[:space:]]index:[[:space:]]\([[:digit:]]\)/\1/p'`
+
+next_sink_index=`pactl list short sinks|grep -e TI_USB -e analog-stereo|awk '{print $1}'|grep -v $active_sink_index`
+
+#change the default sink
+pacmd "set-default-sink ${next_sink_index}"
+
+#move all inputs to the new sink
+for playing in $(pacmd list-sink-inputs | awk '$1 == "index:" {print $2}'); do
+	pacmd move-sink-input $playing @DEFAULT_SINK@ &> /dev/null
+done
+

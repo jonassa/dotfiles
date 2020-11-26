@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+cname=$(ps -N --ppid 2 -p 2 -o uname,comm --sort -pcpu | tail +2 | uq |\
+    rofi -i -dmenu -theme ~/.config/rofi/kill.rasi -p "killall" |\
+    awk '{print $3}'
+    )
+
+if [[ -n $cname ]]; then
+    killall -KILL $cname
+fi
+
