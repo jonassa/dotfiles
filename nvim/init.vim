@@ -29,7 +29,6 @@ Plug 'https://github.com/nightsense/stellarized'
 Plug 'https://github.com/nightsense/rusticated'
 Plug 'https://github.com/yuttie/inkstained-vim'
 Plug 'https://github.com/Nequo/vim-allomancer'
-Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
 let g:forest_night_enable_italic = 1
@@ -64,9 +63,6 @@ Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-" Plug 'junegunn/goyo.vim'
-" Plug 'junegunn/limelight.vim'
-" Plug 'junegunn/vim-peekaboo'
 
 " UTIL {{{
 Plug 'https://github.com/tpope/vim-fugitive'
@@ -87,13 +83,6 @@ Plug 'https://github.com/tpope/vim-apathy'
 Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
-
-Plug 'https://github.com/scrooloose/nerdtree'
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeShowFiles = 1
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeAutoDeleteBuffer = 1
-au StdinReadPre * let s:std_in=1
 
 Plug 'liuchengxu/vista.vim'
 let g:vista_stay_on_open = 0
@@ -216,15 +205,6 @@ Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-" TODO: problem with backspace consuming the next newline on comments
-" Plug 'https://github.com/jiangmiao/auto-pairs'
-let g:AutoPairsShortcutToggle = ''
-let g:AutoPairsShortcutBackInsert = ''
-let g:AutoPairsMapCh = 0
-let g:AutoPairsMoveCharacter = ''
-let g:AutoPairsShortcutJump = ''
-let g:AutoPairsShortcutFastWrap = ''
-
 " Plug 'https://github.com/AndrewRadev/sideways.vim'
 " " disse funker bare for lister/argumenter?
 " nnoremap <silent> <c-m-b> :SidewaysLeft<CR>
@@ -252,7 +232,7 @@ let g:qf_max_height = 15
 
 " LANGUAGE SUPPORT {{{
 Plug 'sheerun/vim-polyglot'
-Plug 'https://github.com/derekwyatt/vim-scala'
+" Plug 'https://github.com/derekwyatt/vim-scala'
 " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/metakirby5/codi.vim'
 " nnoremap something :Codi!!<CR>
@@ -267,8 +247,6 @@ let g:bullets_enabled_file_types = [
             \]
 
 Plug 'tridactyl/vim-tridactyl'
-
-" Plug 'https://github.com/honza/vim-snippets'
 
 " Treesitter {{{
 " Plug 'nvim-treesitter/nvim-treesitter'
@@ -296,31 +274,6 @@ EOF
 
 "}}}
 
-" ULTISNIPS {{{
-" Plug 'https://github.com/SirVer/ultisnips'
-" let g:UltiSnipsExpandTrigger="<NUL>"
-" let g:UltiSnipsJumpForwardTrigger="<M-f>"
-" let g:UltiSnipsJumpBackwardTrigger="<M-b>"
-" let g:UltiSnipsRemoveSelectModeMappings = 0
-" let g:UltiSnipsMappingsToIgnore = ['<Tab>']
-" nnoremap <leader>u :Snippets<CR>
-"}}}
-
-" Plug 'dense-analysis/ale'
-" let g:ale_disable_lsp = 1
-" Disable ALE for certain languages and use coc instead
-" let g:ale_linters = {
-" \   'scala': [''],
-" \}
-" TODO: use loclist and find mappings for lnext/lprev
-" let g:ale_set_loclist = 0
-" let g:ale_set_quickfix = 1
-
-" Disabled due to python import-errors
-" let g:ale_pattern_options = {
-" \   '': {'ale_enabled': 0},
-" \}
-
 "}}}
 
 " LSP {{{
@@ -332,8 +285,6 @@ Plug 'neoclide/coc-neco'
 " Extensions: json, snippets, tag, python, pairs, sh
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
-" This makes everything slow, at least in certain filetypes
-" Plug 'tjdevries/coc-zsh'
 
 " Highlight comments in CocConfig
 au FileType json syntax match Comment +\/\/.\+$+
@@ -504,40 +455,7 @@ if has('termguicolors')
     endif
 endif
 
-" let g:dark='gruvbox-material'
-" let g:dark='edge'
-" let g:dark='sonokai'
-let g:dark='forest-night'
-
-" let g:light='stellarized'
-" let g:light='tempus_dawn'
-" let g:light='tempus_past'
-let g:light='inkstained'
-let g:fallback='gruvbox'
-let g:theme=g:dark
-
-fun! SetColors()
-    if &termguicolors == 0
-        let g:theme=g:fallback
-    elseif exists('b:textfile')
-        " let g:theme=g:light
-        execute 'colorscheme ' . g:light
-        set background=light
-    elseif !empty($VIM_COLORS)
-        let g:theme=$VIM_COLORS
-        execute 'set background=' . $VIM_BG
-    else
-        execute 'colorscheme ' . g:theme
-        " if $MOOD == "light"
-        "     let g:theme=g:light
-        "     set background=light
-        " else
-        "     let g:theme=g:dark
-        "     set background=dark
-        " endif
-    endif
-    " execute 'colorscheme ' . g:theme
-endf
+let g:theme='forest-night'
 
 let g:favorite_colors = [
             \ "material-theme",
@@ -601,8 +519,6 @@ au VimResized * wincmd =
 " Close Netrw when exiting
 au FileType netrw setlocal bufhidden=delete
 
-au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
 " Close preview window after completion
 au CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -617,10 +533,6 @@ au FileType qf nnoremap <silent> <buffer> q :close<CR>
 au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':close<CR>'
 " Open help in a new tab
 au FileType help wincmd T
-
-" Use custom colorscheme for text files
-au FileType text let b:textfile = 1
-au BufEnter * call SetColors()
 
 " Override formatoptions, which are set by ftplugins
 au vimrc BufEnter * set formatoptions=jncrql
@@ -716,6 +628,8 @@ nnoremap <C-F> <C-F>zz
 nnoremap <C-B> <C-B>zz
 nnoremap <C-D> <C-D>zz
 nnoremap <C-U> <C-U>zz
+nnoremap <PageUp> <PageUp>zz
+nnoremap <PageDown> <PageDown>zz
 nnoremap G Gzz
 map gb %
 xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
@@ -897,6 +811,8 @@ xnoremap <M-I> <gv
 " normal indent
 nnoremap <M-i> >>
 nnoremap <M-I> <<
+nnoremap > >>
+nnoremap < <<
 
 " autoindent
 nnoremap g= gg=G``
@@ -963,7 +879,6 @@ nnoremap yP "0P
 inoremap <C-v> <C-R>"
 
 " Toggling panels
-nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 nnoremap <silent> <M-2> :Vista!!<CR>
 
 " nnoremap cd :Directories<CR>
@@ -985,13 +900,10 @@ xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
-nnoremap M zz
 " nnoremap <silent> <M-Bar> :call Scratch()<CR>
-" noremap gh H
-" noremap gl L
-" noremap gm M
+nnoremap M zz
+noremap gm zz
 nnoremap g/ :g//<CR>
-" nnoremap cd /\d\+<CR>gnc
 
 " inc/decrement number
 nnoremap ± <C-A>
@@ -1438,8 +1350,6 @@ aug END
 command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
 
 nnoremap <Space><Esc> <Nop>
-nnoremap <PageUp> <PageUp>zz
-nnoremap <PageDown> <PageDown>zz
 nnoremap <BS> <C-O>
 nnoremap <S-Tab> <C-O>
 
@@ -1450,8 +1360,6 @@ nnoremap db bdaw
 nnoremap dB BdaW
 
 inoremap <m-j> <Esc>o<C-A>
-nnoremap > >>
-nnoremap < <<
 nnoremap <m-i> ^
 nmap π oprint(
 
