@@ -28,6 +28,8 @@ Plug 'https://github.com/kristijanhusak/vim-hybrid-material'
 Plug 'https://github.com/nightsense/stellarized'
 Plug 'https://github.com/nightsense/rusticated'
 Plug 'https://github.com/yuttie/inkstained-vim'
+Plug 'https://github.com/Nequo/vim-allomancer'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
 let g:forest_night_enable_italic = 1
@@ -38,7 +40,6 @@ Plug 'https://github.com/relastle/bluewery.vim'
 Plug 'https://github.com/flrnd/plastic.vim'
 Plug 'srcery-colors/srcery-vim'
 Plug 'https://github.com/sainnhe/edge'
-" let g:edge_style = 'aura'
 let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
@@ -60,13 +61,12 @@ Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
 "}}}
 
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
-Plug 'voldikss/vim-floaterm'
-let g:floaterm_keymap_toggle = '<F1>'
-let g:floaterm_gitcommit = 'split'
-command! LF FloatermNew lf
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/limelight.vim'
+" Plug 'junegunn/vim-peekaboo'
 
 " UTIL {{{
 Plug 'https://github.com/tpope/vim-fugitive'
@@ -88,18 +88,23 @@ Plug 'pacha/vem-tabline'
 let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
 
+Plug 'https://github.com/scrooloose/nerdtree'
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeShowFiles = 1
+let g:NERDTreeChDirMode = 2
+let g:NERDTreeAutoDeleteBuffer = 1
+au StdinReadPre * let s:std_in=1
+
 Plug 'liuchengxu/vista.vim'
+let g:vista_stay_on_open = 0
+let g:vista_icon_indent = [" » ", "\t"]
 let g:vista_default_executive = 'ctags'
 let g:vista_executive_for = {
-      \ 'python': 'coc',
-      \ 'scala': 'coc',
-      \ 'markdown': 'toc',
-      \ }
-let g:vista_stay_on_open = 0
-let g:vista#renderer#enable_icon = 0
-let g:vista_icon_indent = [" » ", "\t"]
-let g:vista_keep_fzf_colors = 1
+            \ 'scala': 'coc',
+            \ 'vim': 'ctags',
+            \ }
 " let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 0
 
 " Plug 'https://github.com/thaerkh/vim-indentguides'
 " let g:indentguides_ignorelist = ['help']
@@ -205,11 +210,20 @@ let g:splitjoin_join_mapping = '<m-J>'
 " nnoremap <silent> <m-K> :SplitjoinSplit<CR>
 
 Plug 'https://github.com/FooSoft/vim-argwrap'
-nnoremap <leader>k :ArgWrap<CR>
+nnoremap gw :ArgWrap<CR>
 
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
+
+" TODO: problem with backspace consuming the next newline on comments
+" Plug 'https://github.com/jiangmiao/auto-pairs'
+let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsShortcutBackInsert = ''
+let g:AutoPairsMapCh = 0
+let g:AutoPairsMoveCharacter = ''
+let g:AutoPairsShortcutJump = ''
+let g:AutoPairsShortcutFastWrap = ''
 
 " Plug 'https://github.com/AndrewRadev/sideways.vim'
 " " disse funker bare for lister/argumenter?
@@ -238,7 +252,7 @@ let g:qf_max_height = 15
 
 " LANGUAGE SUPPORT {{{
 Plug 'sheerun/vim-polyglot'
-" Plug 'https://github.com/derekwyatt/vim-scala'
+Plug 'https://github.com/derekwyatt/vim-scala'
 " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Plug 'https://github.com/metakirby5/codi.vim'
 " nnoremap something :Codi!!<CR>
@@ -253,6 +267,8 @@ let g:bullets_enabled_file_types = [
             \]
 
 Plug 'tridactyl/vim-tridactyl'
+
+" Plug 'https://github.com/honza/vim-snippets'
 
 " Treesitter {{{
 " Plug 'nvim-treesitter/nvim-treesitter'
@@ -280,6 +296,31 @@ EOF
 
 "}}}
 
+" ULTISNIPS {{{
+" Plug 'https://github.com/SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger="<NUL>"
+" let g:UltiSnipsJumpForwardTrigger="<M-f>"
+" let g:UltiSnipsJumpBackwardTrigger="<M-b>"
+" let g:UltiSnipsRemoveSelectModeMappings = 0
+" let g:UltiSnipsMappingsToIgnore = ['<Tab>']
+" nnoremap <leader>u :Snippets<CR>
+"}}}
+
+" Plug 'dense-analysis/ale'
+" let g:ale_disable_lsp = 1
+" Disable ALE for certain languages and use coc instead
+" let g:ale_linters = {
+" \   'scala': [''],
+" \}
+" TODO: use loclist and find mappings for lnext/lprev
+" let g:ale_set_loclist = 0
+" let g:ale_set_quickfix = 1
+
+" Disabled due to python import-errors
+" let g:ale_pattern_options = {
+" \   '': {'ale_enabled': 0},
+" \}
+
 "}}}
 
 " LSP {{{
@@ -291,6 +332,8 @@ Plug 'neoclide/coc-neco'
 " Extensions: json, snippets, tag, python, pairs, sh
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+" This makes everything slow, at least in certain filetypes
+" Plug 'tjdevries/coc-zsh'
 
 " Highlight comments in CocConfig
 au FileType json syntax match Comment +\/\/.\+$+
@@ -461,26 +504,60 @@ if has('termguicolors')
     endif
 endif
 
-let g:theme='edge'
-execute 'colorscheme ' . g:theme
+" let g:dark='gruvbox-material'
+" let g:dark='edge'
+" let g:dark='sonokai'
+let g:dark='forest-night'
+
+" let g:light='stellarized'
+" let g:light='tempus_dawn'
+" let g:light='tempus_past'
+let g:light='inkstained'
+let g:fallback='gruvbox'
+let g:theme=g:dark
+
+fun! SetColors()
+    if &termguicolors == 0
+        let g:theme=g:fallback
+    elseif exists('b:textfile')
+        " let g:theme=g:light
+        execute 'colorscheme ' . g:light
+        set background=light
+    elseif !empty($VIM_COLORS)
+        let g:theme=$VIM_COLORS
+        execute 'set background=' . $VIM_BG
+    else
+        execute 'colorscheme ' . g:theme
+        " if $MOOD == "light"
+        "     let g:theme=g:light
+        "     set background=light
+        " else
+        "     let g:theme=g:dark
+        "     set background=dark
+        " endif
+    endif
+    " execute 'colorscheme ' . g:theme
+endf
 
 let g:favorite_colors = [
-            \ "edge",
-            \ "sonokai",
-            \ "forest-night",
-            \ "gruvbox-material",
             \ "material-theme",
             \ "deus",
             \ "onedark",
+            \ "two-firewatch",
+            \ "allomancer",
             \ "forest-night",
             \ "flatwhite",
+            \ "orange-moon",
+            \ "nordisk",
             \ "neodark",
             \ "base16-tomorrow-night",
             \ "hybrid_material",
             \ "rigel",
+            \ "molokai",
             \ "palenight",
             \ "seoul256",
             \ "seoul256-light",
+            \ "sonokai",
             \ ]
 
 fun! CRotate(direction)
@@ -524,6 +601,8 @@ au VimResized * wincmd =
 " Close Netrw when exiting
 au FileType netrw setlocal bufhidden=delete
 
+au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " Close preview window after completion
 au CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -538,6 +617,10 @@ au FileType qf nnoremap <silent> <buffer> q :close<CR>
 au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':close<CR>'
 " Open help in a new tab
 au FileType help wincmd T
+
+" Use custom colorscheme for text files
+au FileType text let b:textfile = 1
+au BufEnter * call SetColors()
 
 " Override formatoptions, which are set by ftplugins
 au vimrc BufEnter * set formatoptions=jncrql
@@ -555,11 +638,11 @@ aug END
 call yankstack#setup()
 
 " Leader
-let g:mapleader = "\<Space>"
+let g:mapleader="\<Space>"
 nnoremap <M-x> :Commands<CR>
 nnoremap <silent> <leader>:  :Commands<CR>
 " Use coc if available, else use ctags
-nnoremap <silent> <leader>j :Vista finder<CR>
+" nnoremap <silent> <leader><leader> :Vista finder coc<CR>
 nnoremap <silent> <leader><leader> :<C-u>CocList -I symbols<CR>
 " TODO: expr map: other buffer if only 2 buffers (not hidden)
 nnoremap <silent> <leader><Tab> :Buffers<CR> 
@@ -568,9 +651,7 @@ nnoremap <silent> <leader>Q :qa!<CR>
 nnoremap <silent> <leader>w :x!<CR>
 nnoremap <silent> <leader>s :up<CR>
 nnoremap <silent> <leader>e :e!<CR>zz
-" nnoremap <silent> <leader>br :e!<CR>zz
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
-nnoremap <leader>r :call Run()<CR>
 " nnoremap <silent> <leader>cd :Directories<CR>
 nnoremap <silent> <leader>n :enew<CR>
 nnoremap <silent> <C-R> :History:<CR>
@@ -579,13 +660,12 @@ nnoremap <silent> <leader>fe :Files<CR>
 nnoremap <silent> <leader>fh :Files ~<CR>
 nnoremap <silent> <leader>F  :Files ~<CR>
 nnoremap <silent> <leader>fr :History<CR>
-nnoremap <leader>fl :Locate<Space>
 nnoremap <silent> <leader>gg :GFiles<CR>
 nnoremap <silent> <leader>C  :Colors<CR>
 nnoremap <silent> <leader>'  :Marks<CR>
 nnoremap <leader>/ :Ag<Space>
-nnoremap <silent> <leader>* :Grep "\b<cword>\b"<CR>
-nnoremap <silent> <C-G> :Ag<CR><Space>
+nnoremap <C-G> :Ag<CR><Space>
+nnoremap <leader>o :Locate<Space>
 " nnoremap <silent> <leader>r :History<CR>
 nnoremap <silent> t :Tags<CR>
 nnoremap <silent> <leader>l :BLines<CR>
@@ -636,8 +716,6 @@ nnoremap <C-F> <C-F>zz
 nnoremap <C-B> <C-B>zz
 nnoremap <C-D> <C-D>zz
 nnoremap <C-U> <C-U>zz
-nnoremap <PageUp> <PageUp>zz
-nnoremap <PageDown> <PageDown>zz
 nnoremap G Gzz
 map gb %
 xnoremap <expr> j mode() ==# 'v' ? 'gj' : 'j'
@@ -672,15 +750,9 @@ noremap <M-f> <C-Right>
 noremap <M-b> <C-Left>
 noremap <M-e> g_
 
-" M-W: selecting or changing words
-" m-w could also be used to yank (kill-ring-save from emacs)
-" nnoremap <m-w> ciW
-nnoremap <M-w> viw
-nnoremap <M-W> viW
-xnoremap <M-w> w
-xnoremap <M-W> W
-onoremap <M-w> w
-onoremap <M-W> W
+" Visual, operator mode
+xnoremap <M-w> aW
+onoremap <M-w> aW
 
 " Insert mode editing
 inoremap <M-f> <Esc>l<C-Right>
@@ -759,6 +831,7 @@ nnoremap <silent> <M-s> :up<CR>
 " Quickfix
 if executable('ag') | set grepprg=ag\ --vimgrep\ --silent | endif
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
+nmap <silent> <leader>* :Grep "\b<cword>\b"<CR>
 " nmap <silent> gw :Grep "\b<cword>\b"<CR>
 nnoremap <silent> <left>  :cpf<CR>zvzz
 nnoremap <silent> <right> :cnf<CR>zvzz
@@ -824,8 +897,6 @@ xnoremap <M-I> <gv
 " normal indent
 nnoremap <M-i> >>
 nnoremap <M-I> <<
-nnoremap > >>
-nnoremap < <<
 
 " autoindent
 nnoremap g= gg=G``
@@ -841,7 +912,6 @@ nmap <M-C> :t-1<CR>gccj
 nmap dP :t-1<CR>gccj
 xnoremap P :t-1<CR>
 xnoremap <M-d> :t-1<CR>
-" :t-1 in line mode
 
 " delete line
 nnoremap <M-D> dd
@@ -893,6 +963,7 @@ nnoremap yP "0P
 inoremap <C-v> <C-R>"
 
 " Toggling panels
+nnoremap <silent> <expr> <M-1> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 nnoremap <silent> <M-2> :Vista!!<CR>
 
 " nnoremap cd :Directories<CR>
@@ -902,14 +973,11 @@ nnoremap gB :ls!<CR>:b<Space>
 
 nnoremap vv viw
 nnoremap VV viW
-nnoremap VL vg_
 nnoremap <m-v> ^vg_
 xnoremap <m-v> <Esc>
 " yank line with indent
 nnoremap gl 0y$
 nnoremap dl 0d$
-nnoremap gw "+yaw
-nnoremap gW "+yaW
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
@@ -917,10 +985,13 @@ xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 nnoremap <C-W><C-I> <C-W>}
 
 "{{{ Less useful keybindings
-" nnoremap <silent> <M-Bar> :call Scratch()<CR>
 nnoremap M zz
-noremap gm zz
+" nnoremap <silent> <M-Bar> :call Scratch()<CR>
+" noremap gh H
+" noremap gl L
+" noremap gm M
 nnoremap g/ :g//<CR>
+" nnoremap cd /\d\+<CR>gnc
 
 " inc/decrement number
 nnoremap ± <C-A>
@@ -947,7 +1018,7 @@ au vimrc FileType vim setlocal fdm=marker | norm zv
 " endif
 " set foldlevel=2
 " set foldnestmax=2
-" nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
+nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
 nnoremap <M-m> zm
 nnoremap <M-M> zr
 nnoremap Z za
@@ -983,6 +1054,7 @@ fun! Scratch()
     if bufnr('Scratch') == -1
         e Scratch
         setlocal filetype=text nobuflisted bufhidden=hide buftype=nofile noswapfile
+        call SetColors()
     elseif bufnr('%') == bufnr('Scratch')
         b #
     else
@@ -1082,6 +1154,7 @@ fun! Run()
         R
     endif
 endf
+nnoremap <leader>r :call Run()<CR>
 
 fun! RunInterpreter()
     update
@@ -1341,7 +1414,9 @@ nnoremap \j :jumps<CR>
 nnoremap \f :Filetypes<CR>
 
 nnoremap <m-E> vg_
+nnoremap VL vg_
 xnoremap x "_x
+nnoremap <m-w> ciW
 nnoremap <m-l> cc
 xmap <Space> <M-r><Space>
 " Select the last inserted text (works poorly for multiple lines inserted)
@@ -1363,6 +1438,8 @@ aug END
 command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
 
 nnoremap <Space><Esc> <Nop>
+nnoremap <PageUp> <PageUp>zz
+nnoremap <PageDown> <PageDown>zz
 nnoremap <BS> <C-O>
 nnoremap <S-Tab> <C-O>
 
@@ -1373,10 +1450,13 @@ nnoremap db bdaw
 nnoremap dB BdaW
 
 inoremap <m-j> <Esc>o<C-A>
+nnoremap > >>
+nnoremap < <<
 nnoremap <m-i> ^
 nmap π oprint(
 
 " Most wanted:
+" save file in tmux
 " skip over parens/expression/argument (autopairs?)
 " m-d to delete word, not Word, same for change
 " go to start of line, easier than H
@@ -1386,12 +1466,6 @@ nmap π oprint(
 " number text object, select, change, delete, in/decrement
 " gcap
 " shift arg left right
-
-inoremap ª ∧
-inoremap œ ∨
-inoremap → ∩
-inoremap ↓ ∪
-inoremap € ∈
 
 "}}}
 
