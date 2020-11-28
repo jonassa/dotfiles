@@ -39,7 +39,7 @@ autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 chpwd() {
     emulate -L zsh
-    ls -l
+    ls -lho --color=always --group-directories-first
 }
 
 MOOD=$(</tmp/mood)

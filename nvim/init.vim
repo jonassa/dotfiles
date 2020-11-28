@@ -28,7 +28,6 @@ Plug 'https://github.com/kristijanhusak/vim-hybrid-material'
 Plug 'https://github.com/nightsense/stellarized'
 Plug 'https://github.com/nightsense/rusticated'
 Plug 'https://github.com/yuttie/inkstained-vim'
-Plug 'https://github.com/Nequo/vim-allomancer'
 Plug 'https://github.com/kamwitsta/flatwhite-vim'
 Plug 'sainnhe/vim-color-forest-night'
 let g:forest_night_enable_italic = 1
@@ -39,6 +38,7 @@ Plug 'https://github.com/relastle/bluewery.vim'
 Plug 'https://github.com/flrnd/plastic.vim'
 Plug 'srcery-colors/srcery-vim'
 Plug 'https://github.com/sainnhe/edge'
+" let g:edge_style = 'aura'
 let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
@@ -60,6 +60,10 @@ Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
 "}}}
 
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+Plug 'voldikss/vim-floaterm'
+let g:floaterm_keymap_toggle = '<F1>'
+let g:floaterm_gitcommit = 'split'
+command! LF FloatermNew lf
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -457,28 +461,26 @@ if has('termguicolors')
     endif
 endif
 
-let g:theme='forest-night'
+let g:theme='edge'
 execute 'colorscheme ' . g:theme
 
 let g:favorite_colors = [
+            \ "edge",
+            \ "sonokai",
+            \ "forest-night",
+            \ "gruvbox-material",
             \ "material-theme",
             \ "deus",
             \ "onedark",
-            \ "two-firewatch",
-            \ "allomancer",
             \ "forest-night",
             \ "flatwhite",
-            \ "orange-moon",
-            \ "nordisk",
             \ "neodark",
             \ "base16-tomorrow-night",
             \ "hybrid_material",
             \ "rigel",
-            \ "molokai",
             \ "palenight",
             \ "seoul256",
             \ "seoul256-light",
-            \ "sonokai",
             \ ]
 
 fun! CRotate(direction)
@@ -839,9 +841,7 @@ nmap <M-C> :t-1<CR>gccj
 nmap dP :t-1<CR>gccj
 xnoremap P :t-1<CR>
 xnoremap <M-d> :t-1<CR>
-" TODO: expr map so that when not in line mode, does yP, while it does yp or
 " :t-1 in line mode
-xnoremap D :t-1<CR>
 
 " delete line
 nnoremap <M-D> dd
@@ -947,7 +947,7 @@ au vimrc FileType vim setlocal fdm=marker | norm zv
 " endif
 " set foldlevel=2
 " set foldnestmax=2
-nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
+" nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
 nnoremap <M-m> zm
 nnoremap <M-M> zr
 nnoremap Z za
@@ -983,7 +983,6 @@ fun! Scratch()
     if bufnr('Scratch') == -1
         e Scratch
         setlocal filetype=text nobuflisted bufhidden=hide buftype=nofile noswapfile
-        call SetColors()
     elseif bufnr('%') == bufnr('Scratch')
         b #
     else

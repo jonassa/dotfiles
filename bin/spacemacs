@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+env HOME=$HOME/emacs/spacemacs emacs

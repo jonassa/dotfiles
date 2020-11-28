@@ -1,0 +1,49 @@
+- defaults:
+    link:
+      # Create parent directories to the link
+      create: true
+      # Remove existing symlinks that do not have the right target
+      relink: true
+      # This would remove existing files as well, deleting existing configuration
+      # force: true
+
+- clean: ['~']
+
+- link:
+    ~/.dotfiles: ''
+    ~/bin: bin
+    # /etc/bash.bashrc: bash/bash.bashrc
+    # /etc/inputrc: bash/inputrc
+    ~/.bashrc: bash/bashrc
+    ~/.tmux.conf: tmux.conf
+    ~/.zshrc: zsh/zshrc
+    ~/.zshenv: zsh/zshenv
+    ~/.zshplugins: zsh/zshplugins
+    ~/.config/nvim: nvim
+    ~/.condarc: condarc
+    ~/.config/direnv/direnvrc: direnvrc
+    ~/.config/flake8: flake8
+    ~/.jupyter/jupyter_notebook_config.py: jupyter_notebook_config.py
+    ~/.gitconfig: gitconfig
+    ~/.gitignore_global: gitignore_global
+    ~/.config/htop/htoprc: htoprc
+    ~/.ideavimrc: ideavimrc
+    ~/.config/kitty/kitty.conf: kitty.conf
+    ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.lesskey: lesskey
+    ~/.profile: profile
+    ~/.config/redshift.conf: redshift.conf
+    ~/.config/rofi: rofi
+    ~/.config/Code/User/settings.json: settings.json
+    ~/.config/starship.toml: starship.toml
+    ~/.config/tridactyl/tridactylrc: firefox/tridactylrc
+    ~/.mozilla/firefox/hl9i0x10.default/user.js: firefox/user.js
+    ~/.vintrc.yaml: vintrc.yaml
+    ~/.config/zathura/zathurarc: zathurarc
+
+# - create:
+    # - ~/.config/rofi
+    # - ~/.config/nvim
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
