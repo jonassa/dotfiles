@@ -85,15 +85,17 @@ let g:vem_tabline_show = 2
 let g:vem_tabline_multiwindow_mode = 0
 
 Plug 'liuchengxu/vista.vim'
-let g:vista_stay_on_open = 0
-let g:vista_icon_indent = [" » ", "\t"]
 let g:vista_default_executive = 'ctags'
 let g:vista_executive_for = {
-            \ 'scala': 'coc',
-            \ 'vim': 'ctags',
-            \ }
-" let g:vista_fzf_preview = ['right:50%']
+      \ 'python': 'coc',
+      \ 'scala': 'coc',
+      \ 'markdown': 'toc',
+      \ }
+let g:vista_stay_on_open = 0
 let g:vista#renderer#enable_icon = 0
+let g:vista_icon_indent = [" » ", "\t"]
+let g:vista_keep_fzf_colors = 1
+" let g:vista_fzf_preview = ['right:50%']
 
 " Plug 'https://github.com/thaerkh/vim-indentguides'
 " let g:indentguides_ignorelist = ['help']
@@ -199,7 +201,7 @@ let g:splitjoin_join_mapping = '<m-J>'
 " nnoremap <silent> <m-K> :SplitjoinSplit<CR>
 
 Plug 'https://github.com/FooSoft/vim-argwrap'
-nnoremap gw :ArgWrap<CR>
+nnoremap <leader>k :ArgWrap<CR>
 
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
@@ -456,6 +458,7 @@ if has('termguicolors')
 endif
 
 let g:theme='forest-night'
+execute 'colorscheme ' . g:theme
 
 let g:favorite_colors = [
             \ "material-theme",
@@ -550,11 +553,11 @@ aug END
 call yankstack#setup()
 
 " Leader
-let g:mapleader="\<Space>"
+let g:mapleader = "\<Space>"
 nnoremap <M-x> :Commands<CR>
 nnoremap <silent> <leader>:  :Commands<CR>
 " Use coc if available, else use ctags
-" nnoremap <silent> <leader><leader> :Vista finder coc<CR>
+nnoremap <silent> <leader>j :Vista finder<CR>
 nnoremap <silent> <leader><leader> :<C-u>CocList -I symbols<CR>
 " TODO: expr map: other buffer if only 2 buffers (not hidden)
 nnoremap <silent> <leader><Tab> :Buffers<CR> 
@@ -563,7 +566,9 @@ nnoremap <silent> <leader>Q :qa!<CR>
 nnoremap <silent> <leader>w :x!<CR>
 nnoremap <silent> <leader>s :up<CR>
 nnoremap <silent> <leader>e :e!<CR>zz
+" nnoremap <silent> <leader>br :e!<CR>zz
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
+nnoremap <leader>r :call Run()<CR>
 " nnoremap <silent> <leader>cd :Directories<CR>
 nnoremap <silent> <leader>n :enew<CR>
 nnoremap <silent> <C-R> :History:<CR>
@@ -572,12 +577,13 @@ nnoremap <silent> <leader>fe :Files<CR>
 nnoremap <silent> <leader>fh :Files ~<CR>
 nnoremap <silent> <leader>F  :Files ~<CR>
 nnoremap <silent> <leader>fr :History<CR>
+nnoremap <leader>fl :Locate<Space>
 nnoremap <silent> <leader>gg :GFiles<CR>
 nnoremap <silent> <leader>C  :Colors<CR>
 nnoremap <silent> <leader>'  :Marks<CR>
 nnoremap <leader>/ :Ag<Space>
-nnoremap <C-G> :Ag<CR><Space>
-nnoremap <leader>o :Locate<Space>
+nnoremap <silent> <leader>* :Grep "\b<cword>\b"<CR>
+nnoremap <silent> <C-G> :Ag<CR><Space>
 " nnoremap <silent> <leader>r :History<CR>
 nnoremap <silent> t :Tags<CR>
 nnoremap <silent> <leader>l :BLines<CR>
@@ -664,9 +670,15 @@ noremap <M-f> <C-Right>
 noremap <M-b> <C-Left>
 noremap <M-e> g_
 
-" Visual, operator mode
-xnoremap <M-w> aW
-onoremap <M-w> aW
+" M-W: selecting or changing words
+" m-w could also be used to yank (kill-ring-save from emacs)
+" nnoremap <m-w> ciW
+nnoremap <M-w> viw
+nnoremap <M-W> viW
+xnoremap <M-w> w
+xnoremap <M-W> W
+onoremap <M-w> w
+onoremap <M-W> W
 
 " Insert mode editing
 inoremap <M-f> <Esc>l<C-Right>
@@ -745,7 +757,6 @@ nnoremap <silent> <M-s> :up<CR>
 " Quickfix
 if executable('ag') | set grepprg=ag\ --vimgrep\ --silent | endif
 command! -nargs=? -complete=file_in_path Grep silent grep! <args>
-nmap <silent> <leader>* :Grep "\b<cword>\b"<CR>
 " nmap <silent> gw :Grep "\b<cword>\b"<CR>
 nnoremap <silent> <left>  :cpf<CR>zvzz
 nnoremap <silent> <right> :cnf<CR>zvzz
@@ -828,6 +839,9 @@ nmap <M-C> :t-1<CR>gccj
 nmap dP :t-1<CR>gccj
 xnoremap P :t-1<CR>
 xnoremap <M-d> :t-1<CR>
+" TODO: expr map so that when not in line mode, does yP, while it does yp or
+" :t-1 in line mode
+xnoremap D :t-1<CR>
 
 " delete line
 nnoremap <M-D> dd
@@ -888,11 +902,14 @@ nnoremap gB :ls!<CR>:b<Space>
 
 nnoremap vv viw
 nnoremap VV viW
+nnoremap VL vg_
 nnoremap <m-v> ^vg_
 xnoremap <m-v> <Esc>
 " yank line with indent
 nnoremap gl 0y$
 nnoremap dl 0d$
+nnoremap gw "+yaw
+nnoremap gW "+yaW
 xnoremap <expr> I mode() == '<C-V>' ? 'I' : '<C-V>^I'
 xnoremap <expr> A mode() == '<C-V>' ? 'A' : '<C-V>$A'
 
@@ -1066,7 +1083,6 @@ fun! Run()
         R
     endif
 endf
-nnoremap <leader>r :call Run()<CR>
 
 fun! RunInterpreter()
     update
@@ -1326,9 +1342,7 @@ nnoremap \j :jumps<CR>
 nnoremap \f :Filetypes<CR>
 
 nnoremap <m-E> vg_
-nnoremap VL vg_
 xnoremap x "_x
-nnoremap <m-w> ciW
 nnoremap <m-l> cc
 xmap <Space> <M-r><Space>
 " Select the last inserted text (works poorly for multiple lines inserted)
@@ -1364,7 +1378,6 @@ nnoremap <m-i> ^
 nmap π oprint(
 
 " Most wanted:
-" save file in tmux
 " skip over parens/expression/argument (autopairs?)
 " m-d to delete word, not Word, same for change
 " go to start of line, easier than H
@@ -1374,6 +1387,12 @@ nmap π oprint(
 " number text object, select, change, delete, in/decrement
 " gcap
 " shift arg left right
+
+inoremap ª ∧
+inoremap œ ∨
+inoremap → ∩
+inoremap ↓ ∪
+inoremap € ∈
 
 "}}}
 
