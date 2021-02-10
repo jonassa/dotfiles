@@ -7,11 +7,11 @@
     "diagnostic.locationlistUpdate": true,
     "diagnostic.warningSign":"--",
 
-    // Default python completion is Jedi. Disable Jedi to use MS LS. Palantir LS  requires custom langserv.
     "python.jediEnabled": true,
-    //"python.jediPath": "/home/jonas/anaconda3/pkgs/jedi-0.17.2-py38_0/lib/python3.8/site-packages",
+    // Apparently necessary. Consider switching from coc-python.
+    // Jedi is smart enough to detect env/meant to be installed in one location
+    "python.jediPath": "/usr/lib/python3.9/site-packages/",
 
-    //"python.linting.flake8Args": ["--select 'F'"],
     "python.autoComplete.addBrackets": true,
 
     "list.previewSplitRight":true,

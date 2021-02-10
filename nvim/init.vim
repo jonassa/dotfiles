@@ -4,73 +4,126 @@ runtime! archlinux.vimfiletype plugin indent on
 call plug#begin('~/.vim/plugged')
 
 " COLORSCHEMES {{{
-Plug 'arcticicestudio/nord-vim'
-Plug 'https://github.com/morhetz/gruvbox'
-let g:gruvbox_contrast_dark = 'hard'
-let g:gruvbox_improved_strings = 1
-let g:gruvbox_improved_warnings = 1
-Plug 'https://github.com/joshdick/onedark.vim'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
-Plug 'https://github.com/jdkanani/vim-material-theme'
-Plug 'https://github.com/ajmwagar/vim-deus'
-Plug 'Rigellute/rigel'
-Plug 'https://github.com/andreypopp/vim-colors-plain'
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'junegunn/seoul256.vim'
-Plug 'https://github.com/drewtempelmeyer/palenight.vim'
-Plug 'https://github.com/fatih/molokai'
-Plug 'https://github.com/sts10/vim-pink-moon'
-Plug 'https://github.com/rakr/vim-two-firewatch'
-Plug 'https://github.com/tyrannicaltoucan/vim-quantum'
-Plug 'https://github.com/lifepillar/vim-wwdc16-theme'
-Plug 'https://github.com/kamwitsta/nordisk'
-Plug 'https://github.com/kristijanhusak/vim-hybrid-material'
-Plug 'https://github.com/nightsense/stellarized'
-Plug 'https://github.com/nightsense/rusticated'
-Plug 'https://github.com/yuttie/inkstained-vim'
-Plug 'https://github.com/kamwitsta/flatwhite-vim'
+
+" Treesitter
 Plug 'sainnhe/vim-color-forest-night'
 let g:forest_night_enable_italic = 1
 let g:forest_night_disable_italic_comment = 1
 let g:forest_night_diagnostic_line_highlight = 1
 let g:forest_night_transparent_background = 0
-Plug 'https://github.com/relastle/bluewery.vim'
-Plug 'https://github.com/flrnd/plastic.vim'
-Plug 'srcery-colors/srcery-vim'
-Plug 'https://github.com/sainnhe/edge'
-" let g:edge_style = 'aura'
+Plug 'sainnhe/edge'
 let g:edge_style = 'neon'
 let g:edge_enable_italic = 1
 let g:edge_disable_italic_comment = 1
 let g:edge_menu_selection_background = 'purple'
-" default, proton or neon
 let g:edge_transparent_background = 0
-Plug 'https://github.com/sainnhe/gruvbox-material'
+Plug 'sainnhe/gruvbox-material'
 let g:gruvbox_material_disable_italic_comment = 1
-let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_background = 'medium'
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_transparent_background = 0
-Plug 'https://github.com/sainnhe/sonokai'
-" shusia, andromeda, atlantis or maia
+Plug 'sainnhe/sonokai'
 let g:sonokai_style = 'atlantis'
 let g:sonokai_disable_italic_comment = 1
-Plug 'https://github.com/lifepillar/vim-solarized8'
-Plug 'https://github.com/YorickPeterse/happy_hacking.vim'
-Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
+Plug 'franbach/miramare'
+let g:miramare_current_word = 'underline'
+
+
+Plug 'arcticicestudio/nord-vim'
+Plug 'morhetz/gruvbox'
+let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_improved_strings = 1
+let g:gruvbox_improved_warnings = 1
+Plug 'joshdick/onedark.vim'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'pacokwon/onedarkpaco.vim'
+Plug 'romgrk/doom-one.vim'
+Plug 'jdkanani/vim-material-theme'
+Plug 'ajmwagar/vim-deus'
+Plug 'Rigellute/rigel'
+Plug 'andreypopp/vim-colors-plain'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'fatih/molokai'
+Plug 'sts10/vim-pink-moon'
+Plug 'rakr/vim-two-firewatch'
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'lifepillar/vim-wwdc16-theme'
+Plug 'kamwitsta/nordisk'
+Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'nightsense/stellarized'
+Plug 'nightsense/rusticated'
+Plug 'yuttie/inkstained-vim'
+Plug 'kamwitsta/flatwhite-vim'
+Plug 'relastle/bluewery.vim'
+Plug 'flrnd/plastic.vim'
+Plug 'srcery-colors/srcery-vim'
+Plug 'YorickPeterse/happy_hacking.vim'
+Plug 'bluz71/vim-nightfly-guicolors'
+Plug 'equt/paper.vim'
+Plug 'ayu-theme/ayu-vim'
+let ayucolor = 'mirage'
+" let ayucolor = 'light'
 "}}}
 
-" Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 Plug 'voldikss/vim-floaterm'
 let g:floaterm_keymap_toggle = '<F1>'
 let g:floaterm_gitcommit = 'split'
 command! LF FloatermNew lf
 
+" FZF {{{
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
+" let g:fzf_layout = { 'down': '~20%' }
+let g:fzf_layout = { 'window': { 'width': 0.75, 'height': 0.6 } }
+let g:fzf_nvim_statusline = 0
+let g:fzf_buffers_jump = 1
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" Disable statusline
+au! FileType fzf
+au  FileType fzf set laststatus=0 noshowmode noruler
+            \| au BufLeave <buffer> set laststatus=2 showmode ruler
+
+let g:fzf_colors =
+          \ { 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Statement'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'Normal'],
+            \ 'hl+':     ['fg', 'SpecialComment'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
+
+command! -bang -nargs=* Ag call fzf#vim#ag
+            \ (<q-args>, '--color-path "0;34" --color-line-number "0;32"', fzf#vim#with_preview(), <bang>0)
+
+" Files with bat previewer
+command! -bang -nargs=? -complete=dir Files
+            \ call fzf#vim#files(<q-args>, {'options': ['--preview', 'bat -p --color always {}']}, <bang>0)
+
+" Buffers with --select-1
+command! -bang -nargs=? -complete=buffer Buffers
+            \ call fzf#vim#buffers(<q-args>, {'options': ['-1']}, <bang>0)
+
+" cd under $HOME
+command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
+            \ {'source': 'fd . -H -td ~',
+            \  'sink': 'cd'}))
+
+imap <C-X><C-F> <plug>(fzf-complete-path)
+imap <C-X><C-L> <plug>(fzf-complete-line)
+
+"}}}
+
 " UTIL {{{
 Plug 'https://github.com/tpope/vim-fugitive'
-" TODO: map something to :Gbrowse
 Plug 'https://github.com/tpope/vim-rhubarb'
 Plug 'https://github.com/mhinz/vim-signify'
 
@@ -80,6 +133,19 @@ Plug 'https://github.com/tpope/vim-eunuch'
 
 " TESTING: Set 'path' dynamically instead of using set path=.,,**
 Plug 'https://github.com/tpope/vim-apathy'
+
+" Configured universal ctags in .ctags.d/
+" This is nice to always have tags generated, though vista does this as well
+Plug 'https://github.com/ludovicchabant/vim-gutentags'
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_missing = 1
+
+Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_no_mappings = 1
+
+Plug 'https://github.com/romainl/vim-qf'
+let g:qf_mapping_ack_style = 1
+let g:qf_max_height = 15
 
 "}}}
 
@@ -101,16 +167,14 @@ let g:vista_icon_indent = [" » ", "\t"]
 let g:vista_keep_fzf_colors = 1
 " let g:vista_fzf_preview = ['right:50%']
 
-" Plug 'https://github.com/thaerkh/vim-indentguides'
-" let g:indentguides_ignorelist = ['help']
-" let g:indentguides_spacechar = ' '
-" let g:indentguides_tabchar = '|'
-
 Plug 'https://github.com/jeetsukumaran/vim-filebeagle'
 let g:filebeagle_suppress_keymaps = 1
 nnoremap <silent> - :FileBeagleBufferDir<CR>
 
 Plug 'RRethy/vim-illuminate'
+
+Plug 'dstein64/nvim-scrollview', { 'branch': 'main' }
+let g:scrollview_winblend = 0
 "}}}
 
 " EDITING {{{
@@ -171,16 +235,17 @@ noremap <plug>(slash-after) zz
 nnoremap dn dgn
 nnoremap cn cgn
 
-" Plug 'unblevable/quick-scope'
 Plug 'justinmk/vim-sneak'
+let g:sneak#label = 1
 let g:sneak#s_next = 1
 let g:sneak#use_ic_scs = 1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
+map f <Plug>Sneak_s
+map F <Plug>Sneak_S
+" map f <Plug>Sneak_f
+" map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
 highlight link Sneak IncSearch
-
 
 Plug 'https://github.com/tpope/vim-commentary'
 Plug 'https://github.com/machakann/vim-sandwich/'
@@ -205,11 +270,8 @@ let g:splitjoin_join_mapping = '<m-J>'
 " nnoremap <silent> <m-K> :SplitjoinSplit<CR>
 
 Plug 'https://github.com/FooSoft/vim-argwrap'
-nnoremap <leader>k :ArgWrap<CR>
 
 Plug 'junegunn/vim-easy-align'
-nmap ga <Plug>(EasyAlign)
-xmap ga <Plug>(EasyAlign)
 
 " Plug 'https://github.com/AndrewRadev/sideways.vim'
 " " disse funker bare for lister/argumenter?
@@ -229,19 +291,12 @@ nnoremap <m-B> daWBPB
 
 "}}}
 
-Plug 'christoomey/vim-tmux-navigator'
-let g:tmux_navigator_no_mappings = 1
-
-Plug 'https://github.com/romainl/vim-qf'
-let g:qf_mapping_ack_style = 1
-let g:qf_max_height = 15
-
 " LANGUAGE SUPPORT {{{
+" Disable python2 support
+let g:loaded_python_provider = 0
+let g:python3_host_prog = '/usr/bin/python'
+
 Plug 'sheerun/vim-polyglot'
-" Plug 'https://github.com/derekwyatt/vim-scala'
-" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-" Plug 'https://github.com/metakirby5/codi.vim'
-" nnoremap something :Codi!!<CR>
 Plug 'https://github.com/gabrielelana/vim-markdown'
 let g:markdown_enable_spell_checking = 0
 Plug 'https://github.com/dkarter/bullets.vim'
@@ -260,12 +315,13 @@ packadd nvim-treesitter
 
 lua << EOF
   require'nvim-treesitter.configs'.setup {
+    ensure_installed = {"c", "bash", "python"},
     highlight = {
       enable = true,
       use_languagetree = false,
     },
     indent = {
-      enable = true
+      enable = false
     },
     incremental_selection = {
       enable = true,
@@ -288,7 +344,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 
-" Extensions: json, snippets, tag, python, pairs, sh
+" Extensions: json, snippets, tag, python, pairs, sh, lists
 Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 
@@ -335,7 +391,6 @@ endf
 
 " Get help (manpages and such)
 nnoremap gh K
-
 
 "}}}
 
@@ -431,12 +486,12 @@ set sessionoptions-=options,folds,help
 " STATUSLINE {{{
 set noshowmode
 set statusline=
+" set statusline+=%#question#%{getcwd()}\ " working directory
 set statusline+=%#title#\ %f\ %*
 " Should have a trailing newline
 set statusline+=%2*[%n%M%R%W%q]\ %*\ 
 set statusline+=%{coc#status()}
 " set statusline+=%{nvim_treesitter#statusline(90)}
-" set statusline+=%#question#%{getcwd()}\ " working directory
 set statusline+=\ %m
 set statusline+=%=
 " set statusline+=\ %{strftime('%R',getftime(expand('%')))}
@@ -461,7 +516,7 @@ if has('termguicolors')
     endif
 endif
 
-let g:theme='edge'
+let g:theme='forest-night'
 execute 'colorscheme ' . g:theme
 
 let g:favorite_colors = [
@@ -479,8 +534,6 @@ let g:favorite_colors = [
             \ "hybrid_material",
             \ "rigel",
             \ "palenight",
-            \ "seoul256",
-            \ "seoul256-light",
             \ ]
 
 fun! CRotate(direction)
@@ -535,7 +588,8 @@ au WinLeave * set nocursorline
 au FileType qf nnoremap <silent> <buffer> q :close<CR>
 " au FileType help nnoremap <silent> <buffer> q :close<CR>
 " If help is last window, delete buffer, else close window
-au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':close<CR>'
+" au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':close<CR>'
+au FileType help nnoremap <silent> <expr> <buffer> q winnr('$') == 1 ? ':bd<CR>' : ':q<CR>'
 " Open help in a new tab
 au FileType help wincmd T
 
@@ -548,7 +602,12 @@ au VimEnter * call CocMapsOveride()
 " let g:coc_enable_locationlist = 0 autocmd User CocLocationsChange
 " 	CocList --normal location
 
+augroup LuaHighlight 
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
+augroup END
 aug END
+
 "}}}
 
 " KEYBINDINGS {{{
@@ -558,6 +617,8 @@ call yankstack#setup()
 let g:mapleader = "\<Space>"
 nnoremap <M-x> :Commands<CR>
 nnoremap <silent> <leader>:  :Commands<CR>
+nnoremap <silent> <leader>'  :Marks<CR>
+nnoremap <silent> <leader>m  :Marks<CR>
 " Use coc if available, else use ctags
 nnoremap <silent> <leader>j :Vista finder<CR>
 nnoremap <silent> <leader><leader> :<C-u>CocList -I symbols<CR>
@@ -577,24 +638,47 @@ nnoremap <silent> <C-R> :History:<CR>
 nnoremap <silent> <leader>h  :Helptags<CR>
 nnoremap <silent> <leader>fe :Files<CR>
 nnoremap <silent> <leader>fh :Files ~<CR>
-nnoremap <silent> <leader>F  :Files ~<CR>
 nnoremap <silent> <leader>fr :History<CR>
-nnoremap <leader>fl :Locate<Space>
-nnoremap <silent> <leader>gg :GFiles<CR>
+nnoremap          <leader>fl :Locate<Space>
+nnoremap <silent> <leader>fp :GFiles<CR>
+
+" nnoremap <silent> <leader>gg :GFiles<CR>
+nnoremap          <leader>gg :Git grep<Space>
+nnoremap <silent> <leader>gb :GBrowse<CR>
+nnoremap <silent> <leader>gc :Commits<CR>
+nnoremap <silent> <leader>ge :Gread<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>gl :Git log --all --oneline<CR>
+
 nnoremap <silent> <leader>C  :Colors<CR>
-nnoremap <silent> <leader>'  :Marks<CR>
+nmap <silent> <leader>o <Plug>(qf_qf_toggle)
 nnoremap <leader>/ :Ag<Space>
 nnoremap <silent> <leader>* :Grep "\b<cword>\b"<CR>
 nnoremap <silent> <C-G> :Ag<CR><Space>
-" nnoremap <silent> <leader>r :History<CR>
 nnoremap <silent> t :Tags<CR>
-nnoremap <silent> <leader>l :BLines<CR>
 nnoremap <silent> S :BLines<CR>
-nnoremap <silent> <M-l> :BLines<CR>
-nnoremap <silent> <leader>ii :PlugInstall<CR>
-nnoremap <silent> <leader>iu :PlugUpdate<CR>
-nnoremap <silent> <leader>ic :PlugClean!<CR>
-nnoremap <silent> <leader>gc :Commits<CR>
+
+nnoremap <leader>ks :%s/
+xnoremap <leader>ks :s/
+nnoremap <leader>kr :%s/\<<c-r><c-w>\>/
+xnoremap <leader>kr y:%s/\<<c-r>"\>/
+nmap <silent> <leader>kw <Plug>(ArgWrapToggle)
+nmap <leader>ka <Plug>(EasyAlign)
+xmap <leader>ka <Plug>(EasyAlign)
+nmap <leader>kc gcap
+
+nnoremap <silent> <leader>uu :PlugInstall<CR>
+nnoremap <silent> <leader>UU :PlugUpdate<CR>
+nnoremap <silent> <leader>uc :PlugClean!<CR>
+
+nnoremap <silent> <leader>l :<C-u>CocList<CR>
+nnoremap <silent> <leader>cl  :<C-u>CocList<CR>
+nnoremap <silent> <leader>cc  :<C-u>CocCommand<CR>
+nnoremap <silent> <leader>co  :<C-u>CocList outline<CR>
+nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<CR>
+nnoremap <silent> <leader>cd  :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <leader>ci  :<C-u>CocInfo<CR>
+nmap <leader>? <plug>(fzf-maps-n)
 
 " Escape
 noremap  <M-q> <Esc>
@@ -671,6 +755,7 @@ noremap <M-b> <C-Left>
 noremap <M-f> <C-Right>
 noremap <M-b> <C-Left>
 noremap <M-e> g_
+" nnoremap <m-i> ^
 
 " M-W: selecting or changing words
 " m-w could also be used to yank (kill-ring-save from emacs)
@@ -744,6 +829,8 @@ nnoremap <M-BS> <C-W>c
 " noremap <silent> <C-p> :bp<CR>
 nmap <silent> <C-n> <Plug>vem_next_buffer-
 nmap <silent> <C-p> <Plug>vem_prev_buffer-
+nmap <silent> <A-,> <Plug>vem_next_buffer-
+nmap <silent> <A-.> <Plug>vem_prev_buffer-
 nnoremap <silent> <C-Q> :close<CR>
 nnoremap <silent> <C-X> :bp<Bar>bd! #<CR>
 nnoremap <silent> <C-H> :TmuxNavigateLeft<CR>
@@ -781,12 +868,6 @@ nnoremap <silent> <expr> dp &diff ? 'dp' : ':t.<CR>'
 " nnoremap <silent> <expr> do &diff ? 'do' : ':Explore<CR>'
 nnoremap <silent> <expr> <leader>d &diff ? ':diffoff!<CR>:q<CR>' : ':Gdiffsplit<CR>'
 
-" substsitute
-nnoremap gs :%s/
-xnoremap gs :s/
-" replace word/visual
-nnoremap <leader>gr :%s/\<<c-r><c-w>\>/
-xnoremap gr y:%s/\<<c-r>"\>/
 " remove empty lines (rare enough to just use g)
 " xnoremap R :g/^$/d<CR>
 " make one empty line between each paragraph
@@ -799,6 +880,8 @@ nnoremap <C-F> <C-F>zz
 nnoremap <C-B> <C-B>zz
 nmap đ <C-F>
 nmap ” <C-B>
+" nnoremap ø <c-d>zz
+" nnoremap æ <c-u>zz
 
 " go to tag
 nnoremap <CR> <C-]>zz
@@ -868,18 +951,17 @@ xnoremap <M-j> :m'>+<CR>`<my`>mzgv`yo`z
 xnoremap <M-k> :m'<-2<CR>`>my`<mzgv`yo`z
 
 
-" yank to end of line
 map Y y$
-"d/c/y to start of line
 nnoremap dh d^
 nnoremap ch c^
 nnoremap yh y^
+nnoremap db bdaw
+nnoremap dB BdaW
 
 " yank to clipboard
 xnoremap <C-C> "+y
 nnoremap <C-C> "+yy
 " paste from clipboard
-" nnoremap <leader>p "+p
 nnoremap <leader>p :PutLine<CR>
 " nnoremap cp <esc>"+p
 " nnoremap cP <esc>"+P
@@ -934,10 +1016,11 @@ nnoremap <M-CR> <ESC>:s/\s*;*\s*$/;<CR>
 "}}}
 
 " FOLDING {{{
-" TODO: why is foldmethod=manual and not indent (except vimrc; fdm=marker)
-setglobal fdm=indent
-setglobal nofoldenable
-" TODO: does not zv when jumping to tag using :Tags or :Vista finder
+" setglobal fdm=indent
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set nofoldenable
+set foldnestmax=5
 set foldopen+=jump
 au vimrc BufEnter $MYVIMRC norm zv
 " au vimrc BufEnter $MYVIMRC setlocal fdm=marker | norm zv
@@ -945,19 +1028,11 @@ au vimrc FileType vim setlocal fdm=marker | norm zv
 " if expand("%:t") != 'init.vim'
 "     set nofoldenable
 " endif
-" set foldlevel=2
-" set foldnestmax=2
+
 " nnoremap <expr> <F1> &foldlevel ? 'zM' :'zR'
 nnoremap <M-m> zm
 nnoremap <M-M> zr
 nnoremap Z za
-
-" FOLD_TESTING {{{
-set fdm=indent
-" m-m only decrements to 98 and so on; <f1> must be used first
-" also, this breaks vimrc being folded initially
-set foldlevelstart=99 " open buffer with no folding, but with foldenable set
-" }}}
 
 "}}}
 
@@ -1150,55 +1225,6 @@ let g:sandwich#recipes += [
             \]
 "}}}
 
-" FZF {{{
-" let g:fzf_layout = { 'down': '~20%' }
-let g:fzf_layout = { 'window': { 'width': 0.7, 'height': 0.5 } }
-let g:fzf_nvim_statusline = 0
-let g:fzf_buffers_jump = 1
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" Disable statusline
-au! FileType fzf
-au  FileType fzf set laststatus=0 noshowmode noruler
-            \| au BufLeave <buffer> set laststatus=2 showmode ruler
-
-let g:fzf_colors =
-          \ { 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg', 'Normal'],
-            \ 'hl':      ['fg', 'Statement'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'Normal'],
-            \ 'hl+':     ['fg', 'SpecialComment'],
-            \ 'info':    ['fg', 'PreProc'],
-            \ 'border':  ['fg', 'Ignore'],
-            \ 'prompt':  ['fg', 'Conditional'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] }
-
-command! -bang -nargs=* Ag call fzf#vim#ag
-            \ (<q-args>, '--color-path "0;34" --color-line-number "0;32"', fzf#vim#with_preview(), <bang>0)
-
-" Files with bat previewer
-command! -bang -nargs=? -complete=dir Files
-            \ call fzf#vim#files(<q-args>, {'options': ['--preview', 'bat -p --color always {}']}, <bang>0)
-
-" Buffers with --select-1
-command! -bang -nargs=? -complete=buffer Buffers
-            \ call fzf#vim#buffers(<q-args>, {'options': ['-1']}, <bang>0)
-
-" cd under $HOME
-command! -nargs=* -complete=dir Directories call fzf#run(fzf#wrap(
-            \ {'source': 'fd . -H -td ~',
-            \  'sink': 'cd'}))
-
-imap <C-X><C-F> <plug>(fzf-complete-path)
-imap <C-X><C-L> <plug>(fzf-complete-line)
-nmap <leader>? <plug>(fzf-maps-n)
-
-"}}}
-
 " Netrw {{{
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
@@ -1207,20 +1233,6 @@ let g:netrw_winsize = 25
 
 " COC TESTING {{{
 
-" <Plug>(coc-diagnostic-info)
-nmap gj <Plug>(coc-diagnostic-next)
-nmap gk <Plug>(coc-diagnostic-prev)
-" <Plug>(coc-diagnostic-next-error)
-" <Plug>(coc-diagnostic-prev-error)
-
-"   <Plug>(ale_previous_wrap) - ALEPreviousWrap
-"   <Plug>(ale_previous_wrap_error) - ALEPrevious -wrap -error
-"   <Plug>(ale_previous_wrap_warning) - ALEPrevious -wrap -warning
-"   <Plug>(ale_next_wrap) - ALENextWrap
-"   <Plug>(ale_next_wrap_error) - ALENext -wrap -error
-"   <Plug>(ale_next_wrap_warning) - ALENext -wrap -warning
-
-" Compare: ALEGoToDefinition
 fun! CocMapsOveride()
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gD <Plug>(coc-declaration)
@@ -1229,6 +1241,9 @@ fun! CocMapsOveride()
     nmap <silent> gr <Plug>(coc-references)
     " nnoremap cr <Plug>(coc-rename)
     " nnoremap vr <Plug>(coc-refactor)
+    " <Plug>(coc-diagnostic-info)
+    nmap gj <Plug>(coc-diagnostic-next)
+    nmap gk <Plug>(coc-diagnostic-prev)
 endf
 
 nmap <c-space> <Plug>(coc-codeaction)
@@ -1245,19 +1260,9 @@ command! -nargs=0 Format :call CocAction('format')
 " nnoremap <F5> :Format<CR>
 " <Plug>(coc-format)
 
-nnoremap <silent> <leader>cl  :<C-u>CocList<CR>
-nnoremap <silent> <leader>cc  :<C-u>CocCommand<CR>
-nnoremap <silent> <leader>co  :<C-u>CocList outline<CR>
-nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<CR>
-nnoremap <silent> <leader>cd  :<C-u>CocList diagnostics<CR>
-" Load diagnostics to location/quickfix?
-" nnoremap <silent> <leader>cd  :<C-u>CocDiagnostics<CR>
-
 "}}}
 
 " TESTING AREA {{{
-
-" FREE KEYS {{{
 
 " nnoremap <C-E>
 " nnoremap <C-Y>
@@ -1275,16 +1280,9 @@ nnoremap <silent> <leader>cd  :<C-u>CocList diagnostics<CR>
 " nnoremap |
 " nnoremap }
 
-"}}}
-
-
 " Zappend/Zelect
 " nnoremap zd "Zdd
 " nnoremap zp "zp:let @z=''<CR>
-
-" Fetch lines
-" nnoremap + :<C-u>+m.<left><left>
-" nnoremap - :<C-u>-m.<left><left>
 
 inoremap <M-1> !
 inoremap <M-2> @
@@ -1363,17 +1361,13 @@ aug END
 command! FASD call fzf#run(fzf#wrap({'source': 'fasd -al', 'options': '--no-sort --tac --tiebreak=index'}))
 
 nnoremap <Space><Esc> <Nop>
+
 nnoremap <BS> <C-O>
 nnoremap <S-Tab> <C-O>
-
-nnoremap ø <c-d>zz
-nnoremap æ <c-u>zz
-
-nnoremap db bdaw
-nnoremap dB BdaW
+nnoremap <m-o> <c-o>
+nnoremap <m-i> <c-i>
 
 inoremap <m-j> <Esc>o<C-A>
-nnoremap <m-i> ^
 nmap π oprint(
 
 " Most wanted:
@@ -1393,5 +1387,21 @@ inoremap → ∩
 inoremap ↓ ∪
 inoremap € ∈
 
-"}}}
+nnoremap <m-w> viw
+nnoremap <m-W> viW
+xnoremap <m-w> y
+xnoremap <m-W> y
+xnoremap <m-q> y
+nnoremap <m-F> v<C-Right>
+nnoremap <m-B> v<C-Left>
+xnoremap <m-F> <C-Right>
+xnoremap <m-B> <C-Left>
+xmap <m-s> <Plug>(operator-sandwich-add)
 
+nnoremap <silent> ml :BLines<CR>
+cnoremap <m-m> <CR>:m''<CR>
+cnoremap <m-c> <CR>:t''<CR>
+
+nnoremap ø :
+
+"}}}

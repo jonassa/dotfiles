@@ -6,7 +6,6 @@ format = """\
     $git_commit\
     $git_state\
     $git_status\
-    $python\
     $conda\
     $cmd_duration\
     $line_break\

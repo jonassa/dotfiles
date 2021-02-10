@@ -81,9 +81,12 @@ colourscheme dark
 unbind <F1>
 unbind <C-f>
 unbind <C-b>
+unbind <C-d>
+unbind <C-u>
 unbind ZZ
 unbind --mode=ignore I
 unbind d
+unbind f
 
 
 bind q back
@@ -111,7 +114,7 @@ bind S scrollpage
 bind d scrollpage -0.5
 bind D scrollpage -1
 
-bind <A-x> fillcmdline_notrail
+"bind <A-x> fillcmdline_notrail
 
 bind b fillcmdline taball
 " bind w fillcmdline tabopen
@@ -156,4 +159,4 @@ set searchurls.w   https://en.wikipedia.org/w/index.php?search=%s
 
 
 " Testing options
-set scrollduration 100
+" set scrollduration 100

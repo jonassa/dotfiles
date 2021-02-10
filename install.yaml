@@ -6,6 +6,8 @@
       relink: true
       # This would remove existing files as well, deleting existing configuration
       # force: true
+    shell:
+      stderr: true
 
 - clean: ['~']
 
@@ -19,13 +21,14 @@
     ~/.zshrc: zsh/zshrc
     ~/.zshenv: zsh/zshenv
     ~/.zshplugins: zsh/zshplugins
+    ~/.nord_dircolors: nord_dircolors
     ~/.config/nvim: nvim
     ~/.condarc: condarc
     ~/.config/direnv/direnvrc: direnvrc
     ~/.config/flake8: flake8
     ~/.jupyter/jupyter_notebook_config.py: jupyter_notebook_config.py
-    ~/.gitconfig: gitconfig
-    ~/.gitignore_global: gitignore_global
+    ~/.gitconfig: git/gitconfig
+    ~/.config/git/ignore: git/ignore
     ~/.config/htop/htoprc: htoprc
     ~/.ideavimrc: ideavimrc
     ~/.config/kitty/kitty.conf: kitty.conf
@@ -38,8 +41,6 @@
     ~/.config/starship.toml: starship.toml
     ~/.config/tridactyl/tridactylrc: firefox/tridactylrc
     ~/.mozilla/firefox/hl9i0x10.default/user.js: firefox/user.js
-    ~/.vintrc.yaml: vintrc.yaml
-    ~/.config/zathura/zathurarc: zathurarc
 
 # - create:
     # - ~/.config/rofi
@@ -47,3 +48,8 @@
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
+  - [localectl set-x11-keymap no pc105 nodeadkeys caps:escape, Caps Lock to Escape]
+  - [curl -sfL git.io/antibody | sh -s - -b ~/bin, Installing Antibody]
+  - sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+

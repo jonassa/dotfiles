@@ -8,8 +8,8 @@ fontlist=(
     'Roboto Mono 11'
     'DejaVu Sans Mono 11'
     'Iosevka Regular 13'
-    'SF Mono 11'
-    'SF Mono 11.5'
+    'SF Mono Semibold 10.5'
+    'SF Mono Medium 11'
     'Hack Regular 11'
     'Noto Sans Mono Regular 11'
     'UbuntuMono Nerd Font Regular 13'
@@ -36,7 +36,11 @@ done | fzf)
 
 if [[ -n $selection ]]; then
     if [[ $selection =~ "Pragmata" ]]; then
-        sed -i "s/CellHeightScale=.*/CellHeightScale=1.150000/" "$terminalrc"
+        if grep "CellHeightScale=.*" $terminalrc &> /dev/null; then
+            sed -i "s/CellHeightScale=.*/CellHeightScale=1.150000/" "$terminalrc"
+        else
+            echo "CellHeightScale=1.150000" >> $terminalrc
+        fi
     else
         sed -i "s/CellHeightScale=.*/CellHeightScale=1.000000/" "$terminalrc"
     fi

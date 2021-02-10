@@ -25,7 +25,6 @@ pathadd() {
 }
 pathadd "${HOME}/.local/bin"
 pathadd "${HOME}/.npm-global/bin"
-pathadd "${HOME}/.gem/ruby/2.5.0/bin"
 pathadd "${HOME}/.cargo/bin"
 pathadd "${HOME}/bin"
 unset pathadd
@@ -39,13 +38,11 @@ export JAVA_HOME=/usr/lib/jvm/default # Scala metals (og andre ting som IntelliJ
 
 export XDG_CONFIG_HOME="$HOME/.config/"
 
-export MOOD=dark; echo dark > /tmp/mood
-export VIM_BG='dark'
 # export VIM_COLORS='material-theme'
 
 # Prettify python traceback (must install tbvaccine in virtualenv)
 export TBVACCINE=1
 
-# export LESS='-iRk /home/jonas/.less'
 export LESS='-iRF -k /home/jonas/.less'
 export NMON='MMMm1'
+export BAT_THEME='ansi-dark'

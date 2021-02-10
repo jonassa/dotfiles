@@ -42,20 +42,6 @@ chpwd() {
     ls -lho --color=always --group-directories-first
 }
 
-MOOD=$(</tmp/mood)
-
-[[ $MOOD == 'light' ]] && alias fzf='fzf --color=light'
-
-if [[ $MOOD == light ]]; then
-    MAN_SOMETHING=red
-    MAN_HEADER=black
-    MAN_BOLD=green
-else
-    MAN_SOMETHING=red
-    MAN_HEADER=white
-    MAN_BOLD=green
-fi
-
 man() {
     env \
         LESS_TERMCAP_mb=$fg_bold[$MAN_SOMETHING]  \
@@ -159,7 +145,7 @@ bindkey -M menuselect '^[a' accept-search
 bindkey '^[[Z' reverse-menu-complete
 
 # Instantly insert first completion (can be too aggressive)
-setopt menucomplete
+# setopt menucomplete
 # This is default
 setopt autolist
 
@@ -273,6 +259,8 @@ alias h='history -nd -50'
 alias hgrep='history -nd -10000|grep'
 alias d='dirs -v'
 alias lo='locate'
+alias udb='sudo updatedb'
+alias lc='sudo updatedb; locate'
 # alias u='cd ..'
 siblings() {
     local target=$(command fd -d1 -td . .. --color=always | ag -v ${PWD:t} | fzf -1 -0 --ansi )
@@ -281,7 +269,6 @@ siblings() {
 # alias s='siblings'
 
 alias ax='chmod +x'
-alias bat='bat --theme ansi-dark'
 alias cat='bat'
 vsh(){
     if [[ -n $1 ]] && [[ ! -f $1 ]]; then
@@ -302,6 +289,7 @@ alias path='echo $PATH | tr ":" "\n"'
 #     diff -u "$1" "$2" | diffr
 # }
 alias grep='grep -i --color=auto'
+alias pg='pgrep'
 alias fd='fd -H' # hidden
 # alias ag='ag --color-path=0\;34 --color-line-number=0\;32 --color-match=1\;31'
 # alias ag='ag --hidden --ignore .git'
@@ -309,7 +297,6 @@ agl() {ag $@ --pager less 2> /dev/null}
 alias rg='rg -uuS' # hidden, ignored, smartcase
 rgl() {rg $@ 2> /dev/null | less}
 q() {[[ -n $@ ]] && ag $@ ~/Dropbox/Data}
-alias udb='sudo updatedb'
 
 alias term='xfce4-terminal'
 alias vim='nvim'
@@ -322,8 +309,8 @@ alias em='emacsclient -c -a=""'
 alias tmp='vim /tmp/scratch'
 vimgrep() { vim -c "silent grep $@" }
 alias vr='nvim ~/.config/nvim/init.vim'
-alias z='nvim ~/.zshrc'
-alias main='nvim ~/Dropbox/main.txt +"color tempus_past"'
+alias z='nvim ~/.dotfiles/zsh/zshrc'
+alias main='nvim ~/Dropbox/main.txt +"color inkstained"'
 alias notes='nvim ~/Dropbox/notes.txt +"color inkstained"'
 CONFIG_FILES=(
     "$HOME/.zshrc"
@@ -412,13 +399,13 @@ alias cdu='cdu -is -dh &> /dev/null'
 #     smem -kt $@) | command less
 #     }
 alias smem='sudo smem -kt' # -k abbreviate, -t show totals
-alias pgrep='pgrep -ai' # show command, case insensitive
+alias pgrep='pgrep -aif' # show command, case insensitive, match full command
 # alias pgrep='pgrep -li'  # show name, case insensitive
 alias aria='aria2c'
 alias sub='subliminal download -l en'
 alias py='python'
 alias py2='python2'
-alias rsync='rsync -hP'
+alias rsync='rsync -ahP' # human readable, archive (recursive), partial (resume), progress
 
 srv() {
     local ip="$(ip -br -4 addr show wlan0 | awk '{print $3}' | cut -d/ -f1):8000"
@@ -584,19 +571,19 @@ pi() {
     # fi
 }
 
-pg() {
-    if [[ -n $@ ]]; then
-        result=$(yay -Ssq $@ | fzf --preview 'yay -Si {}')
-    else
-        # result=$( \
-        #     (
-        #     curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
-        #     pacman -Slq;
-        #     ) | sort | fzf --preview 'yay -Si {}')
-        result=$( yay -Pc | field 1 | sort | fzf --preview 'yay -Si {}')
-    fi
-    yay -Si $result
-}
+#pg() {
+#    if [[ -n $@ ]]; then
+#        result=$(yay -Ssq $@ | fzf --preview 'yay -Si {}')
+#    else
+#        # result=$( \
+#        #     (
+#        #     curl https://aur.archlinux.org/packages.gz -o - 2> /dev/null | zcat;
+#        #     pacman -Slq;
+#        #     ) | sort | fzf --preview 'yay -Si {}')
+#        result=$( yay -Pc | field 1 | sort | fzf --preview 'yay -Si {}')
+#    fi
+#    yay -Si $result
+#}
 
 pq() {
     if [[ -n $@ ]]; then
@@ -944,7 +931,7 @@ gp() {
 }
 
 pe() {
-    pfile=$(find .password-store/ -type f | while read -r line; do realpath --relative-to=".password-store" $line ;done | fzf)
+    pfile=$(find ~/.password-store/ -type f | while read -r line; do realpath --relative-to=".password-store" $line ;done | fzf)
     [[ -n $pfile ]] && pass edit $pfile:r
 }
 
@@ -1116,7 +1103,7 @@ bindkey '^[k' _kill_process
 bindkey '^[s' _systemd_units
 bindkey '^[S' _ssh_targets
 bindkey '^[H' _manpages
-# bindkey '^[W' _where
+bindkey '^[w' _where
 
 bindkey '^[r' _resudo
 bindkey '^[a' _repeat
@@ -1124,12 +1111,13 @@ bindkey '^U'  _parent_dir
 bindkey '^[-' _oldcd
 bindkey 'o' _popd
 # bindkey -s 'o' 'popd\r'
-bindkey 'w' _run
+bindkey 'x' _run
 
 bindkey -s ß /
 bindkey -s ð ~/
 bindkey -s π ../
 bindkey -s œ 'xdg-open .\r'
+bindkey -s € '$()^[[D'
 
 
 # FZF
@@ -1142,9 +1130,10 @@ export FZF_ALT_C_COMMAND="fd -H -td -tl"
 # export FZF_ALT_C_COMMAND="find -type d -or -type l"
 export FZF_ALT_C_OPTS="--prompt='./' --preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_OPTS="
-    --height=35% --reverse --inline-info
-    --bind 'tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up'
+    --height=40% --reverse --inline-info
+    --bind 'tab:down,btab:up,ctrl-space:toggle+down,alt-q:abort,alt-n:down,alt-p:up,alt-j:down,alt-k:up,change:top'
     --color fg:-1,bg:-1,bg+:-1
+    --no-hscroll
 "
 # Using bat instead of highlight for file preview
 # --ansi --preview 'bat --color=always --style=header,grid --line-range :300 {}'
@@ -1155,8 +1144,8 @@ bindkey '^[t' fzf-completion
 bindkey '^I' $fzf_default_completion
 
 setopt autonamedirs
-dotfiles="/home/jonas/Dropbox/Backup/dotfiles"
-Fag="/home/jonas/Dropbox/Fag"
+dotfiles="$HOME/.dotfiles"
+Fag="/$HOME/Dropbox/Fag"
 
 # FASD
 eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
@@ -1244,3 +1233,6 @@ eval "$(/opt/miniconda3/bin/conda shell.zsh hook)"
     # ~/
     # ./
     # ../
+
+alias wp='which python'
+
