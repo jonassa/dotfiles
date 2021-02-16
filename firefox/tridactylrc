@@ -93,6 +93,7 @@ bind q back
 bind Q forward
 bind w forward
 bind i focusinput
+bind <A-i> focusinput
 bind gi focusinput -l
 bind n findnext 1
 bind N findnext -1
